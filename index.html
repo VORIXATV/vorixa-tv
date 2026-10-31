@@ -183,40 +183,50 @@
             border: none;
         }
 
+        /* تصميم الباقات والأقسام */
+        .package-section {
+            background: rgba(31, 40, 51, 0.4);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
         .section-title {
-            font-size: 18px;
-            margin: 20px 0 15px 0;
+            font-size: 17px;
+            margin-bottom: 12px;
             color: var(--accent-gold);
             border-right: 4px solid var(--accent-gold);
             padding-right: 10px;
             font-weight: bold;
+            letter-spacing: 0.5px;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
         }
 
         .channel-card {
             background: #111111;
-            padding: 16px;
-            border-radius: 10px;
+            padding: 14px;
+            border-radius: 8px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
-            border: 1px solid rgba(212, 175, 55, 0.25);
+            border: 1px solid rgba(212, 175, 55, 0.2);
         }
 
         .channel-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-3px);
             border-color: var(--accent-gold);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
             background: #181818;
         }
 
         .channel-card h4 {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-color);
             font-weight: bold;
             letter-spacing: 0.5px;
@@ -251,69 +261,75 @@
             <iframe id="main-player" src="about:blank" allowfullscreen></iframe>
         </div>
 
-        <!-- قنوات BeIN Sports -->
-        <h3 class="section-title">قنوات BeIN Sports</h3>
-        <div class="grid">
-            <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/1/index.m3u8')">
-                <h4>BEIN SPORTS 1 HD</h4>
-            </div>
-            <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/2/index.m3u8')">
-                <h4>BEIN SPORTS 2 HD</h4>
-            </div>
-            <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/3/index.m3u8')">
-                <h4>BEIN SPORTS 3 HD</h4>
-            </div>
-            <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/4/index.m3u8')">
-                <h4>BEIN SPORTS 4 HD</h4>
-            </div>
-            <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/5/index.m3u8')">
-                <h4>BEIN SPORTS 5 HD</h4>
-            </div>
-            <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/6/index.m3u8')">
-                <h4>BEIN SPORTS 6 HD</h4>
-            </div>
-            <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/7/index.m3u8')">
-                <h4>BEIN SPORTS 7 HD</h4>
-            </div>
-            <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/8/index.m3u8')">
-                <h4>BEIN SPORTS 8 HD</h4>
-            </div>
-            <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/9/index.m3u8')">
-                <h4>BEIN SPORTS 9 HD</h4>
-            </div>
-        </div>
-
-        <!-- قنوات THAMANEA -->
-        <h3 class="section-title">قنوات THAMANEA</h3>
-        <div class="grid">
-            <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3455_.m3u8')">
-                <h4>THAMANEA 1 HD</h4>
-            </div>
-            <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3454_.m3u8')">
-                <h4>THAMANEA 2 HD</h4>
-            </div>
-            <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3453_.m3u8')">
-                <h4>THAMANEA 3 HD</h4>
+        <!-- باقة BEIN SPORTS -->
+        <div class="package-section">
+            <h3 class="section-title">📺 باقة BEIN SPORTS</h3>
+            <div class="grid">
+                <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/1/index.m3u8')">
+                    <h4>BEIN SPORTS 1 HD</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/2/index.m3u8')">
+                    <h4>BEIN SPORTS 2 HD</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/3/index.m3u8')">
+                    <h4>BEIN SPORTS 3 HD</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/4/index.m3u8')">
+                    <h4>BEIN SPORTS 4 HD</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/5/index.m3u8')">
+                    <h4>BEIN SPORTS 5 HD</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/6/index.m3u8')">
+                    <h4>BEIN SPORTS 6 HD</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/7/index.m3u8')">
+                    <h4>BEIN SPORTS 7 HD</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/8/index.m3u8')">
+                    <h4>BEIN SPORTS 8 HD</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/9/index.m3u8')">
+                    <h4>BEIN SPORTS 9 HD</h4>
+                </div>
             </div>
         </div>
 
-        <!-- قنوات ALWAN Sports -->
-        <h3 class="section-title">قنوات ALWAN Sports</h3>
-        <div class="grid">
-            <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3461_.m3u8')">
-                <h4>ALWAN SPORTS 1 HD</h4>
+        <!-- باقة THAMANEA -->
+        <div class="package-section">
+            <h3 class="section-title">📺 باقة THAMANEA</h3>
+            <div class="grid">
+                <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3455_.m3u8')">
+                    <h4>THAMANEA 1 HD</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3454_.m3u8')">
+                    <h4>THAMANEA 2 HD</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3453_.m3u8')">
+                    <h4>THAMANEA 3 HD</h4>
+                </div>
             </div>
-            <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3460_.m3u8')">
-                <h4>ALWAN SPORTS 2 HD</h4>
-            </div>
-            <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3459_.m3u8')">
-                <h4>ALWAN SPORTS 3 HD</h4>
-            </div>
-            <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3458_.m3u8')">
-                <h4>ALWAN SPORTS 4 HD</h4>
-            </div>
-            <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3457_.m3u8')">
-                <h4>ALWAN SPORTS 5 HD</h4>
+        </div>
+
+        <!-- باقة ALWAN SPORTS -->
+        <div class="package-section">
+            <h3 class="section-title">📺 باقة ALWAN SPORTS</h3>
+            <div class="grid">
+                <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3461_.m3u8')">
+                    <h4>ALWAN SPORTS 1 HD</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3460_.m3u8')">
+                    <h4>ALWAN SPORTS 2 HD</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3459_.m3u8')">
+                    <h4>ALWAN SPORTS 3 HD</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3458_.m3u8')">
+                    <h4>ALWAN SPORTS 4 HD</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3457_.m3u8')">
+                    <h4>ALWAN SPORTS 5 HD</h4>
+                </div>
             </div>
         </div>
     </div>
