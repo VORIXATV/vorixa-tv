@@ -155,7 +155,7 @@
             display: none;
         }
 
-        /* مشغل الفيديو */
+        /* حاوية المشغل مع الواجهة الترحيبية الفخمة */
         .player-container {
             width: 100%;
             background: #000;
@@ -165,12 +165,51 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
             border: 1px solid rgba(212, 175, 55, 0.3);
             margin-bottom: 25px;
+            position: relative;
+        }
+
+        /* واجهة الترحيب الفخمة التي تظهر قبل اختيار القناة */
+        #welcome-banner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #121212, #050505);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 10;
+            padding: 20px;
+            border: 2px dashed rgba(212, 175, 55, 0.3);
+        }
+
+        #welcome-banner h2 {
+            color: var(--accent-gold);
+            font-size: 24px;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+
+        #welcome-banner p {
+            color: #94a3b8;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .welcome-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
         }
 
         iframe {
             width: 100%;
             height: 100%;
             border: none;
+            position: relative;
+            z-index: 5;
         }
 
         /* تصميم كروت الباقات الرئيسية */
@@ -295,8 +334,13 @@
 
     <!-- محتوى الموقع الأساسي -->
     <div class="container" id="main-content">
-        <!-- مشغل الفيديو -->
+        <!-- مشغل الفيديو مع الواجهة الترحيبية -->
         <div class="player-container">
+            <div id="welcome-banner">
+                <div class="welcome-icon">👑</div>
+                <h2>VORIXA TV</h2>
+                <p>اختر الباقة والقناة المفضلة لديك لبدء البث المباشر</p>
+            </div>
             <iframe id="main-player" src="about:blank" allowfullscreen></iframe>
         </div>
 
@@ -382,7 +426,7 @@
                 <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3460_.m3u8')">
                     <h4>ALWAN SPORTS 2 HD</h4>
                 </div>
-                <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3459_.m3u8')">
+                <div class="channel-card" onclick="changeStream('https://blcco.linkyp.org/live/3459_.m3u8')">
                     <h4>ALWAN SPORTS 3 HD</h4>
                 </div>
                 <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3458_.m3u8')">
@@ -415,9 +459,16 @@
         }
 
         function changeStream(url) {
+            // إخفاء واجهة الترحيب الفخمة فوراً عند اختيار أي قناة
+            const welcomeBanner = document.getElementById('welcome-banner');
+            if (welcomeBanner) {
+                welcomeBanner.style.display = 'none';
+            }
+
             const player = document.getElementById('main-player');
             player.src = url;
-            // التمرير التلقائي للشاشة لأعلى عند اختيار قناة
+            
+            // التمرير التلقائي للشاشة لأعلى عند اختيار قناة لتبين شاشة البث بوضوح
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
