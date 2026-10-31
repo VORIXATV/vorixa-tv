@@ -7,11 +7,10 @@
     <style>
         :root {
             --bg-color: #0b0c10;
-            --card-bg: #1f2833;
+            --card-bg: #111111;
             --accent-gold: #d4af37;
             --accent-gold-hover: #f3e5ab;
             --text-color: #f8fafc;
-            --text-muted: #c5a059;
         }
 
         * {
@@ -28,7 +27,7 @@
             min-height: 100vh;
         }
 
-        /* شاشة حماية الكود - أسود وذهبي */
+        /* شاشة إدخال الكود */
         #auth-screen {
             position: fixed;
             top: 0;
@@ -59,7 +58,6 @@
             margin-bottom: 10px;
             font-size: 26px;
             letter-spacing: 2px;
-            text-transform: uppercase;
         }
 
         .auth-box p {
@@ -102,7 +100,6 @@
 
         .auth-box button:hover {
             background: linear-gradient(135deg, #f3e5ab, #d4af37);
-            transform: translateY(-2px);
         }
 
         .error-msg {
@@ -118,15 +115,9 @@
             color: var(--accent-gold);
             font-size: 13px;
             text-decoration: none;
-            font-weight: 500;
         }
 
-        .telegram-btn-auth:hover {
-            color: var(--accent-gold-hover);
-            text-decoration: underline;
-        }
-
-        /* الهيدر العلوي للموقع */
+        /* الهيدر العلوي */
         header {
             background-color: #111111;
             padding: 15px 20px;
@@ -155,14 +146,13 @@
             font-size: 13px;
             text-decoration: none;
             font-weight: bold;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
         }
 
         .container {
             max-width: 800px;
             margin: 20px auto;
             padding: 0 15px;
-            display: none; /* مخفي لحين إدخال الرمز الصحيح */
+            display: none;
         }
 
         /* مشغل الفيديو */
@@ -183,45 +173,95 @@
             border: none;
         }
 
-        /* تصميم الباقات والأقسام */
-        .package-section {
-            background: rgba(31, 40, 51, 0.4);
-            border: 1px solid rgba(212, 175, 55, 0.2);
+        /* تصميم كروت الباقات الرئيسية */
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .package-card {
+            background: linear-gradient(145deg, #141414, #080808);
+            border: 1px solid var(--accent-gold);
             border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .package-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+            border-color: var(--accent-gold-hover);
+        }
+
+        .package-card h3 {
+            color: var(--accent-gold);
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .package-card p {
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        /* صفحة القنوات لكل باقة */
+        .channels-view {
+            display: none;
+        }
+
+        .back-btn {
+            background: #111111;
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--accent-gold);
+            color: #000;
         }
 
         .section-title {
-            font-size: 17px;
-            margin-bottom: 12px;
+            font-size: 18px;
+            margin-bottom: 15px;
             color: var(--accent-gold);
             border-right: 4px solid var(--accent-gold);
             padding-right: 10px;
             font-weight: bold;
-            letter-spacing: 0.5px;
         }
 
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 10px;
+            gap: 12px;
         }
 
         .channel-card {
             background: #111111;
-            padding: 14px;
-            border-radius: 8px;
+            padding: 16px;
+            border-radius: 10px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            border: 1px solid rgba(212, 175, 55, 0.25);
         }
 
         .channel-card:hover {
             transform: translateY(-3px);
             border-color: var(--accent-gold);
-            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
             background: #181818;
         }
 
@@ -229,7 +269,6 @@
             font-size: 13px;
             color: var(--text-color);
             font-weight: bold;
-            letter-spacing: 0.5px;
         }
     </style>
 </head>
@@ -256,14 +295,34 @@
 
     <!-- محتوى الموقع الأساسي -->
     <div class="container" id="main-content">
-        <!-- مشغل البث الرئيسي -->
+        <!-- مشغل الفيديو -->
         <div class="player-container">
             <iframe id="main-player" src="about:blank" allowfullscreen></iframe>
         </div>
 
-        <!-- باقة BEIN SPORTS -->
-        <div class="package-section">
-            <h3 class="section-title">📺 باقة BEIN SPORTS</h3>
+        <!-- 1. واجهة الباقات الرئيسية -->
+        <div id="packages-view">
+            <h3 class="section-title">اختر الباقة</h3>
+            <div class="packages-grid">
+                <div class="package-card" onclick="openPackage('bein-package')">
+                    <h3>👑 باقة BEIN SPORTS</h3>
+                    <p>تحتوي على 9 قنوات</p>
+                </div>
+                <div class="package-card" onclick="openPackage('thamanea-package')">
+                    <h3>👑 باقة THAMANEA</h3>
+                    <p>تحتوي على 3 قنوات</p>
+                </div>
+                <div class="package-card" onclick="openPackage('alwan-package')">
+                    <h3>👑 باقة ALWAN SPORTS</h3>
+                    <p>تحتوي على 5 قنوات</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. قنوات BeIN Sports -->
+        <div id="bein-package" class="channels-view">
+            <button class="back-btn" onclick="showPackages()">➡️ الرجوع للباقات</button>
+            <h3 class="section-title">قنوات BEIN SPORTS</h3>
             <div class="grid">
                 <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/1/index.m3u8')">
                     <h4>BEIN SPORTS 1 HD</h4>
@@ -295,9 +354,10 @@
             </div>
         </div>
 
-        <!-- باقة THAMANEA -->
-        <div class="package-section">
-            <h3 class="section-title">📺 باقة THAMANEA</h3>
+        <!-- 3. قنوات THAMANEA -->
+        <div id="thamanea-package" class="channels-view">
+            <button class="back-btn" onclick="showPackages()">➡️ الرجوع للباقات</button>
+            <h3 class="section-title">قنوات THAMANEA</h3>
             <div class="grid">
                 <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3455_.m3u8')">
                     <h4>THAMANEA 1 HD</h4>
@@ -311,9 +371,10 @@
             </div>
         </div>
 
-        <!-- باقة ALWAN SPORTS -->
-        <div class="package-section">
-            <h3 class="section-title">📺 باقة ALWAN SPORTS</h3>
+        <!-- 4. قنوات ALWAN SPORTS -->
+        <div id="alwan-package" class="channels-view">
+            <button class="back-btn" onclick="showPackages()">➡️ الرجوع للباقات</button>
+            <h3 class="section-title">قنوات ALWAN SPORTS</h3>
             <div class="grid">
                 <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3461_.m3u8')">
                     <h4>ALWAN SPORTS 1 HD</h4>
@@ -332,10 +393,11 @@
                 </div>
             </div>
         </div>
+
     </div>
 
     <script>
-        // الكود هو 23
+        // كود الدخول هو 23
         const correctCode = "23"; 
 
         function checkPassword() {
@@ -355,6 +417,23 @@
         function changeStream(url) {
             const player = document.getElementById('main-player');
             player.src = url;
+            // التمرير التلقائي للشاشة لأعلى عند اختيار قناة
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // فتح باقة معينة
+        function openPackage(packageId) {
+            document.getElementById('packages-view').style.display = 'none';
+            const packages = document.querySelectorAll('.channels-view');
+            packages.forEach(pkg => pkg.style.display = 'none');
+            document.getElementById(packageId).style.display = 'block';
+        }
+
+        // العودة إلى قائمة الباقات
+        function showPackages() {
+            const packages = document.querySelectorAll('.channels-view');
+            packages.forEach(pkg => pkg.style.display = 'none');
+            document.getElementById('packages-view').style.display = 'block';
         }
     </script>
 </body>
