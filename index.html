@@ -155,7 +155,7 @@
             display: none;
         }
 
-        /* حاوية المشغل مع واجهة حركات فخمة جداً */
+        /* حاوية المشغل مع واجهة فخمة */
         .player-container {
             width: 100%;
             background: #000;
@@ -237,7 +237,7 @@
             z-index: 5;
         }
 
-        /* شريط تحكم إضافي للمشغل (زر ملء الشاشة) */
+        /* شريط تحكم المشغل وزر ملء الشاشة الأفقي */
         .player-controls {
             display: flex;
             justify-content: space-between;
@@ -425,14 +425,14 @@
             <iframe id="main-player" src="about:blank" allowfullscreen></iframe>
         </div>
 
-        <!-- شريط تحكم المشغل وزر ملء الشاشة -->
+        <!-- شريط تحكم المشغل وزر ملء الشاشة الأفقي -->
         <div class="player-controls">
             <div class="live-indicator">
                 <div class="live-dot"></div>
                 <span>بث مباشر فوري</span>
             </div>
             <button class="fullscreen-btn" onclick="toggleFullScreen()">
-                ⛶ ملء الشاشة بالكامل
+                ⛶ ملء الشاشة أفقي
             </button>
         </div>
 
@@ -564,9 +564,10 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // وظيفة ملء الشاشة بالكامل للمشغل
+        // وظيفة ملء الشاشة الأفقي التلقائي
         function toggleFullScreen() {
             const playerBox = document.getElementById('player-box');
+            
             if (!document.fullscreenElement) {
                 if (playerBox.requestFullscreen) {
                     playerBox.requestFullscreen();
@@ -575,9 +576,20 @@
                 } else if (playerBox.msRequestFullscreen) { /* IE11 */
                     playerBox.msRequestFullscreen();
                 }
+
+                // محاولة فرض دوران الشاشة إلى وضع أفقي (Landscape) على الموبايل
+                if (screen.orientation && screen.orientation.lock) {
+                    screen.orientation.lock('landscape').catch(err => {
+                        // بعض المتصفحات تطلب تفاعل أو شروط أمنية، تتخطى تلقائياً إذا لم تكن مدعومة
+                        console.log("Orientation lock not supported or allowed.");
+                    });
+                }
             } else {
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
+                }
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock();
                 }
             }
         }
@@ -586,6 +598,8 @@
         function openPackage(packageId) {
             document.getElementById('packages-view').style.display = 'none';
             const packages = document.querySelectorAll('.channels-view');
+            packages.packageforEach?.(pkg => pkg.style.display = 'none');
+            // التأكد من إخفاء الكل بسلاسة
             packages.forEach(pkg => pkg.style.display = 'none');
             document.getElementById(packageId).style.display = 'block';
         }
