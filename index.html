@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VORIXA TV - البث المباشر</title>
-    <!-- مكتبة تشغيل الوسائط المتطورة لتشغيل كل الصيغ بما فيها TS -->
-    <script src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -28,7 +26,6 @@
             min-height: 100vh;
         }
 
-        /* شاشة حماية الكود */
         #auth-screen {
             position: fixed;
             top: 0;
@@ -94,11 +91,6 @@
             font-weight: bold;
             font-size: 16px;
             cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .auth-box button:hover {
-            opacity: 0.9;
         }
 
         .error-msg {
@@ -116,7 +108,6 @@
             text-decoration: none;
         }
 
-        /* الهيدر العلوي للموقع */
         header {
             background-color: var(--card-bg);
             padding: 15px 20px;
@@ -134,7 +125,6 @@
             color: var(--accent-color);
             font-size: 22px;
             font-weight: bold;
-            letter-spacing: 1px;
         }
 
         .tg-header-btn {
@@ -151,10 +141,9 @@
             max-width: 800px;
             margin: 20px auto;
             padding: 0 15px;
-            display: none; /* مخفي لحين إدخال الكود الصحيح */
+            display: none;
         }
 
-        /* حاوية مشغل الفيديو */
         .player-container {
             width: 100%;
             background: #000;
@@ -165,9 +154,10 @@
             margin-bottom: 25px;
         }
 
-        #player-element {
+        iframe {
             width: 100%;
             height: 100%;
+            border: none;
         }
 
         .section-title {
@@ -189,7 +179,7 @@
             border-radius: 8px;
             text-align: center;
             cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
+            transition: transform 0.2s;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
@@ -206,7 +196,6 @@
 </head>
 <body>
 
-    <!-- شاشة إدخال الكود -->
     <div id="auth-screen">
         <div class="auth-box">
             <h2>VORIXA TV</h2>
@@ -219,37 +208,33 @@
         </div>
     </div>
 
-    <!-- الهيدر -->
     <header>
         <h1>VORIXA TV</h1>
         <a href="https://t.me/se_22m" target="_blank" class="tg-header-btn">قناة التليجرام</a>
     </header>
 
-    <!-- محتوى الموقع الأساسي -->
     <div class="container" id="main-content">
-        <!-- مشغل البث الرئيسي القوي -->
         <div class="player-container">
-            <div id="player-element"></div>
+            <iframe id="main-player" src="about:blank" allowfullscreen></iframe>
         </div>
 
-        <!-- قائمة القنوات (تقدر تخلي بيها روابط الـ TS أو أي رابط يعجبك) -->
         <h3 class="section-title">القنوات المباشرة</h3>
         <div class="grid">
+            <!-- ضع هنا روابط الـ Embed أو روابط المشغل الحية -->
+            <div class="channel-card" onclick="changeStream('http://live-albashatv.site/gh?url=http://rfedswertas9900.site:2052/live/32400256889746/29789212069919/677012.ts')">
+                <h4>BelN SPORTS 1</h4>
+            </div>
             <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3461_.m3u8')">
                 <h4>Alwan Sport 1</h4>
             </div>
-            <div class="channel-card" onclick="changeStream('http://live-albashatv.site/gh?url=http://rfedswertas9900.site:2052/live/32400256889746/29789212069919/677012.ts')">
-                <h4>beIN Sports 1</h4>
-            </div>
             <div class="channel-card" onclick="changeStream('https://blcco.linkip.org/live/3460_.m3u8')">
-                <h4>Alwan Sport 2</h4>
+                <h4>ALwan sports 2</h4>
             </div>
         </div>
     </div>
 
     <script>
-        const correctCode = "23"; // تقدر تغييره وقت ما تحب
-        let playerInstance = null;
+        const correctCode = "23"; 
 
         function checkPassword() {
             const enteredCode = document.getElementById('passcode').value;
@@ -266,19 +251,8 @@
         }
 
         function changeStream(url) {
-            // إذا كان اكو مشغل قديم شغال، احذفه قبل ما تشغل القناة الجديدة
-            if (playerInstance) {
-                playerInstance.destroy();
-            }
-
-            // تشغيل الرابط الجديد (سواء كان TS أو مدمج أو M3U8)
-            playerInstance = new Clappr.Player({
-                source: url,
-                parentId: "#player-element",
-                autoPlay: true,
-                height: "100%",
-                width: "100%",
-            });
+            const player = document.getElementById('main-player');
+            player.src = url;
         }
     </script>
 </body>
