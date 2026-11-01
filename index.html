@@ -148,6 +148,29 @@
             font-weight: bold;
         }
 
+        /* الشريط الملكي المتحرك تحت الهيدر */
+        .marquee-bar {
+            background: linear-gradient(90deg, #111, #1a1600, #111);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            color: var(--accent-gold);
+            padding: 6px 0;
+            font-size: 13px;
+            font-weight: bold;
+            overflow: hidden;
+            white-space: nowrap;
+            display: none;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
         .container {
             max-width: 800px;
             margin: 20px auto;
@@ -237,7 +260,7 @@
             z-index: 5;
         }
 
-        /* تصميم كروت الباقات الرئيسية */
+        /* تصميم كروت الباقات الرئيسية مع تأثير التوهج الذهبي */
         .packages-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -246,25 +269,32 @@
 
         .package-card {
             background: linear-gradient(145deg, #141414, #080808);
-            border: 1px solid var(--accent-gold);
+            border: 1px solid rgba(212, 175, 55, 0.4);
             border-radius: 12px;
             padding: 30px 20px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.4s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
         }
 
         .package-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
-            border-color: var(--accent-gold-hover);
+            transform: translateY(-6px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4), inset 0 0 10px rgba(212, 175, 55, 0.2);
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
         }
 
         .package-card h3 {
             color: var(--accent-gold);
             font-size: 18px;
             margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .package-card p {
@@ -272,9 +302,26 @@
             font-size: 13px;
         }
 
-        /* صفحة القنوات لكل باقة */
+        .ball-icon {
+            display: inline-block;
+            animation: spinBall 4s linear infinite;
+        }
+
+        @keyframes spinBall {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* صفحة القنوات لكل باقة مع تأثير الانتقال السلس (Fade) */
         .channels-view {
             display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        .channels-view.active {
+            display: block;
+            opacity: 1;
         }
 
         .back-btn {
@@ -357,6 +404,13 @@
         <a href="https://t.me/se_22m" target="_blank" class="tg-header-btn">قناة التليجرام</a>
     </header>
 
+    <!-- الشريط الملكي المتحرك -->
+    <div class="marquee-bar" id="marquee-bar">
+        <div class="marquee-content">
+            ✨ أهلاً بك في منصة VORIXA TV الرسمية للمباريات والبث المباشر بجودة HD • انضم لقناتنا على التليجرام @se_22m ليصلك كل جديد ✨
+        </div>
+    </div>
+
     <!-- محتوى الموقع الأساسي -->
     <div class="container" id="main-content">
         <!-- مشغل الفيديو مع الواجهة الفخمة المتحركة -->
@@ -371,19 +425,19 @@
         </div>
 
         <!-- 1. واجهة الباقات الرئيسية -->
-        <div id="packages-view">
+        <div id="packages-view" class="channels-view active">
             <h3 class="section-title">اختر الباقة</h3>
             <div class="packages-grid">
                 <div class="package-card" onclick="openPackage('bein-package')">
-                    <h3>👑 باقة BEIN SPORTS</h3>
+                    <h3><span class="ball-icon">⚽</span> باقة BEIN SPORTS</h3>
                     <p>تحتوي على 9 قنوات</p>
                 </div>
                 <div class="package-card" onclick="openPackage('thamanea-package')">
-                    <h3>👑 باقة THAMANEA</h3>
+                    <h3><span class="ball-icon">⚽</span> باقة THAMANEA</h3>
                     <p>تحتوي على 3 قنوات</p>
                 </div>
                 <div class="package-card" onclick="openPackage('alwan-package')">
-                    <h3>👑 باقة ALWAN SPORTS</h3>
+                    <h3><span class="ball-icon">⚽</span> باقة ALWAN SPORTS</h3>
                     <p>تحتوي على 5 قنوات</p>
                 </div>
             </div>
@@ -475,10 +529,12 @@
             const errorMsg = document.getElementById('error');
             const authScreen = document.getElementById('auth-screen');
             const mainContent = document.getElementById('main-content');
+            const marqueeBar = document.getElementById('marquee-bar');
 
             if (enteredCode === correctCode) {
                 authScreen.style.display = 'none';
                 mainContent.style.display = 'block';
+                marqueeBar.style.display = 'block'; // إظهار الشريط المتحرك بعد الدخول
             } else {
                 errorMsg.style.display = 'block';
             }
@@ -498,19 +554,34 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // فتح باقة معينة
+        // فتح باقة معينة بتأثير سلس (Fade)
         function openPackage(packageId) {
-            document.getElementById('packages-view').style.display = 'none';
-            const packages = document.querySelectorAll('.channels-view');
-            packages.forEach(pkg => pkg.style.display = 'none');
-            document.getElementById(packageId).style.display = 'block';
+            const views = document.querySelectorAll('.channels-view');
+            views.forEach(view => {
+                view.classList.remove('active');
+                view.style.display = 'none';
+            });
+            
+            const target = document.getElementById(packageId);
+            target.style.display = 'block';
+            setTimeout(() => {
+                target.classList.add('active');
+            }, 50);
         }
 
-        // العودة إلى قائمة الباقات
+        // العودة إلى قائمة الباقات بتأثير سلس
         function showPackages() {
-            const packages = document.querySelectorAll('.channels-view');
-            packages.forEach(pkg => pkg.style.display = 'none');
-            document.getElementById('packages-view').style.display = 'block';
+            const views = document.querySelectorAll('.channels-view');
+            views.forEach(view => {
+                view.classList.remove('active');
+                view.style.display = 'none';
+            });
+
+            const target = document.getElementById('packages-view');
+            target.style.display = 'block';
+            setTimeout(() => {
+                target.classList.add('active');
+            }, 50);
         }
     </script>
 </body>
