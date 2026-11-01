@@ -148,7 +148,7 @@
             font-weight: bold;
         }
 
-        /* الشريط الملكي المتحرك (بالاتجاه المطلوب) */
+        /* الشريط الملكي المتحرك (الاتجاه الأرتب والصحيح) */
         .marquee-bar {
             background: linear-gradient(90deg, #111, #1a1600, #111);
             border-bottom: 1px solid rgba(212, 175, 55, 0.2);
@@ -167,8 +167,8 @@
         }
 
         @keyframes marquee {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .container {
