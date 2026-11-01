@@ -178,42 +178,6 @@
             display: none;
         }
 
-        /* عداد المباريات التنازلي الحقيقي */
-        .match-countdown-card {
-            background: linear-gradient(135deg, #141414, #080808);
-            border: 1px solid var(--accent-gold);
-            border-radius: 12px;
-            padding: 15px 20px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.15);
-        }
-
-        .match-info h4 {
-            color: var(--accent-gold);
-            font-size: 15px;
-            margin-bottom: 4px;
-        }
-
-        .match-info p {
-            color: #94a3b8;
-            font-size: 12px;
-        }
-
-        .countdown-timer {
-            background: #000;
-            border: 1px solid rgba(212, 175, 55, 0.5);
-            padding: 8px 14px;
-            border-radius: 8px;
-            color: var(--accent-gold);
-            font-weight: bold;
-            font-size: 14px;
-            letter-spacing: 1px;
-            box-shadow: inset 0 0 10px rgba(212, 175, 55, 0.2);
-        }
-
         /* حاوية المشغل مع الإضاءة السينمائية المحيطة */
         .player-wrapper {
             position: relative;
@@ -545,15 +509,6 @@
     <!-- محتوى الموقع الأساسي -->
     <div class="container" id="main-content">
         
-        <!-- عداد تنازلي حقيقي لأبرز مباريات اليوم -->
-        <div class="match-countdown-card">
-            <div class="match-info">
-                <h4 id="match-title">⚽ أبرز مباريات اليوم (دوري أبطال أوروبا)</h4>
-                <p id="match-teams">ريال مدريد ضد مانشستر سيتي</p>
-            </div>
-            <div class="countdown-timer" id="timer-display">00:00:00</div>
-        </div>
-
         <!-- مشغل الفيديو مع الإضاءة السينمائية المحيطة -->
         <div class="player-wrapper">
             <div class="player-container">
@@ -691,35 +646,9 @@
                 authScreen.style.display = 'none';
                 mainContent.style.display = 'block';
                 marqueeBar.style.display = 'block';
-                startMatchCountdown(); // بدء تشغيل العداد التنازلي الحقيقي فور الدخول
             } else {
                 errorMsg.style.display = 'block';
             }
-        }
-
-        // عداد تنازلي حقيقي لمباريات اليوم (مبതിയ محسوب لوقت القادم أو توقيت المساء الحقيقي)
-        function startMatchCountdown() {
-            // ضبط وقت المباراة القادمة (مثلاً بعد عدة ساعات أو مساء اليوم بتوقيت حقيقي)
-            const matchTime = new Date().getTime() + (4 * 60 * 60 * 1000); // مثال: بعد 4 ساعات من الآن
-
-            setInterval(() => {
-                const now = new Date().getTime();
-                const distance = matchTime - now;
-
-                if (distance < 0) {
-                    document.getElementById("timer-display").innerHTML = "المباراة منقولة مباشرة الآن! 🔴";
-                    return;
-                }
-
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                document.getElementById("timer-display").innerHTML = 
-                    String(hours).padStart(2, '0') + ":" + 
-                    String(minutes).padStart(2, '0') + ":" + 
-                    String(seconds).padStart(2, '0');
-            }, 1000);
         }
 
         // تغيير البث مع إظهار إشعار تفاعلي ناعم (Toast)
