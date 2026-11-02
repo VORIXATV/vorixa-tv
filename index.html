@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VORIXA TV - البث المباشر</title>
+    <!-- استدعاء مكتبة HLS لدعم تشغيل كل الروابط (m3u8 و ts) بكل قوة -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         :root {
             --bg-color: #0b0c10;
@@ -271,12 +273,14 @@
             100% { transform: translateY(-8px); }
         }
 
-        iframe {
+        /* مشغل الفيديو الفعلي HTML5 المطور */
+        video {
             width: 100%;
             height: 100%;
-            border: none;
+            object-fit: contain;
             position: relative;
             z-index: 5;
+            background: #000;
         }
 
         /* شريط تحكم المشغل (زر تحديث البث) */
@@ -509,7 +513,7 @@
     <!-- محتوى الموقع الأساسي -->
     <div class="container" id="main-content">
         
-        <!-- مشغل الفيديو مع الإضاءة السينمائية المحيطة -->
+        <!-- مشغل الفيديو المطور (يدعم m3u8 و ts بكفاءة تامة) -->
         <div class="player-wrapper">
             <div class="player-container">
                 <div id="welcome-banner">
@@ -518,7 +522,7 @@
                     <h2>VORIXA TV</h2>
                     <p>اختر الباقة المفضلة لديك واستمتع بمشاهدة المباريات بجودة عالية</p>
                 </div>
-                <iframe id="main-player" src="about:blank" allowfullscreen></iframe>
+                <video id="video-player" controls autoplay playsinline></video>
             </div>
         </div>
 
@@ -550,24 +554,24 @@
             </div>
         </div>
 
-        <!-- 2. قنوات BeIN Sports -->
+        <!-- 2. قنوات BeIN Sports (تدعم m3u8 و ts بالكامل الآن) -->
         <div id="bein-package" class="channels-view">
             <button class="back-btn" onclick="showPackages()">➡️ الرجوع للباقات</button>
             <h3 class="section-title">قنوات BEIN SPORTS</h3>
             <div class="grid">
-                <div class="channel-card" onclick="changeStream('https://cp11.adabmedia.com/hls2/bein1.m3u8', 'BEIN SPORTS 1 HD')">
+                <div class="channel-card" onclick="changeStream('http://hydraa.st:80/live/ghadax88/0569777788/327425.m3u8', 'BEIN SPORTS 1 HD')">
                     <h4>BEIN SPORTS 1 HD</h4>
                 </div>
-                <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/2/index.m3u8', 'BEIN SPORTS 2 HD')">
+                <div class="channel-card" onclick="changeStream('http://hydraa.st:80/live/ghadax88/0569777788/327424.m3u8', 'BEIN SPORTS 2 HD')">
                     <h4>BEIN SPORTS 2 HD</h4>
                 </div>
-                <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/3/index.m3u8', 'BEIN SPORTS 3 HD')">
+                <div class="channel-card" onclick="changeStream('http://hydraa.st:80/live/ghadax88/0569777788/327423.m3u8', 'BEIN SPORTS 3 HD')">
                     <h4>BEIN SPORTS 3 HD</h4>
                 </div>
-                <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/4/index.m3u8', 'BEIN SPORTS 4 HD')">
+                <div class="channel-card" onclick="changeStream('http://hydraa.st:80/live/ghadax88/0569777788/327422.m3u8', 'BEIN SPORTS 4 HD')">
                     <h4>BEIN SPORTS 4 HD</h4>
                 </div>
-                <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/5/index.m3u8', 'BEIN SPORTS 5 HD')">
+                <div class="channel-card" onclick="changeStream('http://hydraa.st:80/live/ghadax88/0569777788/327421.m3u8', 'BEIN SPORTS 5 HD')">
                     <h4>BEIN SPORTS 5 HD</h4>
                 </div>
                 <div class="channel-card" onclick="changeStream('https://web.aboozayed.web.id/6/index.m3u8', 'BEIN SPORTS 6 HD')">
@@ -634,6 +638,7 @@
         // كود الدخول هو 23
         const correctCode = "23"; 
         let currentStreamUrl = "";
+        let hlsInstance = null;
 
         function checkPassword() {
             const enteredCode = document.getElementById('passcode').value;
@@ -651,7 +656,7 @@
             }
         }
 
-        // تغيير البث مع إظهار إشعار تفاعلي ناعم (Toast)
+        // دالة تشغيل البث الذكية (تدعم M3U8 و TS بكل كفاءة وسلاسة)
         function changeStream(url, channelName) {
             currentStreamUrl = url;
             const welcomeBanner = document.getElementById('welcome-banner');
@@ -659,8 +664,33 @@
                 welcomeBanner.style.display = 'none';
             }
 
-            const player = document.getElementById('main-player');
-            player.src = url;
+            const video = document.getElementById('video-player');
+
+            // إذا كان مشغل HLS يعمل مسبقاً، نقوم بإيقافه وتدميره لتجنب التداخل
+            if (hlsInstance) {
+                hlsInstance.destroy();
+            }
+
+            if (Hls.isSupported()) {
+                hlsInstance = new Hls({
+                    xhrSetup: function(xhr, url) {
+                        xhr.withCredentials = false; // لتجنب قيود CORS
+                    }
+                });
+                hlsInstance.loadSource(url);
+                hlsInstance.attachMedia(video);
+                hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play().catch(e => console.log("Auto-play prevented", e));
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // يدعم أجهزة آبل (سفاري) افتراضياً
+                video.src = url;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play().catch(e => console.log("Auto-play prevented", e));
+                });
+            } else {
+                showToast("⚠️ المتصفح لا يدعم هذا النوع من البث!");
+            }
             
             showToast(`✨ جاري تشغيل: ${channelName}`);
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -672,12 +702,8 @@
                 showToast("⚠️ اختر قناة أولاً لتحديث البث!");
                 return;
             }
-            const player = document.getElementById('main-player');
-            player.src = 'about:blank';
-            setTimeout(() => {
-                player.src = currentStreamUrl;
-                showToast("🔄 تم تحديث وإعادة تحميل البث بنجاح");
-            }, 300);
+            changeStream(currentStreamUrl, "إعادة تحميل البث");
+            showToast("🔄 تم إعادة تحميل القناة بنجاح");
         }
 
         // إظهار الإشعار التفاعلي المنقوش
