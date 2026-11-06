@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VORIXA TV - البث المباشر</title>
+    
+    <!-- مكتبات التشغيل المتقدمة للروابط والقنوات -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mpegts.js@1.7.3/dist/mpegts.js"></script>
+
     <style>
         :root {
             --bg-color: #0b0c10;
@@ -188,7 +193,7 @@
             content: '';
             position: absolute;
             bottom: -10px;
-            left: 5%;
+            left: 5%5%;
             width: 90%;
             height: 20px;
             background: var(--accent-gold);
@@ -271,10 +276,12 @@
             100% { transform: translateY(-8px); }
         }
 
-        iframe {
+        /* عنصر الفيديو الجديد المدعوم بالمكتبات */
+        video#main-player {
             width: 100%;
             height: 100%;
-            border: none;
+            object-fit: contain;
+            background: #000;
             position: relative;
             z-index: 5;
         }
@@ -509,7 +516,7 @@
     <!-- محتوى الموقع الأساسي -->
     <div class="container" id="main-content">
         
-        <!-- مشغل الفيديو مع الإضاءة السينمائية المحيطة -->
+        <!-- مشغل الفيديو مع الإضاءة السينمائية ومكتبات البث -->
         <div class="player-wrapper">
             <div class="player-container">
                 <div id="welcome-banner">
@@ -518,7 +525,7 @@
                     <h2>VORIXA TV</h2>
                     <p>اختر الباقة المفضلة لديك واستمتع بمشاهدة المباريات بجودة عالية</p>
                 </div>
-                <iframe id="main-player" src="about:blank" allowfullscreen></iframe>
+                <video id="main-player" controls autoplay playsinline></video>
             </div>
         </div>
 
@@ -667,6 +674,8 @@
         // كود الدخول هو 30
         const correctCode = "30"; 
         let currentStreamUrl = "";
+        let hlsInstance = null;
+        let mpegtsInstance = null;
 
         function checkPassword() {
             const enteredCode = document.getElementById('passcode').value;
@@ -684,7 +693,30 @@
             }
         }
 
-        // تغيير البث مع إظهار إشعار تفاعلي ناعم (Toast)
+        // دالة تنظيف المشغلات السابقة لمنع تداخل القنوات
+        function cleanupPlayers() {
+            if (hlsInstance) {
+                hlsInstance.destroy();
+                hlsInstance = null;
+            }
+            if (mpegtsInstance) {
+                try {
+                    mpegtsInstance.pause();
+                    mpegtsInstance.unload();
+                    mpegtsInstance.detachMediaElement();
+                    mpegtsInstance.destroy();
+                } catch(e) {}
+                mpegtsInstance = null;
+            }
+            const player = document.getElementById('main-player');
+            if (player) {
+                player.pause();
+                player.removeAttribute('src');
+                player.load();
+            }
+        }
+
+        // دالة تشغيل القنوات الاحترافية المدعومة بـ HLS و MPEGTS
         function changeStream(url, channelName) {
             currentStreamUrl = url;
             const welcomeBanner = document.getElementById('welcome-banner');
@@ -692,8 +724,39 @@
                 welcomeBanner.style.display = 'none';
             }
 
+            cleanupPlayers();
             const player = document.getElementById('main-player');
-            player.src = url;
+
+            if (url.includes('.m3u8')) {
+                if (Hls.isSupported()) {
+                    hlsInstance = new Hls();
+                    hlsInstance.loadSource(url);
+                    hlsInstance.attachMedia(player);
+                    hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
+                        player.play().catch(() => {});
+                    });
+                } else if (player.canPlayType('application/vnd.apple.mpegurl')) {
+                    player.src = url;
+                    player.play().catch(() => {});
+                }
+            } else if (url.includes('.ts') || mpegts.isSupported()) {
+                try {
+                    mpegtsInstance = mpegts.createPlayer({
+                        type: 'mpegts',
+                        isLive: true,
+                        url: url
+                    });
+                    mpegtsInstance.attachMediaElement(player);
+                    mpegtsInstance.load();
+                    mpegtsInstance.play().catch(() => {});
+                } catch (e) {
+                    player.src = url;
+                    player.play().catch(() => {});
+                }
+            } else {
+                player.src = url;
+                player.play().catch(() => {});
+            }
             
             showToast(`✨ جاري تشغيل: ${channelName}`);
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -705,12 +768,8 @@
                 showToast("⚠️ اختر قناة أولاً لتحديث البث!");
                 return;
             }
-            const player = document.getElementById('main-player');
-            player.src = 'about:blank';
-            setTimeout(() => {
-                player.src = currentStreamUrl;
-                showToast("🔄 تم تحديث وإعادة تحميل البث بنجاح");
-            }, 300);
+            changeStream(currentStreamUrl, "إعادة التحميل");
+            showToast("🔄 تم تحديث وإعادة تحميل البث بنجاح");
         }
 
         // إظهار الإشعار التفاعلي المنقوش
@@ -741,7 +800,12 @@
         // العودة إلى قائمة الباقات بتأثير سلس
         function showPackages() {
             const views = document.querySelectorAll('.channels-view');
-            views.forEach(view => {
+            views.views?.forEach?.(view => {
+                view.classList.remove('active');
+                view.style.display = 'none';
+            });
+            // ضمان التوافق التام
+            document.querySelectorAll('.channels-view').forEach(view => {
                 view.classList.remove('active');
                 view.style.display = 'none';
             });
