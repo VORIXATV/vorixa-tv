@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VORIXA TV - البث المباشر</title>
     
-    <!-- مكتبات التشغيل المتقدمة للروابط والقنوات -->
+    <!-- مكتبات التشغيل المتقدمة -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/mpegts.js@1.7.3/dist/mpegts.js"></script>
 
@@ -276,7 +276,7 @@
             100% { transform: translateY(-8px); }
         }
 
-        /* عنصر الفيديو الجديد المطور */
+        /* عنصر الفيديو المدعوم والمطور */
         video#main-player {
             width: 100%;
             height: 100%;
@@ -692,7 +692,6 @@
             }
         }
 
-        // دالة تنظيف المشغلات السابقة لمنع تداخل القنوات
         function cleanupPlayers() {
             if (hlsInstance) {
                 hlsInstance.destroy();
@@ -715,7 +714,6 @@
             }
         }
 
-        // دالة تشغيل البث المحدثة لمعالجة حماية الروابط وتجاوز الـ CORS
         function changeStream(url, channelName) {
             currentStreamUrl = url;
             const welcomeBanner = document.getElementById('welcome-banner');
@@ -726,45 +724,41 @@
             cleanupPlayers();
             const player = document.getElementById('main-player');
 
-            // استخدام بروكسي داخلي خفيف في حال رفض السيرفر الاتصال المباشر من المتصفح
-            const finalUrl = url;
+            // تفعيل بروكسي داخلي خفيف لتمرير روابط الـ m3u8 و ts دون قيود المتصفح
+            const safeUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
+            const directUrl = url;
 
-            if (url.includes('.m3u8') || url.includes('.ts') || true) {
-                if (Hls.isSupported() && url.includes('.m3u8')) {
+            if (url.includes('.m3u8')) {
+                if (Hls.isSupported()) {
                     hlsInstance = new Hls({
-                        xhrSetup: function(xhr, url) {
-                            // تجاوز قيود الأمان لضمان عمل الروابط
+                        xhrSetup: function (xhr, url) {
                             xhr.withCredentials = false;
                         }
                     });
-                    hlsInstance.loadSource(finalUrl);
+                    hlsInstance.loadSource(directUrl);
                     hlsInstance.attachMedia(player);
                     hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
                         player.play().catch(() => {});
                     });
-                    hlsInstance.on(Hls.Events.ERROR, function(event, data) {
+                    hlsInstance.on(Hls.Events.ERROR, function (event, data) {
                         if (data.fatal) {
-                            switch(data.type) {
-                                case Hls.ErrorTypes.NETWORK_ERROR:
-                                    hlsInstance.startLoad();
-                                    break;
-                                case Hls.ErrorTypes.MEDIA_ERROR:
-                                    hlsInstance.recoverMediaError();
-                                    break;
-                                default:
-                                    cleanupPlayers();
-                                    player.src = finalUrl;
-                                    player.play().catch(() => {});
-                                    break;
-                            }
+                            // محاولة ثانية عبر البروكسي في حال الفشل المباشر
+                            hlsInstance.loadSource(safeUrl);
+                            hlsInstance.startLoad();
+                            player.play().catch(() => {});
                         }
                     });
-                } else if (mpegts.isSupported() && (url.includes('.ts') || !url.includes('.m3u8'))) {
+                } else if (player.canPlayType('application/vnd.apple.mpegurl')) {
+                    player.src = directUrl;
+                    player.play().catch(() => {});
+                }
+            } else {
+                if (mpegts.isSupported()) {
                     try {
                         mpegtsInstance = mpegts.createPlayer({
                             type: 'mpegts',
                             isLive: true,
-                            url: finalUrl
+                            url: directUrl
                         }, {
                             enableStashBuffer: false,
                             liveBufferLatencyChasing: true
@@ -773,11 +767,11 @@
                         mpegtsInstance.load();
                         mpegtsInstance.play().catch(() => {});
                     } catch (e) {
-                        player.src = finalUrl;
+                        player.src = directUrl;
                         player.play().catch(() => {});
                     }
                 } else {
-                    player.src = finalUrl;
+                    player.src = directUrl;
                     player.play().catch(() => {});
                 }
             }
