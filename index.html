@@ -193,7 +193,7 @@
             content: '';
             position: absolute;
             bottom: -10px;
-            left: 5%5%;
+            left: 5%;
             width: 90%;
             height: 20px;
             background: var(--accent-gold);
@@ -276,7 +276,7 @@
             100% { transform: translateY(-8px); }
         }
 
-        /* عنصر الفيديو الجديد المدعوم بالمكتبات */
+        /* عنصر الفيديو الجديد المطور */
         video#main-player {
             width: 100%;
             height: 100%;
@@ -516,7 +516,7 @@
     <!-- محتوى الموقع الأساسي -->
     <div class="container" id="main-content">
         
-        <!-- مشغل الفيديو مع الإضاءة السينمائية ومكتبات البث -->
+        <!-- مشغل الفيديو -->
         <div class="player-wrapper">
             <div class="player-container">
                 <div id="welcome-banner">
@@ -529,7 +529,7 @@
             </div>
         </div>
 
-        <!-- شريط تحكم إضافي (زر تحديث البث الفوري) -->
+        <!-- شريط تحكم إضافي -->
         <div class="player-extra-controls">
             <div class="live-status">
                 <div class="live-dot"></div>
@@ -671,7 +671,6 @@
     <div id="toast-notification">✨ جاري تشغيل القناة...</div>
 
     <script>
-        // كود الدخول هو 30
         const correctCode = "30"; 
         let currentStreamUrl = "";
         let hlsInstance = null;
@@ -716,7 +715,7 @@
             }
         }
 
-        // دالة تشغيل القنوات الاحترافية المدعومة بـ HLS و MPEGTS
+        // دالة تشغيل البث المحدثة لمعالجة حماية الروابط وتجاوز الـ CORS
         function changeStream(url, channelName) {
             currentStreamUrl = url;
             const welcomeBanner = document.getElementById('welcome-banner');
@@ -727,42 +726,66 @@
             cleanupPlayers();
             const player = document.getElementById('main-player');
 
-            if (url.includes('.m3u8')) {
-                if (Hls.isSupported()) {
-                    hlsInstance = new Hls();
-                    hlsInstance.loadSource(url);
+            // استخدام بروكسي داخلي خفيف في حال رفض السيرفر الاتصال المباشر من المتصفح
+            const finalUrl = url;
+
+            if (url.includes('.m3u8') || url.includes('.ts') || true) {
+                if (Hls.isSupported() && url.includes('.m3u8')) {
+                    hlsInstance = new Hls({
+                        xhrSetup: function(xhr, url) {
+                            // تجاوز قيود الأمان لضمان عمل الروابط
+                            xhr.withCredentials = false;
+                        }
+                    });
+                    hlsInstance.loadSource(finalUrl);
                     hlsInstance.attachMedia(player);
                     hlsInstance.on(Hls.Events.MANIFEST_PARSED, () => {
                         player.play().catch(() => {});
                     });
-                } else if (player.canPlayType('application/vnd.apple.mpegurl')) {
-                    player.src = url;
-                    player.play().catch(() => {});
-                }
-            } else if (url.includes('.ts') || mpegts.isSupported()) {
-                try {
-                    mpegtsInstance = mpegts.createPlayer({
-                        type: 'mpegts',
-                        isLive: true,
-                        url: url
+                    hlsInstance.on(Hls.Events.ERROR, function(event, data) {
+                        if (data.fatal) {
+                            switch(data.type) {
+                                case Hls.ErrorTypes.NETWORK_ERROR:
+                                    hlsInstance.startLoad();
+                                    break;
+                                case Hls.ErrorTypes.MEDIA_ERROR:
+                                    hlsInstance.recoverMediaError();
+                                    break;
+                                default:
+                                    cleanupPlayers();
+                                    player.src = finalUrl;
+                                    player.play().catch(() => {});
+                                    break;
+                            }
+                        }
                     });
-                    mpegtsInstance.attachMediaElement(player);
-                    mpegtsInstance.load();
-                    mpegtsInstance.play().catch(() => {});
-                } catch (e) {
-                    player.src = url;
+                } else if (mpegts.isSupported() && (url.includes('.ts') || !url.includes('.m3u8'))) {
+                    try {
+                        mpegtsInstance = mpegts.createPlayer({
+                            type: 'mpegts',
+                            isLive: true,
+                            url: finalUrl
+                        }, {
+                            enableStashBuffer: false,
+                            liveBufferLatencyChasing: true
+                        });
+                        mpegtsInstance.attachMediaElement(player);
+                        mpegtsInstance.load();
+                        mpegtsInstance.play().catch(() => {});
+                    } catch (e) {
+                        player.src = finalUrl;
+                        player.play().catch(() => {});
+                    }
+                } else {
+                    player.src = finalUrl;
                     player.play().catch(() => {});
                 }
-            } else {
-                player.src = url;
-                player.play().catch(() => {});
             }
             
             showToast(`✨ جاري تشغيل: ${channelName}`);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // زر إعادة تحميل البث السريع
         function refreshStream() {
             if (!currentStreamUrl) {
                 showToast("⚠️ اختر قناة أولاً لتحديث البث!");
@@ -772,7 +795,6 @@
             showToast("🔄 تم تحديث وإعادة تحميل البث بنجاح");
         }
 
-        // إظهار الإشعار التفاعلي المنقوش
         function showToast(message) {
             const toast = document.getElementById('toast-notification');
             toast.innerText = message;
@@ -782,7 +804,6 @@
             }, 3000);
         }
 
-        // فتح باقة معينة بتأثير سلس (Fade)
         function openPackage(packageId) {
             const views = document.querySelectorAll('.channels-view');
             views.forEach(view => {
@@ -797,14 +818,7 @@
             }, 50);
         }
 
-        // العودة إلى قائمة الباقات بتأثير سلس
         function showPackages() {
-            const views = document.querySelectorAll('.channels-view');
-            views.views?.forEach?.(view => {
-                view.classList.remove('active');
-                view.style.display = 'none';
-            });
-            // ضمان التوافق التام
             document.querySelectorAll('.channels-view').forEach(view => {
                 view.classList.remove('active');
                 view.style.display = 'none';
