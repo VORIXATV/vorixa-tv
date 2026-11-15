@@ -2,9 +2,9 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VORIXA TV - البث المباشر</title>
-    <!-- مكتبة HLS.js لدعم تشغيل كافة روابط m3u8 و ts بكفاءة عالية وبدون مشاكل -->
+    <!-- مكتبة HLS لدعم تشغيل كافة روابط البث المباشر .ts و .m3u8 بكفاءة مطلقة -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         :root {
@@ -20,6 +20,7 @@
             margin: 0;
             padding: 0;
             font-family: system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -273,7 +274,7 @@
             100% { transform: translateY(-8px); }
         }
 
-        /* مشغل الفيديو الداخلي الجديد كلياً */
+        /* مشغل الفيديو الداخلي الاحترافي */
         video#main-player {
             width: 100%;
             height: 100%;
@@ -552,7 +553,6 @@
         <div id="packages-view" class="channels-view active">
             <h3 class="section-title">اختر الباقة</h3>
             <div class="packages-grid">
-                <!-- باقة الدوري الألماني الجديدة -->
                 <div class="package-card" onclick="openPackage('bundesliga-package')">
                     <img src="https://i.ibb.co/JWGQ9p7g/images-2a93381e-25ef-4c.png" alt="logo" class="pkg-logo">
                     <h3>الدوري الألماني | SHAHID</h3>
@@ -577,7 +577,7 @@
             </div>
         </div>
 
-        <!-- 2. باقة الدوري الألماني | SHAHID الجديدة -->
+        <!-- 2. باقة الدوري الألماني | SHAHID -->
         <div id="bundesliga-package" class="channels-view">
             <button class="back-btn" onclick="showPackages()">➡️ الرجوع للباقات</button>
             <h3 class="section-title">الدوري الألماني | SHAHID</h3>
@@ -746,10 +746,9 @@
     <div id="toast-notification">✨ جاري تشغيل القناة...</div>
 
     <script>
-        // كود الدخول هو 30
         const correctCode = "30"; 
         let currentStreamUrl = "";
-        let hlsInstance = null; // متغير لإدارة مشغل HLS
+        let hlsInstance = null;
 
         function checkPassword() {
             const enteredCode = document.getElementById('passcode').value;
@@ -767,7 +766,7 @@
             }
         }
 
-        // دالة تشغيل القنوات والمشغل الاحترافي الداخلي
+        // المشغل الاحترافي القوي (يدعم HLS و TS وروابط البث المباشر بدون مشاكل)
         function changeStream(url, channelName) {
             currentStreamUrl = url;
             const welcomeBanner = document.getElementById('welcome-banner');
@@ -777,37 +776,51 @@
 
             const video = document.getElementById('main-player');
 
-            // إيقاف وتفريغ مشغل HLS القديم إذا كان يعمل
             if (hlsInstance) {
                 hlsInstance.destroy();
                 hlsInstance = null;
             }
 
-            // التحقق من نوع الرابط وتشغيله بالمشغل المناسب
-            if (Hls.isSupported() && (url.includes('.m3u8') || url.includes('.ts'))) {
-                hlsInstance = new Hls();
+            if (Hls.isSupported() && (url.includes('.m3u8') || url.includes('.ts') || !url.endsWith('.mp4'))) {
+                hlsInstance = new Hls({
+                    xhrSetup: function (xhr, url) {
+                        xhr.withCredentials = false;
+                    }
+                });
                 hlsInstance.loadSource(url);
                 hlsInstance.attachMedia(video);
                 hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play().catch(e => console.log("Auto-play prevented", e));
+                    video.play().catch(e => console.log("Auto-play error:", e));
+                });
+                hlsInstance.on(Hls.Events.ERROR, function(event, data) {
+                    if (data.fatal) {
+                        switch(data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                hlsInstance.startLoad();
+                                break;
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                hlsInstance.recoverMediaError();
+                                break;
+                            default:
+                                hlsInstance.destroy();
+                                break;
+                        }
+                    }
                 });
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // للمتصفحات التي تدعم HLS بالفطرة (مثل Safari على الآيفون)
                 video.src = url;
                 video.addEventListener('loadedmetadata', function() {
-                    video.play().catch(e => console.log("Auto-play prevented", e));
+                    video.play().catch(e => console.log("Auto-play error:", e));
                 });
             } else {
-                // للروابط والملفات الأخرى (مثل mp4 أو البث المباشر المباشر)
                 video.src = url;
-                video.play().catch(e => console.log("Auto-play prevented", e));
+                video.play().catch(e => console.log("Auto-play error:", e));
             }
             
             showToast(`✨ جاري تشغيل: ${channelName}`);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // زر إعادة تحميل البث السريع
         function refreshStream() {
             if (!currentStreamUrl) {
                 showToast("⚠️ اختر قناة أولاً لتحديث البث!");
@@ -817,7 +830,6 @@
             showToast("🔄 تم تحديث وإعادة تحميل البث بنجاح");
         }
 
-        // إظهار الإشعار التفاعلي المنقوش
         function showToast(message) {
             const toast = document.getElementById('toast-notification');
             toast.innerText = message;
@@ -827,7 +839,6 @@
             }, 3000);
         }
 
-        // فتح باقة معينة بتأثير سلس (Fade)
         function openPackage(packageId) {
             const views = document.querySelectorAll('.channels-view');
             views.forEach(view => {
@@ -842,7 +853,6 @@
             }, 50);
         }
 
-        // العودة إلى قائمة الباقات بتأثير سلس
         function showPackages() {
             const views = document.querySelectorAll('.channels-view');
             views.forEach(view => {
