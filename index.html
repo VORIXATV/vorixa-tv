@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VORIXA TV - البث المباشر</title>
+    <!-- مكتبة HLS.js لدعم تشغيل كافة روابط m3u8 و ts بكفاءة عالية وبدون مشاكل -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         :root {
             --bg-color: #0b0c10;
@@ -271,12 +273,15 @@
             100% { transform: translateY(-8px); }
         }
 
-        iframe {
+        /* مشغل الفيديو الداخلي الجديد كلياً */
+        video#main-player {
             width: 100%;
             height: 100%;
-            border: none;
+            object-fit: contain;
+            background: #000;
             position: relative;
             z-index: 5;
+            outline: none;
         }
 
         /* شريط تحكم المشغل (زر تحديث البث) */
@@ -343,7 +348,7 @@
             background: linear-gradient(145deg, #141414, #080808);
             border: 1px solid rgba(212, 175, 55, 0.4);
             border-radius: 12px;
-            padding: 30px 20px;
+            padding: 25px 20px;
             text-align: center;
             cursor: pointer;
             transition: all 0.4s ease;
@@ -361,8 +366,8 @@
 
         .package-card h3 {
             color: var(--accent-gold);
-            font-size: 18px;
-            margin-bottom: 8px;
+            font-size: 17px;
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -371,7 +376,18 @@
 
         .package-card p {
             color: #94a3b8;
-            font-size: 13px;
+            font-size: 12px;
+        }
+
+        .pkg-logo {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: #000;
+            padding: 2px;
         }
 
         .ball-icon {
@@ -509,7 +525,7 @@
     <!-- محتوى الموقع الأساسي -->
     <div class="container" id="main-content">
         
-        <!-- مشغل الفيديو مع الإضاءة السينمائية المحيطة -->
+        <!-- مشغل الفيديو الجديد مع الإضاءة السينمائية المحيطة -->
         <div class="player-wrapper">
             <div class="player-container">
                 <div id="welcome-banner">
@@ -518,7 +534,8 @@
                     <h2>VORIXA TV</h2>
                     <p>اختر الباقة المفضلة لديك واستمتع بمشاهدة المباريات بجودة عالية</p>
                 </div>
-                <iframe id="main-player" src="about:blank" allowfullscreen></iframe>
+                <!-- مشغل فيديو HTML5 مدعوم بمكتبة HLS للروابط المباشرة و .ts و .m3u8 -->
+                <video id="main-player" controls autoplay playsinline></video>
             </div>
         </div>
 
@@ -535,6 +552,12 @@
         <div id="packages-view" class="channels-view active">
             <h3 class="section-title">اختر الباقة</h3>
             <div class="packages-grid">
+                <!-- باقة الدوري الألماني الجديدة -->
+                <div class="package-card" onclick="openPackage('bundesliga-package')">
+                    <img src="https://i.ibb.co/JWGQ9p7g/images-2a93381e-25ef-4c.png" alt="logo" class="pkg-logo">
+                    <h3>الدوري الألماني | SHAHID</h3>
+                    <p>تحتوي على 9 قنوات</p>
+                </div>
                 <div class="package-card" onclick="openPackage('bein-package')">
                     <h3><span class="ball-icon">⚽</span> باقة BEIN SPORTS</h3>
                     <p>تحتوي على 20 قناة</p>
@@ -554,7 +577,42 @@
             </div>
         </div>
 
-        <!-- 2. قنوات BeIN Sports -->
+        <!-- 2. باقة الدوري الألماني | SHAHID الجديدة -->
+        <div id="bundesliga-package" class="channels-view">
+            <button class="back-btn" onclick="showPackages()">➡️ الرجوع للباقات</button>
+            <h3 class="section-title">الدوري الألماني | SHAHID</h3>
+            <div class="grid">
+                <div class="channel-card" onclick="changeStream('http://link.faltulog.org:2052/live/36750623403240/14750722182138/674792.ts', 'SHAHID SPORTS 1')">
+                    <h4>SHAHID SPORTS 1</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('http://link.faltulog.org:2052/live/36750623403240/14750722182138/674793.ts', 'SHAHID SPORTS 2')">
+                    <h4>SHAHID SPORTS 2</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('http://link.faltulog.org:2052/live/36750623403240/14750722182138/674794.ts', 'SHAHID SPORTS 3')">
+                    <h4>SHAHID SPORTS 3</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('http://link.faltulog.org:2052/live/36750623403240/14750722182138/674795.ts', 'SHAHID SPORTS 4')">
+                    <h4>SHAHID SPORTS 4</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('http://link.faltulog.org:2052/live/36750623403240/14750722182138/674796.ts', 'SHAHID SPORTS 5')">
+                    <h4>SHAHID SPORTS 5</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('http://link.faltulog.org:2052/live/36750623403240/14750722182138/674797.ts', 'SHAHID SPORTS 6')">
+                    <h4>SHAHID SPORTS 6</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('http://link.faltulog.org:2052/live/36750623403240/14750722182138/674798.ts', 'SHAHID SPORTS 7')">
+                    <h4>SHAHID SPORTS 7</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('http://link.faltulog.org:2052/live/36750623403240/14750722182138/674799.ts', 'SHAHID SPORTS 8')">
+                    <h4>SHAHID SPORTS 8</h4>
+                </div>
+                <div class="channel-card" onclick="changeStream('http://link.faltulog.org:2052/live/36750623403240/14750722182138/674800.ts', 'SHAHID SPORTS 9')">
+                    <h4>SHAHID SPORTS 9</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. قنوات BeIN Sports -->
         <div id="bein-package" class="channels-view">
             <button class="back-btn" onclick="showPackages()">➡️ الرجوع للباقات</button>
             <h3 class="section-title">قنوات BEIN SPORTS</h3>
@@ -622,7 +680,7 @@
             </div>
         </div>
 
-        <!-- 3. قنوات THAMANEA -->
+        <!-- 4. قنوات THAMANEA -->
         <div id="thamanea-package" class="channels-view">
             <button class="back-btn" onclick="showPackages()">➡️ الرجوع للباقات</button>
             <h3 class="section-title">قنوات THAMANEA</h3>
@@ -639,7 +697,7 @@
             </div>
         </div>
 
-        <!-- 4. قنوات ALWAN SPORTS -->
+        <!-- 5. قنوات ALWAN SPORTS -->
         <div id="alwan-package" class="channels-view">
             <button class="back-btn" onclick="showPackages()">➡️ الرجوع للباقات</button>
             <h3 class="section-title">قنوات ALWAN SPORTS</h3>
@@ -662,7 +720,7 @@
             </div>
         </div>
 
-        <!-- 5. باقة قنوات الفجر -->
+        <!-- 6. باقة قنوات الفجر -->
         <div id="fajr-package" class="channels-view">
             <button class="back-btn" onclick="showPackages()">➡️ الرجوع للباقات</button>
             <h3 class="section-title">باقة قنوات الفجر</h3>
@@ -691,6 +749,7 @@
         // كود الدخول هو 30
         const correctCode = "30"; 
         let currentStreamUrl = "";
+        let hlsInstance = null; // متغير لإدارة مشغل HLS
 
         function checkPassword() {
             const enteredCode = document.getElementById('passcode').value;
@@ -708,7 +767,7 @@
             }
         }
 
-        // تغيير البث مع إظهار إشعار تفاعلي ناعم (Toast)
+        // دالة تشغيل القنوات والمشغل الاحترافي الداخلي
         function changeStream(url, channelName) {
             currentStreamUrl = url;
             const welcomeBanner = document.getElementById('welcome-banner');
@@ -716,8 +775,33 @@
                 welcomeBanner.style.display = 'none';
             }
 
-            const player = document.getElementById('main-player');
-            player.src = url;
+            const video = document.getElementById('main-player');
+
+            // إيقاف وتفريغ مشغل HLS القديم إذا كان يعمل
+            if (hlsInstance) {
+                hlsInstance.destroy();
+                hlsInstance = null;
+            }
+
+            // التحقق من نوع الرابط وتشغيله بالمشغل المناسب
+            if (Hls.isSupported() && (url.includes('.m3u8') || url.includes('.ts'))) {
+                hlsInstance = new Hls();
+                hlsInstance.loadSource(url);
+                hlsInstance.attachMedia(video);
+                hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play().catch(e => console.log("Auto-play prevented", e));
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // للمتصفحات التي تدعم HLS بالفطرة (مثل Safari على الآيفون)
+                video.src = url;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play().catch(e => console.log("Auto-play prevented", e));
+                });
+            } else {
+                // للروابط والملفات الأخرى (مثل mp4 أو البث المباشر المباشر)
+                video.src = url;
+                video.play().catch(e => console.log("Auto-play prevented", e));
+            }
             
             showToast(`✨ جاري تشغيل: ${channelName}`);
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -729,12 +813,8 @@
                 showToast("⚠️ اختر قناة أولاً لتحديث البث!");
                 return;
             }
-            const player = document.getElementById('main-player');
-            player.src = 'about:blank';
-            setTimeout(() => {
-                player.src = currentStreamUrl;
-                showToast("🔄 تم تحديث وإعادة تحميل البث بنجاح");
-            }, 300);
+            changeStream(currentStreamUrl, "تحديث البث");
+            showToast("🔄 تم تحديث وإعادة تحميل البث بنجاح");
         }
 
         // إظهار الإشعار التفاعلي المنقوش
