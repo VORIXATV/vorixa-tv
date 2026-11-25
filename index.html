@@ -605,7 +605,7 @@
         </div>
       </div>
 
-      <!-- الشاشة الوسطى: تبقى بوضع الترحيب أو تتحول إلى المشغل عند الضغط على قناة -->
+      <!-- الشاشة الوسطى: تبقى بوضع الترحيب أو تتحول إلى مشغل القناة المحددة -->
       <div class="center-screen-stage" id="centerScreenStage">
         <div class="hero-welcome-box" id="heroWelcomeBox">
           <div class="hero-logo-icon">
@@ -1521,6 +1521,7 @@
       MP.idx = i;
       markMobileChip();
       const st = MP.ch.streams[i];
+      MP.curUrl = extractTargetStreamUrl(st.url);
       document.getElementById('playerTitle').textContent = MP.ch.name + (st.q && MP.ch.streams.length > 1 ? ' - ' + st.q : '');
       startMobilePlayback(st);
     }
@@ -1925,12 +1926,18 @@
     function openExtModal() { document.getElementById('extModal').style.display = 'flex'; }
     function closeExtModal() { document.getElementById('extModal').style.display = 'none'; }
     function openExternal(kind) {
-      const m = String(MP.curUrl || '').match(/^(https?):\/\/([^#]*)/i);
+      const targetUrl = extractTargetStreamUrl(MP.curUrl || (MP.ch && MP.ch.streams && MP.ch.streams[MP.idx] && MP.ch.streams[MP.idx].url) || '');
+      const m = String(targetUrl).match(/^(https?):\/\/([^#]*)/i);
       if (!m) { showToast('الرابط لا يدعم التشغيل الخارجي', '⚠️'); closeExtModal(); return; }
       const pkg = kind === 'vlc' ? 'org.videolan.vlc' : kind === 'mx' ? 'com.mxtech.videoplayer.ad' : '';
       const fb = pkg ? 'S.browser_fallback_url=' + encodeURIComponent('https://play.google.com/store/apps/details?id=' + pkg) + ';' : '';
       closeExtModal();
+      try { vid.pause(); } catch (e) {}
+      showToast('جاري الفتح في المشغل الخارجي...', '🚀');
       location.href = 'intent://' + m[2] + '#Intent;scheme=' + m[1].toLowerCase() + ';action=android.intent.action.VIEW;type=video/*;' + (pkg ? 'package=' + pkg + ';' : '') + fb + 'end';
+      setTimeout(() => {
+        try { window.open(targetUrl, '_blank', 'noopener,noreferrer'); } catch (e) {}
+      }, 900);
     }
 
     function wakeMobileControls() {
