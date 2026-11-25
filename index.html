@@ -36,10 +36,11 @@
     background: linear-gradient(145deg, #1b0b1e 0%, #070b18 48%, #04060c 100%);
     color: var(--text-main);
     margin: 0; padding: 0;
-    width: 100vw; height: 100vh; height: 100dvh;
-    overflow: hidden;
+    width: 100%; min-height: 100vh; min-height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
   }
 
   /* دخولية فخمة جداً (Splash Screen) تلقائية لمدة 3 ثواني */
@@ -91,86 +92,14 @@
     text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
   }
 
-  /* القائمة الجانبية للباقات (ملمومة ومرتبة بشكل أنيق) */
-  .receiver-sidebar {
-    width: 225px;
-    background: linear-gradient(180deg, rgba(13, 18, 36, 0.96), rgba(7, 10, 20, 0.98));
-    border-left: 1px solid rgba(245, 196, 81, 0.2);
-    display: flex; flex-direction: column; height: 100%; flex-shrink: 0; z-index: 10;
-  }
-  .sidebar-header {
-    padding: 10px 12px;
-    border-bottom: 1px solid rgba(245, 196, 81, 0.16);
-    background: rgba(245, 196, 81, 0.05);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .brand-wrap { display: flex; align-items: center; gap: 8px; flex-direction: row-reverse; }
-  .sidebar-logo {
-    width: 28px; height: 28px; background: linear-gradient(135deg, #f5c451, #be123c, #0284c7);
-    border-radius: 8px; display: flex; align-items: center; justify-content: center;
-    font-size: 12px; color: #060811; font-weight: 900;
-  }
-  .sidebar-title { font-size: 12.5px; font-weight: 900; color: #f8fafc; }
-
-  .bundles-menu-list {
-    flex: 1;
-    overflow-y: auto;
-    padding: 6px 7px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-  .bundles-menu-list::-webkit-scrollbar { display: none; }
-
-  .bundle-menu-item {
-    width: 100%;
-    background: rgba(255, 255, 255, 0.025);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 9px;
-    padding: 6px 8px;
-    display: flex; align-items: center; gap: 7px;
-    color: #e2e8f0;
-    cursor: pointer; font-size: 10.5px; font-weight: 800; text-align: right;
-    transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease, transform 0.12s ease;
-    direction: rtl;
-  }
-  .bundle-menu-item:hover, .bundle-menu-item:focus {
-    background: rgba(245, 196, 81, 0.11);
-    border-color: rgba(245, 196, 81, 0.38);
-    color: #fff;
-    outline: none;
-  }
-  .bundle-menu-item.active {
-    background: linear-gradient(90deg, rgba(190, 18, 60, 0.25), rgba(245, 196, 81, 0.18));
-    color: #fff;
-    border-color: rgba(245, 196, 81, 0.62);
-    box-shadow: 0 2px 10px rgba(245, 196, 81, 0.1);
-  }
-  .bundle-menu-logo {
-    width: 22px; height: 22px; object-fit: contain; background: rgba(255,255,255,0.04);
-    border-radius: 6px; padding: 1.5px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.08);
-  }
-  .bundle-count-pill {
-    font-size: 8px;
-    font-weight: 900;
-    color: var(--accent-gold);
-    background: rgba(245, 196, 81, 0.1);
-    border: 1px solid rgba(245, 196, 81, 0.22);
-    padding: 1px 5px;
-    border-radius: 5px;
-    flex-shrink: 0;
-  }
-
   /* منطقة المحتوى الرئيسية */
   .receiver-content-area {
-    flex: 1; height: 100%; display: flex; flex-direction: column; background: transparent; overflow: hidden; min-width: 0;
+    flex: 1; width: 100%; display: flex; flex-direction: column; background: transparent;
   }
 
   /* شريط التحكم العلوي */
   .top-controls-bar {
-    padding: 8px 14px;
+    padding: 8px 12px;
     border-bottom: 1px solid rgba(245, 196, 81, 0.16);
     display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
     gap: 8px;
@@ -185,7 +114,20 @@
     flex-wrap: wrap;
   }
 
-  .active-bundle-name { font-size: 12.5px; font-weight: 900; color: #f8fafc; display: flex; align-items: center; gap: 7px; }
+  .brand-mini-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(245, 196, 81, 0.08);
+    border: 1px solid rgba(245, 196, 81, 0.25);
+    padding: 4px 8px; border-radius: 8px;
+  }
+  .brand-mini-logo {
+    width: 20px; height: 20px; background: linear-gradient(135deg, #f5c451, #be123c, #0284c7);
+    border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: #060811; font-weight: 900;
+  }
+  .brand-mini-name { font-size: 11px; font-weight: 900; color: #f8fafc; }
+
+  .active-bundle-name { font-size: 12px; font-weight: 900; color: #f8fafc; display: flex; align-items: center; gap: 6px; }
   .active-bundle-name span {
     color: var(--accent-gold); font-size: 9px; background: rgba(245, 196, 81, 0.12);
     padding: 2px 7px; border-radius: 6px; border: 1px solid rgba(245, 196, 81, 0.28);
@@ -214,7 +156,7 @@
     outline: none;
   }
 
-  .search-and-tg { display: flex; align-items: center; gap: 7px; }
+  .search-and-tg { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
 
   .live-clock-badge {
     background: rgba(255, 255, 255, 0.025);
@@ -222,7 +164,7 @@
     color: var(--accent-gold);
     padding: 6px 9px;
     border-radius: 8px;
-    font-size: 10.5px;
+    font-size: 10px;
     font-weight: 900;
     display: inline-flex;
     align-items: center;
@@ -232,7 +174,7 @@
   }
   .live-clock-badge i { font-size: 10px; color: var(--accent-secondary); }
 
-  .search-box { position: relative; width: 160px; }
+  .search-box { position: relative; width: 150px; }
   .search-box input {
     width: 100%;
     background: rgba(255, 255, 255, 0.025);
@@ -258,7 +200,7 @@
   .marquee-top-wrapper {
     background: linear-gradient(90deg, rgba(190, 18, 60, 0.14), rgba(245, 196, 81, 0.11), rgba(2, 132, 199, 0.14));
     border: 1px solid rgba(245, 196, 81, 0.3);
-    padding: 14px 0;
+    padding: 13px 0;
     overflow: hidden;
     white-space: nowrap;
     position: relative;
@@ -272,7 +214,7 @@
     align-items: center;
     width: max-content;
     animation: marqueeAnimation 24s linear infinite;
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 900;
     color: #f8fafc;
     direction: rtl;
@@ -290,19 +232,25 @@
     100% { transform: translate3d(-50%, 0, 0); }
   }
 
-  /* شعار التطبيق بوسط الصفحة */
-  .hero-app-logo-card {
+  /* الشاشة الوسطى: تبقى بوضع الترحيب أو تتحول إلى مشغل القناة المحددة */
+  .center-screen-stage {
     background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(245, 196, 81, 0.2);
+    border: 1px solid rgba(245, 196, 81, 0.22);
     border-radius: 18px;
-    padding: 30px 18px;
     margin: 10px 12px;
+    overflow: hidden;
+    position: relative;
+    min-height: 220px;
+    flex-shrink: 0;
+  }
+
+  .hero-welcome-box {
+    padding: 28px 18px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    flex-shrink: 0;
   }
   .hero-logo-icon {
     width: 68px;
@@ -324,26 +272,86 @@
     margin-bottom: 4px;
   }
   .hero-brand-subtitle {
-    font-size: 10px;
+    font-size: 10.5px;
     color: var(--text-sub);
     font-weight: 700;
   }
 
-  .scrollable-grid-wrap {
-    flex: 1;
-    overflow-y: auto;
-    padding: 0 12px 12px 12px;
+  /* الباقات تحت المشغل مباشرة وبشكل سطرين */
+  .bundles-two-rows-section {
+    margin: 4px 12px 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .bundles-two-rows-grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+    overflow-x: auto;
+    padding-bottom: 4px;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
   }
-  .scrollable-grid-wrap::-webkit-scrollbar { display: none; }
+  .bundles-two-rows-grid::-webkit-scrollbar { display: none; }
+
+  .bundle-tile-btn {
+    min-width: 158px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 11px;
+    padding: 7px 9px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #e2e8f0;
+    cursor: pointer;
+    font-size: 10.5px;
+    font-weight: 800;
+    text-align: right;
+    transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+    direction: rtl;
+  }
+  .bundle-tile-btn:hover, .bundle-tile-btn:focus {
+    background: rgba(245, 196, 81, 0.11);
+    border-color: rgba(245, 196, 81, 0.4);
+    color: #fff;
+    outline: none;
+  }
+  .bundle-tile-btn.active {
+    background: linear-gradient(90deg, rgba(190, 18, 60, 0.28), rgba(245, 196, 81, 0.18));
+    color: #fff;
+    border-color: rgba(245, 196, 81, 0.65);
+    box-shadow: 0 2px 10px rgba(245, 196, 81, 0.12);
+  }
+  .bundle-menu-logo {
+    width: 24px; height: 24px; object-fit: contain; background: rgba(255,255,255,0.04);
+    border-radius: 7px; padding: 1.5px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.08);
+  }
+  .bundle-count-pill {
+    font-size: 8.5px;
+    font-weight: 900;
+    color: var(--accent-gold);
+    background: rgba(245, 196, 81, 0.12);
+    border: 1px solid rgba(245, 196, 81, 0.24);
+    padding: 1px 6px;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .scrollable-grid-wrap {
+    padding: 0 12px 18px 12px;
+  }
 
   .channels-grid-receiver {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
     gap: 8px;
     width: 100%;
-    margin-top: 10px;
+    margin-top: 6px;
   }
 
   .channel-card-rec {
@@ -366,16 +374,16 @@
     border-radius: 7px; padding: 2px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.07);
   }
   .ch-rec-texts { display: flex; flex-direction: column; min-width: 0; }
-  .ch-rec-title { font-size: 10px; font-weight: 800; color: #f8fafc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ch-rec-title { font-size: 10.5px; font-weight: 800; color: #f8fafc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .ch-rec-sub {
-    font-size: 7px; color: var(--text-sub); font-weight: 700; margin-top: 2px; display: flex; align-items: center; gap: 4px;
+    font-size: 7.5px; color: var(--text-sub); font-weight: 700; margin-top: 2px; display: flex; align-items: center; gap: 4px;
   }
   .live-dot {
     width: 5px; height: 5px; border-radius: 50%; background: var(--accent-green);
   }
 
   .quality-badge {
-    background: rgba(245, 196, 81, 0.12); color: var(--accent-gold); padding: 1px 5px; border-radius: 4px; font-size: 6px; font-weight: 900; border: 1px solid rgba(245, 196, 81, 0.25);
+    background: rgba(245, 196, 81, 0.12); color: var(--accent-gold); padding: 1px 5px; border-radius: 4px; font-size: 6.5px; font-weight: 900; border: 1px solid rgba(245, 196, 81, 0.25);
   }
   .ch-rec-play-btn {
     width: 26px; height: 26px; background: linear-gradient(135deg, #f5c451, #be123c); color: #060811; border-radius: 7px;
@@ -390,30 +398,38 @@
   }
   .toast-popup.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-  /* ===== مشغل التلفون ===== */
+  /* ===== مشغل التلفون (مدمج داخل الشاشة الوسطى أو بملء الشاشة) ===== */
   #player {
-    position: fixed; inset: 0; z-index: 500000;
-    background: #000; display: none; flex-direction: column;
-    height: 100vh; height: 100dvh; touch-action: manipulation; overscroll-behavior: contain;
+    position: relative;
+    width: 100%;
+    height: 240px;
+    background: #000;
+    display: none;
+    flex-direction: column;
+    touch-action: manipulation;
+    overscroll-behavior: contain;
   }
   #player.open { display: flex; }
+  #player:fullscreen, #player:-webkit-full-screen {
+    position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; z-index: 500000;
+  }
   #player.fit-cover #vid { object-fit: cover; }
   #player.fit-fill #vid { object-fit: fill; }
   #player.idle { cursor: none; }
   #player.idle .player-top, #player.idle .player-bottom, #player.idle .player-center-controls { opacity: 0; pointer-events: none; }
   .player-top {
     position: absolute; top: 0; left: 0; right: 0; z-index: 5;
-    padding: calc(12px + env(safe-area-inset-top, 0px)) 14px 12px;
-    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px;
+    display: flex; align-items: center; gap: 6px;
     background: linear-gradient(180deg, rgba(0,0,0,0.85), transparent);
     direction: rtl; transition: opacity 0.25s;
   }
-  .player-title { flex: 1; font-size: 13px; font-weight: 900; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .player-title { flex: 1; font-size: 11.5px; font-weight: 900; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .pbtn {
-    min-width: 36px; height: 36px; padding: 0 10px; border-radius: 10px;
+    min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px;
     border: 1px solid rgba(255,255,255,0.18); background: rgba(15,10,14,0.78);
-    color: #fff; font-size: 12px; cursor: pointer;
-    display: inline-flex; align-items: center; justify-content: center; gap: 5px; font-weight: 800;
+    color: #fff; font-size: 11px; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-weight: 800;
   }
   .pbtn:hover, .pbtn:focus { border-color: var(--accent-gold); background: rgba(245,196,81,0.2); outline: none; }
   .pbtn.close { background: rgba(190,18,60,0.88); border-color: transparent; }
@@ -423,19 +439,19 @@
   /* أزرار التوقف والتشغيل والتقديم والتأخير 10 ثواني في وسط المشغل */
   .player-center-controls {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    z-index: 5; display: flex; align-items: center; justify-content: center; gap: 22px;
+    z-index: 5; display: flex; align-items: center; justify-content: center; gap: 18px;
     direction: ltr; transition: opacity 0.25s;
   }
   .center-skip-btn {
-    width: 48px; height: 48px; border-radius: 50%;
+    width: 40px; height: 40px; border-radius: 50%;
     border: 1px solid rgba(255,255,255,0.22); background: rgba(15,10,14,0.72);
-    color: #fff; font-size: 13px; cursor: pointer;
+    color: #fff; font-size: 11px; cursor: pointer;
     display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; font-weight: 900;
   }
   .center-play-btn {
-    width: 62px; height: 62px; border-radius: 50%;
+    width: 52px; height: 52px; border-radius: 50%;
     border: 1px solid rgba(255,255,255,0.28); background: rgba(15,10,14,0.78);
-    color: #fff; font-size: 22px; cursor: pointer;
+    color: #fff; font-size: 18px; cursor: pointer;
     display: inline-flex; align-items: center; justify-content: center;
     transition: background 0.2s, border-color 0.2s, opacity 0.2s;
   }
@@ -449,34 +465,34 @@
 
   .player-bottom {
     position: absolute; bottom: 0; left: 0; right: 0; z-index: 5;
-    padding: 24px 14px calc(14px + env(safe-area-inset-bottom, 0px));
+    padding: 16px 10px 8px;
     background: linear-gradient(0deg, rgba(0,0,0,0.9), transparent);
     direction: rtl; transition: opacity 0.25s;
-    display: flex; flex-direction: column; gap: 8px;
+    display: flex; flex-direction: column; gap: 6px;
   }
-  .ctrl-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .ctrl-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
   .ctrl-row.spread { justify-content: space-between; }
   .chip {
-    padding: 5px 11px; border-radius: 999px; font-size: 10px; font-weight: 900; color: #e2e8f0; cursor: pointer;
+    padding: 4px 9px; border-radius: 999px; font-size: 9.5px; font-weight: 900; color: #e2e8f0; cursor: pointer;
     background: rgba(15,10,14,0.78); border: 1px solid rgba(255,255,255,0.18);
   }
   .chip.active { background: linear-gradient(135deg, #f5c451, #be123c); color: #060811; border-color: transparent; }
-  .vol { accent-color: var(--accent-gold); width: 80px; }
-  .s10 { font-size: 9px; font-weight: 900; line-height: 1; }
-  .seek-row { display: flex; align-items: center; direction: ltr; width: 100%; gap: 8px; }
-  .seek-row .tm { font-size: 11px; font-weight: 800; color: #e2e8f0; min-width: 44px; text-align: center; }
-  #seek { flex: 1; min-width: 0; height: 22px; margin: 0; background: transparent; -webkit-appearance: none; appearance: none; }
+  .vol { accent-color: var(--accent-gold); width: 65px; }
+  .s10 { font-size: 8px; font-weight: 900; line-height: 1; }
+  .seek-row { display: flex; align-items: center; direction: ltr; width: 100%; gap: 6px; }
+  .seek-row .tm { font-size: 10px; font-weight: 800; color: #e2e8f0; min-width: 38px; text-align: center; }
+  #seek { flex: 1; min-width: 0; height: 18px; margin: 0; background: transparent; -webkit-appearance: none; appearance: none; }
   #seek::-webkit-slider-runnable-track { height: 4px; border-radius: 4px; background: linear-gradient(to right, var(--accent-gold) var(--p, 0%), rgba(255,255,255,0.28) var(--p, 0%)); }
-  #seek::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; margin-top: -5px; border-radius: 50%; background: #fff; border: 2px solid var(--accent-gold); }
+  #seek::-webkit-slider-thumb { -webkit-appearance: none; width: 13px; height: 13px; margin-top: -4.5px; border-radius: 50%; background: #fff; border: 2px solid var(--accent-gold); }
   #seek:disabled { opacity: 0.35; }
   .qwrap { position: relative; }
-  .qmenu { display: none; position: absolute; bottom: calc(100% + 8px); right: 0; min-width: 130px; max-height: 45vh; overflow-y: auto; flex-direction: column; padding: 6px; border-radius: 12px; z-index: 8; background: rgba(9,13,26,0.97); border: 1px solid rgba(245,196,81,0.3); }
+  .qmenu { display: none; position: absolute; bottom: calc(100% + 8px); right: 0; min-width: 120px; max-height: 45vh; overflow-y: auto; flex-direction: column; padding: 6px; border-radius: 12px; z-index: 8; background: rgba(9,13,26,0.97); border: 1px solid rgba(245,196,81,0.3); }
   .qmenu.on { display: flex; }
-  .qitem { background: transparent; border: 1px solid transparent; color: #e2e8f0; padding: 8px 11px; margin: 2px 0; border-radius: 8px; font-size: 11px; font-weight: 800; text-align: right; cursor: pointer; display: flex; justify-content: space-between; white-space: nowrap; }
+  .qitem { background: transparent; border: 1px solid transparent; color: #e2e8f0; padding: 7px 10px; margin: 2px 0; border-radius: 8px; font-size: 10.5px; font-weight: 800; text-align: right; cursor: pointer; display: flex; justify-content: space-between; white-space: nowrap; }
   .qitem:hover, .qitem.active { color: var(--accent-gold); background: rgba(245,196,81,0.12); }
   .qitem.active::after { content: '\2713'; margin-right: 10px; }
   .spinner {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 4; width: 78px; height: 78px; border-radius: 50%; display: none;
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 4; width: 58px; height: 58px; border-radius: 50%; display: none;
     border: 4px solid rgba(255,255,255,0.12); border-top-color: var(--accent-gold); animation: spin 0.9s linear infinite; pointer-events: none;
   }
   .spinner.on { display: block; }
@@ -495,17 +511,11 @@
   }
 
   @media (max-width: 700px) {
-    html, body { flex-direction: column; overflow: auto; position: static; height: 100vh; height: 100dvh; min-height: 100vh; }
-    .receiver-sidebar { width: 100%; height: auto; border-left: none; border-bottom: 1px solid rgba(245, 196, 81, 0.18); background: var(--bg-sidebar); }
-    .sidebar-header { padding: 7px 10px; }
-    .bundles-menu-list { display: flex; flex-direction: row; overflow-x: auto; padding: 5px 7px; gap: 5px; }
-    .bundle-menu-item { width: auto; white-space: nowrap; padding: 5px 8px; gap: 5px; }
-    .receiver-content-area { flex: 1; height: auto; overflow: visible; }
-    .scrollable-grid-wrap { overflow: visible; }
-    .marquee-top-wrapper { padding: 13px 0; }
-    .marquee-content { font-size: 13.5px; }
+    .marquee-top-wrapper { padding: 12px 0; }
+    .marquee-content { font-size: 13px; }
     .search-box { width: 120px; }
     .search-box i { left: 8px; }
+    .bundle-tile-btn { min-width: 148px; }
   }
 </style>
 </head>
@@ -560,6 +570,10 @@
   <div class="receiver-content-area">
     <div class="top-controls-bar">
       <div class="bundle-header-left">
+        <div class="brand-mini-badge">
+          <div class="brand-mini-logo">V</div>
+          <span class="brand-mini-name">VORIXA PRO</span>
+        </div>
         <div class="active-bundle-name" id="activeBundleTitle">
           الرئيسية <span>لوحة الترحيب</span>
         </div>
@@ -579,65 +593,79 @@
       </div>
     </div>
 
-    <div class="recent-bar" id="recentBar"></div>
-
-    <div class="scrollable-grid-wrap" id="scrollableContainer"></div>
-  </div>
-
-  <!-- القائمة الجانبية للباقات -->
-  <div class="receiver-sidebar">
-    <div class="sidebar-header">
-      <div class="brand-wrap">
-        <div class="sidebar-title">VORIXA PRO</div>
-        <div class="sidebar-logo">V</div>
+    <!-- الشريط المتحرك مكبر وواضح في الأعلى -->
+    <div class="marquee-top-wrapper">
+      <div class="marquee-content">
+        <span>بث مباشر بأعلى جودة وبدون تقطيع لقنوات بي ان سبورت وباقي القنوات الرياضية 💎</span>
+        <span>أشتركو بقناتنا على التليجرام لمعرفة جميع تحديثات التطبيق وتحديث الكود 🚨</span>
+        <span>بث مباشر بأعلى جودة وبدون تقطيع لقنوات بي ان سبورت وباقي القنوات الرياضية 💎</span>
+        <span>أشتركو بقناتنا على التليجرام لمعرفة جميع تحديثات التطبيق وتحديث الكود 🚨</span>
       </div>
     </div>
-    <div class="bundles-menu-list" id="bundlesMenuList"></div>
-  </div>
 
-  <!-- مشغل التلفون (يُفعّل تلقائياً لتشغيل كل الروابط) -->
-  <div id="player" aria-label="المشغل">
-    <div class="player-stage" id="playerStage">
-      <video id="vid" playsinline webkit-playsinline autoplay preload="auto" controlsList="nodownload noremoteplayback"></video>
-    </div>
-    <div class="spinner" id="spinner"></div>
-    <div class="player-center-controls" id="playerCenterControls">
-      <button class="center-skip-btn" onclick="skip(-10)" aria-label="رجوع 10 ثواني"><i class="fa-solid fa-rotate-left"></i><span class="s10">10</span></button>
-      <button class="center-play-btn" id="btnPlay" onclick="togglePlay()" aria-label="تشغيل/إيقاف"><i class="fa-solid fa-pause"></i></button>
-      <button class="center-skip-btn" onclick="skip(10)" aria-label="تقديم 10 ثواني"><i class="fa-solid fa-rotate-right"></i><span class="s10">10</span></button>
-    </div>
-    <div class="player-top">
-      <button class="pbtn close" onclick="closeMobilePlayer()" aria-label="إغلاق"><i class="fa-solid fa-xmark"></i></button>
-      <div class="player-title" id="playerTitle"></div>
-      <button class="pbtn" id="btnPrevCh" onclick="chStep(-1)" aria-label="القناة السابقة" style="display:none"><i class="fa-solid fa-backward-step"></i></button>
-      <button class="pbtn" id="btnNextCh" onclick="chStep(1)" aria-label="القناة التالية" style="display:none"><i class="fa-solid fa-forward-step"></i></button>
-      <button class="pbtn" onclick="openExtModal()" aria-label="مشغل خارجي"><i class="fa-solid fa-up-right-from-square"></i></button>
-      <button class="pbtn" onclick="cycleFit()" aria-label="نسبة العرض"><i class="fa-solid fa-up-down-left-right"></i></button>
-      <button class="pbtn" id="btnFs" onclick="toggleFullscreen()" aria-label="ملء الشاشة"><i class="fa-solid fa-expand"></i></button>
-    </div>
-    <div class="player-bottom">
-      <div class="ctrl-row" id="streamChips"></div>
-      <div class="seek-row">
-        <span class="tm" id="tCur">0:00</span>
-        <input type="range" id="seek" min="0" max="1000" step="1" value="0" aria-label="شريط التشغيل" disabled>
-        <span class="tm" id="tDur">0:00</span>
-        <button class="pbtn" id="btnLive" onclick="goLive()" style="display:none; font-size:10px;"><span class="live-dot"></span>مباشر</button>
-      </div>
-      <div class="ctrl-row spread">
-        <div class="ctrl-row">
-          <button class="pbtn" id="btnMute" onclick="toggleMute()" aria-label="كتم"><i class="fa-solid fa-volume-high"></i></button>
-          <input type="range" class="vol" id="volRange" min="0" max="1" step="0.05" value="1" aria-label="مستوى الصوت">
+    <!-- الشاشة الوسطى: تبقى بوضع الترحيب أو تتحول إلى المشغل عند الضغط على قناة -->
+    <div class="center-screen-stage" id="centerScreenStage">
+      <div class="hero-welcome-box" id="heroWelcomeBox">
+        <div class="hero-logo-icon">
+          <i class="fa-solid fa-tv"></i>
         </div>
-        <div class="ctrl-row">
-          <div class="qwrap" id="qWrap" style="display:none">
-            <button class="pbtn" id="btnQual" onclick="toggleQMenu()" aria-label="الجودة"><i class="fa-solid fa-gear"></i><span id="qLabel">تلقائي</span></button>
-            <div class="qmenu" id="qMenu" role="menu"></div>
+        <div class="hero-brand-title">VORIXA PRO</div>
+        <div class="hero-brand-subtitle">بوابتك الأولى للبث المباشر والترفيه الرقمي</div>
+      </div>
+
+      <!-- مشغل التلفون (يُفعّل تلقائياً لتشغيل كل الروابط داخل الشاشة الوسطى) -->
+      <div id="player" aria-label="المشغل">
+        <div class="player-stage" id="playerStage">
+          <video id="vid" playsinline webkit-playsinline autoplay preload="auto" controlsList="nodownload noremoteplayback"></video>
+        </div>
+        <div class="spinner" id="spinner"></div>
+        <div class="player-center-controls" id="playerCenterControls">
+          <button class="center-skip-btn" onclick="skip(-10)" aria-label="رجوع 10 ثواني"><i class="fa-solid fa-rotate-left"></i><span class="s10">10</span></button>
+          <button class="center-play-btn" id="btnPlay" onclick="togglePlay()" aria-label="تشغيل/إيقاف"><i class="fa-solid fa-pause"></i></button>
+          <button class="center-skip-btn" onclick="skip(10)" aria-label="تقديم 10 ثواني"><i class="fa-solid fa-rotate-right"></i><span class="s10">10</span></button>
+        </div>
+        <div class="player-top">
+          <button class="pbtn close" onclick="closeMobilePlayer()" aria-label="إغلاق"><i class="fa-solid fa-xmark"></i></button>
+          <div class="player-title" id="playerTitle"></div>
+          <button class="pbtn" id="btnPrevCh" onclick="chStep(-1)" aria-label="القناة السابقة" style="display:none"><i class="fa-solid fa-backward-step"></i></button>
+          <button class="pbtn" id="btnNextCh" onclick="chStep(1)" aria-label="القناة التالية" style="display:none"><i class="fa-solid fa-forward-step"></i></button>
+          <button class="pbtn" onclick="openExtModal()" aria-label="مشغل خارجي"><i class="fa-solid fa-up-right-from-square"></i></button>
+          <button class="pbtn" onclick="cycleFit()" aria-label="نسبة العرض"><i class="fa-solid fa-up-down-left-right"></i></button>
+          <button class="pbtn" id="btnFs" onclick="toggleFullscreen()" aria-label="ملء الشاشة"><i class="fa-solid fa-expand"></i></button>
+        </div>
+        <div class="player-bottom">
+          <div class="ctrl-row" id="streamChips"></div>
+          <div class="seek-row">
+            <span class="tm" id="tCur">0:00</span>
+            <input type="range" id="seek" min="0" max="1000" step="1" value="0" aria-label="شريط التشغيل" disabled>
+            <span class="tm" id="tDur">0:00</span>
+            <button class="pbtn" id="btnLive" onclick="goLive()" style="display:none; font-size:9.5px;"><span class="live-dot"></span>مباشر</button>
           </div>
-          <button class="pbtn" onclick="restartStream()" aria-label="إعادة الاتصال"><i class="fa-solid fa-arrows-rotate"></i></button>
-          <button class="pbtn" onclick="togglePip()" aria-label="نافذة عائمة"><i class="fa-solid fa-tv"></i></button>
+          <div class="ctrl-row spread">
+            <div class="ctrl-row">
+              <button class="pbtn" id="btnMute" onclick="toggleMute()" aria-label="كتم"><i class="fa-solid fa-volume-high"></i></button>
+              <input type="range" class="vol" id="volRange" min="0" max="1" step="0.05" value="1" aria-label="مستوى الصوت">
+            </div>
+            <div class="ctrl-row">
+              <div class="qwrap" id="qWrap" style="display:none">
+                <button class="pbtn" id="btnQual" onclick="toggleQMenu()" aria-label="الجودة"><i class="fa-solid fa-gear"></i><span id="qLabel">تلقائي</span></button>
+                <div class="qmenu" id="qMenu" role="menu"></div>
+              </div>
+              <button class="pbtn" onclick="restartStream()" aria-label="إعادة الاتصال"><i class="fa-solid fa-arrows-rotate"></i></button>
+              <button class="pbtn" onclick="togglePip()" aria-label="نافذة عائمة"><i class="fa-solid fa-tv"></i></button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- الباقات تحت المشغل مباشرة وبشكل سطرين -->
+    <div class="bundles-two-rows-section">
+      <div class="bundles-two-rows-grid" id="bundlesTwoRowsGrid"></div>
+    </div>
+
+    <!-- قنوات الباقة المختارة -->
+    <div class="scrollable-grid-wrap" id="scrollableContainer"></div>
   </div>
 
   <!-- مكتبات المشغل -->
@@ -683,7 +711,7 @@
 
     // تشغيل تلقائي للشاشة الافتتاحية لمدة 3 ثواني
     window.addEventListener('DOMContentLoaded', () => {
-      buildSidebarBundles();
+      buildTwoRowBundles();
       
       setTimeout(() => {
         const splash = document.getElementById('splashScreen');
@@ -1270,30 +1298,16 @@
       showToast("تم الخروج من الباقة", "🏠");
     }
 
-    function buildSidebarBundles() {
-      const menu = document.getElementById('bundlesMenuList');
-      menu.innerHTML = '';
+    function buildTwoRowBundles() {
+      const grid = document.getElementById('bundlesTwoRowsGrid');
+      grid.innerHTML = '';
       const frag = document.createDocumentFragment();
-      
-      const homeItem = document.createElement('button');
-      homeItem.className = 'bundle-menu-item active';
-      homeItem.id = 'menu_btn_home';
-      homeItem.onclick = () => {
-        document.getElementById('globalSearchInput').value = '';
-        showHomeDashboard();
-      };
-      homeItem.innerHTML = `
-        <div style="width:22px; height:22px; background:rgba(245,196,81,0.14); border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--accent-gold); font-size:10px; flex-shrink:0;"><i class="fa-solid fa-house"></i></div>
-        <span style="flex:1; text-align:right;">الرئيسية</span>
-        <span class="bundle-count-pill">✨</span>
-      `;
-      frag.appendChild(homeItem);
 
       satelliteBundles.forEach(bundle => {
         const bundleLogo = bundle.logo ? bundle.logo : (bundle.channels[0] ? bundle.channels[0].logo : fallbackImg);
         const item = document.createElement('button');
-        item.className = 'bundle-menu-item';
-        item.id = 'menu_btn_' + bundle.id;
+        item.className = 'bundle-tile-btn';
+        item.id = 'bundle_tile_' + bundle.id;
         item.onclick = () => {
           document.getElementById('globalSearchInput').value = '';
           selectBundle(bundle.id);
@@ -1305,44 +1319,20 @@
         `;
         frag.appendChild(item);
       });
-      menu.appendChild(frag);
+      grid.appendChild(frag);
     }
 
     function showHomeDashboard() {
       currentActiveBundleChannels = null;
       toggleExitBundleBtn(false);
-      document.querySelectorAll('.bundle-menu-item').forEach(el => el.classList.remove('active'));
-      const homeBtn = document.getElementById('menu_btn_home');
-      if (homeBtn) homeBtn.classList.add('active');
-
+      document.querySelectorAll('.bundle-tile-btn').forEach(el => el.classList.remove('active'));
       document.getElementById('activeBundleTitle').innerHTML = `الرئيسية <span>لوحة الترحيب</span>`;
-      
-      const container = document.getElementById('scrollableContainer');
-      container.innerHTML = `
-        <!-- الشريط المتحرك مكبر وواضح في الأعلى -->
-        <div class="marquee-top-wrapper">
-          <div class="marquee-content">
-            <span>بث مباشر بأعلى جودة وبدون تقطيع لقنوات بي ان سبورت وباقي القنوات الرياضية 💎</span>
-            <span>أشتركو بقناتنا على التليجرام لمعرفة جميع تحديثات التطبيق وتحديث الكود 🚨</span>
-            <span>بث مباشر بأعلى جودة وبدون تقطيع لقنوات بي ان سبورت وباقي القنوات الرياضية 💎</span>
-            <span>أشتركو بقناتنا على التليجرام لمعرفة جميع تحديثات التطبيق وتحديث الكود 🚨</span>
-          </div>
-        </div>
-
-        <!-- شعار التطبيق بوسط الصفحة -->
-        <div class="hero-app-logo-card">
-          <div class="hero-logo-icon">
-            <i class="fa-solid fa-tv"></i>
-          </div>
-          <div class="hero-brand-title">VORIXA PRO</div>
-          <div class="hero-brand-subtitle">بوابتك الأولى للبث المباشر والترفيه الرقمي</div>
-        </div>
-      `;
+      document.getElementById('scrollableContainer').innerHTML = '';
     }
 
     function selectBundle(bundleId) {
-      document.querySelectorAll('.bundle-menu-item').forEach(el => el.classList.remove('active'));
-      const activeBtn = document.getElementById('menu_btn_' + bundleId);
+      document.querySelectorAll('.bundle-tile-btn').forEach(el => el.classList.remove('active'));
+      const activeBtn = document.getElementById('bundle_tile_' + bundleId);
       if (activeBtn) activeBtn.classList.add('active');
 
       const bundle = satelliteBundles.find(b => b.id === bundleId);
@@ -1398,7 +1388,7 @@
         return;
       }
 
-      document.querySelectorAll('.bundle-menu-item').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.bundle-tile-btn').forEach(el => el.classList.remove('active'));
       const allMatches = [];
       satelliteBundles.forEach(b => {
         b.channels.forEach(ch => {
@@ -1417,14 +1407,14 @@
       container.innerHTML = '';
 
       if (allMatches.length === 0) {
-        container.innerHTML = `<div style="text-align:center; color:var(--text-sub); padding:30px 10px; font-size:11px;">لا توجد قناة مطابقة لـ "${query}"</div>`;
+        container.innerHTML = `<div style="text-align:center; color:var(--text-sub); padding:24px 10px; font-size:11px;">لا توجد قناة مطابقة لـ "${query}"</div>`;
         return;
       }
       renderChannelsGrid(allMatches, container);
     }
 
     /* =====================================================================
-       التوجيه بين نسخة التلفون (المشغل المضاف) ونسخة الشاشات (AppCreator24)
+       التوجيه بين نسخة التلفون (المشغل المضاف بالشاشة الوسطى) ونسخة الشاشات (AppCreator24)
        ===================================================================== */
     function handleChannelClick(ch, listContext) {
       if (!ch || !ch.streams || ch.streams.length === 0) return;
@@ -1435,7 +1425,7 @@
         return;
       }
 
-      // نسخة التلفون: تشغل بالمشغل المضاف
+      // نسخة التلفون: تشغل القناة مباشرة داخل الشاشة الوسطى
       openMobilePlayer(ch, listContext || currentActiveBundleChannels || [ch], 0);
     }
 
@@ -1451,6 +1441,7 @@
     const MP = { ch: null, list: null, idx: 0, hls: null, ts: null, token: 0, retries: 0, stallT: null, retryT: null, idleT: null, engT: null, fit: 0, curUrl: '' };
     const vid = document.getElementById('vid');
     const playerEl = document.getElementById('player');
+    const heroWelcomeEl = document.getElementById('heroWelcomeBox');
 
     function extractTargetStreamUrl(rawUrl) {
       let u = String(rawUrl || '').trim();
@@ -1499,10 +1490,10 @@
       const hasMulti = MP.list.length > 1;
       document.getElementById('btnPrevCh').style.display = hasMulti ? '' : 'none';
       document.getElementById('btnNextCh').style.display = hasMulti ? '' : 'none';
+      if (heroWelcomeEl) heroWelcomeEl.style.display = 'none';
       playerEl.classList.add('open');
       renderMobileChips();
       playMobileStream(streamIdx);
-      enterMobileFs();
       wakeMobileControls();
     }
 
@@ -1510,6 +1501,7 @@
       ++MP.token;
       resetMobileStage();
       playerEl.classList.remove('open', 'idle', 'stream-dead');
+      if (heroWelcomeEl) heroWelcomeEl.style.display = 'flex';
       exitMobileFs();
     }
 
@@ -1902,8 +1894,8 @@
 
     async function enterMobileFs() {
       try {
-        const req = document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen;
-        if (req) await req.call(document.documentElement);
+        const req = playerEl.requestFullscreen || playerEl.webkitRequestFullscreen || document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen;
+        if (req) await req.call(playerEl.requestFullscreen ? playerEl : document.documentElement);
       } catch (e) {}
       try {
         if (screen.orientation && screen.orientation.lock) await screen.orientation.lock('landscape');
