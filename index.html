@@ -36,35 +36,396 @@
     background: linear-gradient(145deg, #1b0b1e 0%, #070b18 48%, #04060c 100%);
     color: var(--text-main);
     margin: 0; padding: 0;
-    width: 100%; height: 100vh; height: 100dvh;
+    width: 100vw; height: 100vh; height: 100dvh;
     overflow: hidden;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
   }
 
-  /* دخولية فخمة جداً (Splash Screen) تلقائية لمدة 3 ثواني */
+  /* دخولية سينمائية فاخرة وسريعة وسلسة VORIXA PRO - 15 ثانية بدون تقطيع */
   #splashScreen {
-    position: fixed; inset: 0; background: #060811; z-index: 9999999;
+    position: fixed; inset: 0;
+    background: #020205;
+    z-index: 9999999;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    transition: opacity 0.25s ease;
+    overflow: hidden;
+    contain: strict;
+    transform: translateZ(0);
+    transition: opacity 0.35s ease-out, transform 0.35s ease-out;
   }
-  .splash-logo-box {
+
+  /* خلفية متدرجة سلسة وسريعة */
+  .vrx-void-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(circle at 50% 45%, rgba(126, 34, 206, 0.34) 0%, rgba(59, 7, 100, 0.16) 40%, rgba(2, 2, 5, 0.98) 78%),
+      radial-gradient(circle at 50% 62%, rgba(245, 196, 81, 0.14) 0%, transparent 56%),
+      #020205;
+    opacity: 0;
+    will-change: opacity;
+    transform: translateZ(0);
+    animation: vrxVoidRise 15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    pointer-events: none;
+  }
+  @keyframes vrxVoidRise {
+    0% { opacity: 0; }
+    8% { opacity: 0.75; }
+    25% { opacity: 1; }
+    88% { opacity: 0.95; }
+    100% { opacity: 0.85; }
+  }
+
+  /* توهج بنفسجي خفيف وسريع بدون blur ثقيل يسبب تقطيع */
+  .vrx-purple-smoke {
+    position: absolute;
+    width: 420px; height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.24) 0%, rgba(126, 34, 206, 0.1) 48%, transparent 72%);
+    opacity: 0;
+    will-change: transform, opacity;
+    transform: translate3d(0, 0, 0) scale(0.8);
+    animation: vrxSmokeSwirl 15s linear forwards;
+    pointer-events: none;
+  }
+  .vrx-purple-smoke.secondary {
+    width: 340px; height: 340px;
+    background: radial-gradient(circle, rgba(245, 196, 81, 0.12) 0%, rgba(147, 51, 234, 0.16) 45%, transparent 72%);
+    animation: vrxSmokeCounter 15s linear forwards;
+  }
+  @keyframes vrxSmokeSwirl {
+    0% { opacity: 0; transform: translate3d(0, 0, 0) scale(0.8) rotate(0deg); }
+    10% { opacity: 0.9; transform: translate3d(0, 0, 0) scale(1.02) rotate(45deg); }
+    68% { opacity: 0.95; transform: translate3d(0, 0, 0) scale(1.1) rotate(180deg); }
+    100% { opacity: 0.4; transform: translate3d(0, 0, 0) scale(1) rotate(260deg); }
+  }
+  @keyframes vrxSmokeCounter {
+    0% { opacity: 0; transform: translate3d(0, 0, 0) scale(0.85) rotate(0deg); }
+    14% { opacity: 0.75; transform: translate3d(0, 0, 0) scale(1.05) rotate(-55deg); }
+    72% { opacity: 0.8; transform: translate3d(0, 0, 0) scale(1.1) rotate(-160deg); }
+    100% { opacity: 0.35; transform: translate3d(0, 0, 0) scale(0.95) rotate(-220deg); }
+  }
+
+  .vrx-gold-particles {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(2.5px 2.5px at 18% 28%, #fde047, transparent),
+      radial-gradient(2px 2px at 82% 22%, #f5c451, transparent),
+      radial-gradient(3px 3px at 74% 72%, #fef08a, transparent),
+      radial-gradient(2px 2px at 26% 76%, #f5c451, transparent),
+      radial-gradient(2.5px 2.5px at 50% 18%, #fde68a, transparent),
+      radial-gradient(2px 2px at 62% 84%, #f5c451, transparent),
+      radial-gradient(2.5px 2.5px at 34% 48%, #d8b4fe, transparent),
+      radial-gradient(2px 2px at 68% 44%, #fde047, transparent);
+    opacity: 0;
+    will-change: transform, opacity;
+    transform: translate3d(0, 0, 0);
+    animation: vrxParticlesGlow 15s ease-out forwards;
+    pointer-events: none;
+  }
+  @keyframes vrxParticlesGlow {
+    0% { opacity: 0; transform: translate3d(0, 12px, 0) scale(0.95); }
+    12% { opacity: 0.9; transform: translate3d(0, 0, 0) scale(1); }
+    78% { opacity: 0.95; transform: translate3d(0, -8px, 0) scale(1.03); }
+    100% { opacity: 0.5; transform: translate3d(0, -14px, 0) scale(1.04); }
+  }
+
+  /* أشعة سريعة وسلسة بدون blur ثقيل */
+  .vrx-light-beams {
+    position: absolute;
+    width: 140%; height: 140px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(168, 85, 247, 0.0) 20%,
+      rgba(168, 85, 247, 0.25) 38%,
+      rgba(245, 196, 81, 0.42) 50%,
+      rgba(168, 85, 247, 0.25) 62%,
+      rgba(168, 85, 247, 0.0) 80%,
+      transparent 100%);
+    opacity: 0;
+    will-change: transform, opacity;
+    transform: rotate(-16deg) translate3d(-35%, 0, 0);
+    animation: vrxBeamRush 15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    pointer-events: none;
+  }
+  .vrx-light-beams.beam-two {
+    height: 110px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(245, 196, 81, 0.0) 24%,
+      rgba(245, 196, 81, 0.35) 46%,
+      rgba(192, 132, 252, 0.32) 54%,
+      rgba(245, 196, 81, 0.0) 76%,
+      transparent 100%);
+    transform: rotate(15deg) translate3d(35%, 0, 0);
+    animation: vrxBeamRushReverse 15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes vrxBeamRush {
+    0%, 7% { opacity: 0; transform: rotate(-16deg) translate3d(-35%, 0, 0) scaleY(0.5); }
+    16% { opacity: 0.9; transform: rotate(-16deg) translate3d(0%, 0, 0) scaleY(1); }
+    34% { opacity: 0.4; transform: rotate(-16deg) translate3d(22%, 0, 0) scaleY(0.75); }
+    46% { opacity: 0; transform: rotate(-16deg) translate3d(35%, 0, 0) scaleY(0.5); }
+    100% { opacity: 0; transform: rotate(-16deg) translate3d(40%, 0, 0) scaleY(0.5); }
+  }
+  @keyframes vrxBeamRushReverse {
+    0%, 10% { opacity: 0; transform: rotate(15deg) translate3d(35%, 0, 0) scaleY(0.5); }
+    20% { opacity: 0.85; transform: rotate(15deg) translate3d(0%, 0, 0) scaleY(1); }
+    38% { opacity: 0.3; transform: rotate(15deg) translate3d(-20%, 0, 0) scaleY(0.7); }
+    49% { opacity: 0; transform: rotate(15deg) translate3d(-35%, 0, 0) scaleY(0.5); }
+    100% { opacity: 0; transform: rotate(15deg) translate3d(-40%, 0, 0) scaleY(0.5); }
+  }
+
+  /* كرة بعلم العراق مرتبة وأجمل بتصميم كروي ثلاثي الأبعاد */
+  .vrx-ball-stage {
+    position: relative;
+    width: 136px; height: 136px;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    will-change: transform, opacity;
+    transform: translate3d(0, 12px, 0) scale(0.45);
+    animation: vrxBallStageFlow 15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    z-index: 4;
+  }
+  @keyframes vrxBallStageFlow {
+    0%, 10% { opacity: 0; transform: translate3d(0, 14px, 0) scale(0.45); }
+    20% { opacity: 1; transform: translate3d(0, 0, 0) scale(1.05); }
+    44% { opacity: 1; transform: translate3d(0, -4px, 0) scale(1); }
+    53% { opacity: 0.7; transform: translate3d(0, -10px, 0) scale(0.85); }
+    60% { opacity: 0; transform: translate3d(0, -16px, 0) scale(0.6); }
+    100% { opacity: 0; transform: translate3d(0, -16px, 0) scale(0.6); }
+  }
+
+  .vrx-ball-orbit-ring {
+    position: absolute; inset: -13px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-top-color: #fde047;
+    border-right-color: #dc2626;
+    border-bottom-color: #16a34a;
+    border-left-color: #c084fc;
+    box-shadow: 0 0 24px rgba(245, 196, 81, 0.42);
+    will-change: transform;
+    animation: vrxOrbitSpin 2.4s linear infinite;
+  }
+  @keyframes vrxOrbitSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .vrx-3d-football {
+    position: relative;
+    width: 104px; height: 104px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid rgba(254, 240, 138, 0.65);
+    box-shadow:
+      0 0 34px rgba(245, 196, 81, 0.5),
+      0 0 50px rgba(147, 51, 234, 0.36),
+      inset -12px -14px 22px rgba(0, 0, 0, 0.8),
+      inset 7px 7px 15px rgba(255, 255, 255, 0.55);
+    display: flex; flex-direction: column;
+    will-change: transform;
+    animation: vrxBallSpin3D 2.8s linear infinite;
+  }
+  @keyframes vrxBallSpin3D {
+    0% { transform: rotate(-5deg) scale(1); }
+    50% { transform: rotate(7deg) scale(1.03); }
+    100% { transform: rotate(-5deg) scale(1); }
+  }
+
+  /* خطوط علم العراق المرتبة على الكرة الكروية */
+  .iraq-stripe-red {
+    flex: 1;
+    width: 100%;
+    background: linear-gradient(180deg, #ef4444 0%, #dc2626 55%, #991b1b 100%);
+    box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.25);
+  }
+  .iraq-stripe-white {
+    flex: 1.25;
+    width: 100%;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 60%, #e2e8f0 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.9), inset 0 -1px 2px rgba(0, 0, 0, 0.12);
+  }
+  .iraq-takbir-text {
+    font-size: 10.5px;
+    font-weight: 900;
+    color: #15803d;
+    letter-spacing: 0.3px;
+    line-height: 1.05;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.8);
+    user-select: none;
+    z-index: 2;
+  }
+  .iraq-stripe-black {
+    flex: 1;
+    width: 100%;
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 55%, #020617 100%);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.14);
+  }
+
+  /* خطوط الكرة الكروية التضاريسية فوق العلم */
+  .vrx-ball-seams {
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 50% 50%, transparent 19px, rgba(15, 23, 42, 0.22) 20px, transparent 21.5px),
+      repeating-conic-gradient(from 0deg, rgba(15, 23, 42, 0.2) 0deg 2deg, transparent 2deg 72deg);
+    mask-image: radial-gradient(circle, transparent 18px, #000 19px, #000 49px, transparent 51px);
+    -webkit-mask-image: radial-gradient(circle, transparent 18px, #000 19px, #000 49px, transparent 51px);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .vrx-ball-specular {
+    position: absolute; top: 8px; left: 15px;
+    width: 42px; height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), transparent);
+    transform: rotate(-28deg);
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  /* علم العراق بجانب اسم التطبيق بالأعلى */
+  .iraq-flag-top-badge {
+    width: 34px;
+    height: 22px;
+    border-radius: 5px;
+    overflow: hidden;
+    display: inline-flex;
+    flex-direction: column;
+    border: 1.5px solid #f5c451;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+    flex-shrink: 0;
+    user-select: none;
+  }
+  .iraq-flag-top-red {
+    flex: 1;
+    width: 100%;
+    background: #dc2626;
+  }
+  .iraq-flag-top-white {
+    flex: 1.3;
+    width: 100%;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .iraq-flag-top-takbir {
+    font-size: 4.5px;
+    font-weight: 900;
+    color: #15803d;
+    line-height: 1;
+    letter-spacing: -0.1px;
+  }
+  .iraq-flag-top-black {
+    flex: 1;
+    width: 100%;
+    background: #0f172a;
+  }
+
+  /* ظهور VORIXA PRO وتقدمه نحو الشاشة بسلاسة وسرعة عالية بدون تقطيع */
+  .vrx-brand-reveal {
+    position: absolute;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    opacity: 0;
+    will-change: transform, opacity;
+    transform: translate3d(0, 0, 0) scale(1.12);
+    animation: vrxBrandArrive 15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    z-index: 5;
+    padding: 0 18px;
+  }
+  @keyframes vrxBrandArrive {
+    0%, 54% { opacity: 0; transform: translate3d(0, 0, 0) scale(1.12); }
+    62% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+    82% { opacity: 1; transform: translate3d(0, 0, 0) scale(1.06); }
+    95% { opacity: 0.95; transform: translate3d(0, 0, 0) scale(1.55); }
+    100% { opacity: 0; transform: translate3d(0, 0, 0) scale(1.85); }
+  }
+
+  .vrx-emblem-crest {
+    position: relative;
     width: 92px; height: 92px;
-    background: linear-gradient(135deg, #f5c451, #be123c, #0284c7);
-    border-radius: 24px; display: flex; align-items: center; justify-content: center;
-    font-size: 38px; color: #060811; font-weight: 900;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
-    animation: pulseSplash 1.6s infinite ease-in-out;
+    border-radius: 26px;
+    background: linear-gradient(155deg, rgba(46, 16, 101, 0.94), rgba(10, 6, 18, 0.98) 65%, rgba(69, 39, 10, 0.88));
+    border: 1.5px solid rgba(253, 224, 71, 0.72);
+    box-shadow:
+      0 14px 32px rgba(0, 0, 0, 0.85),
+      0 0 28px rgba(168, 85, 247, 0.4),
+      inset 0 1px 0 rgba(254, 240, 138, 0.65);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .vrx-emblem-crest::before {
+    content: '';
+    position: absolute; inset: -60%;
+    background: linear-gradient(115deg, transparent 35%, rgba(254, 240, 138, 0.38) 50%, rgba(192, 132, 252, 0.22) 56%, transparent 68%);
+    will-change: transform;
+    animation: vrxCrestShine 15s ease-out forwards;
+  }
+  @keyframes vrxCrestShine {
+    0%, 58% { transform: translate3d(-65%, -65%, 0); }
+    84% { transform: translate3d(65%, 65%, 0); }
+    100% { transform: translate3d(65%, 65%, 0); }
+  }
+  .vrx-crest-monogram {
+    position: relative; z-index: 2;
+    font-size: 40px; font-weight: 900; letter-spacing: 1px;
+    background: linear-gradient(180deg, #fffbeb 0%, #fde047 38%, #d97706 78%, #fef08a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .vrx-main-title {
+    position: relative;
+    font-size: 35px; font-weight: 900;
+    letter-spacing: 5px;
+    line-height: 1.15;
+    background: linear-gradient(95deg, #d8b4fe 0%, #fef08a 25%, #f5c451 50%, #ffffff 65%, #f5c451 80%, #c084fc 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    will-change: background-position;
+    animation: vrxGoldSweep 2.2s linear infinite;
+    margin-bottom: 8px;
+  }
+  @keyframes vrxGoldSweep {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+  }
+
+  .vrx-tagline {
+    font-size: 11.5px; font-weight: 800;
+    color: #e9d5ff;
+    letter-spacing: 1.2px;
     margin-bottom: 16px;
   }
-  @keyframes pulseSplash {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.04); }
-  }
-  .splash-title { font-size: 25px; font-weight: 900; color: #f8fafc; letter-spacing: 2px; margin-bottom: 6px; }
-  .splash-subtitle { font-size: 11px; color: var(--text-sub); font-weight: 700; letter-spacing: 0.5px; }
 
-  /* نافذة كود التفعيل (الكود 10) */
+  .vrx-timeline-bar {
+    width: 170px; height: 3px;
+    border-radius: 999px;
+    background: rgba(245, 196, 81, 0.14);
+    overflow: hidden;
+    border: 1px solid rgba(245, 196, 81, 0.25);
+  }
+  .vrx-timeline-fill {
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, #7e22ce, #c084fc, #f5c451, #fef08a);
+    transform-origin: right center;
+    will-change: transform;
+    animation: vrxTimelineRun 14.9s linear forwards;
+  }
+  @keyframes vrxTimelineRun {
+    0% { transform: scaleX(0); }
+    100% { transform: scaleX(1); }
+  }
+
+  /* نافذة كود التفعيل (الكود 24) */
   .modal-overlay {
     position: fixed; inset: 0; background: rgba(4, 6, 12, 0.96);
     z-index: 999999; display: none; align-items: center; justify-content: center; padding: 15px;
@@ -91,129 +452,132 @@
     text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
   }
 
-  /* منطقة المحتوى الرئيسية */
-  .receiver-content-area {
-    flex: 1; width: 100%; height: 100%;
-    display: flex; flex-direction: column; background: transparent;
-    overflow: hidden;
+  /* القائمة الجانبية للباقات */
+  .receiver-sidebar {
+    width: 260px; 
+    background: var(--bg-sidebar);
+    border-left: 1px solid rgba(245, 196, 81, 0.16);
+    display: flex; flex-direction: column; height: 100%; flex-shrink: 0; z-index: 10;
+  }
+  .sidebar-header {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(245, 196, 81, 0.14);
+    background: rgba(245, 196, 81, 0.04);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .brand-wrap { display: flex; align-items: center; gap: 8px; flex-direction: row-reverse; }
+  .sidebar-logo {
+    width: 30px; height: 30px; background: linear-gradient(135deg, #f5c451, #be123c, #0284c7);
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: #060811; font-weight: 900;
+  }
+  .sidebar-title { font-size: 13px; font-weight: 900; color: #f8fafc; }
+
+  .bundles-menu-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .bundles-menu-list::-webkit-scrollbar { display: none; }
+
+  .bundle-menu-item {
+    width: 100%; 
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    padding: 9px 11px; display: flex; align-items: center; gap: 10px; color: #e2e8f0;
+    cursor: pointer; font-size: 11px; font-weight: 800; margin-bottom: 6px; text-align: right;
+    transition: background 0.1s ease, border-color 0.1s ease, color 0.1s ease;
+    direction: rtl;
+  }
+  .bundle-menu-item:hover, .bundle-menu-item:focus { 
+    background: rgba(245, 196, 81, 0.1); 
+    border-color: rgba(245, 196, 81, 0.36);
+    color: #fff;
+    outline: none;
+  }
+  .bundle-menu-item.active {
+    background: linear-gradient(90deg, rgba(190, 18, 60, 0.22), rgba(245, 196, 81, 0.16));
+    color: #fff; 
+    border-color: rgba(245, 196, 81, 0.58);
+  }
+  .bundle-menu-logo {
+    width: 25px; height: 25px; object-fit: contain; background: rgba(255,255,255,0.03);
+    border-radius: 6px; padding: 2px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.07);
   }
 
-  /* الجزء الثابت في الأعلى (لا يتحرك عند التمرير في الباقات أو القنوات) */
-  .sticky-top-header {
-    flex-shrink: 0;
-    background: rgba(7, 11, 24, 0.96);
-    border-bottom: 1px solid rgba(245, 196, 81, 0.16);
-    z-index: 20;
+  /* منطقة المحتوى الرئيسية */
+  .receiver-content-area {
+    flex: 1; height: 100%; display: flex; flex-direction: column; background: transparent; overflow: hidden; min-width: 0;
   }
 
   /* شريط التحكم العلوي */
   .top-controls-bar {
-    padding: 8px 12px;
-    border-bottom: 1px solid rgba(245, 196, 81, 0.12);
+    padding: 8px 16px; 
+    border-bottom: 1px solid rgba(245, 196, 81, 0.14);
     display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
-    gap: 8px;
+    gap: 8px; 
     background: rgba(9, 13, 26, 0.92);
     direction: rtl;
   }
 
-  .bundle-header-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .brand-mini-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: rgba(245, 196, 81, 0.08);
-    border: 1px solid rgba(245, 196, 81, 0.25);
-    padding: 4px 8px; border-radius: 8px;
-  }
-  .brand-mini-logo {
-    width: 20px; height: 20px; background: linear-gradient(135deg, #f5c451, #be123c, #0284c7);
-    border-radius: 6px; display: flex; align-items: center; justify-content: center;
-    font-size: 10px; color: #060811; font-weight: 900;
-  }
-  .brand-mini-name { font-size: 11px; font-weight: 900; color: #f8fafc; }
-
-  .active-bundle-name { font-size: 12px; font-weight: 900; color: #f8fafc; display: flex; align-items: center; gap: 6px; }
+  .active-bundle-name { font-size: 13px; font-weight: 900; color: #f8fafc; display: flex; align-items: center; gap: 8px; }
   .active-bundle-name span {
     color: var(--accent-gold); font-size: 9px; background: rgba(245, 196, 81, 0.12);
     padding: 2px 7px; border-radius: 6px; border: 1px solid rgba(245, 196, 81, 0.28);
   }
 
-  /* زر الخروج من الباقة */
-  .exit-bundle-btn {
-    background: linear-gradient(135deg, rgba(190, 18, 60, 0.26), rgba(245, 196, 81, 0.14));
-    border: 1px solid rgba(245, 196, 81, 0.42);
-    color: #fef3c7;
-    padding: 5px 10px;
-    border-radius: 8px;
-    font-size: 10px;
-    font-weight: 900;
-    cursor: pointer;
-    display: none;
-    align-items: center;
-    gap: 5px;
-    transition: background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
-  }
-  .exit-bundle-btn.visible { display: inline-flex; }
-  .exit-bundle-btn:hover, .exit-bundle-btn:focus {
-    background: linear-gradient(135deg, rgba(190, 18, 60, 0.42), rgba(245, 196, 81, 0.25));
-    border-color: var(--accent-gold);
-    color: #fff;
-    outline: none;
-  }
-
-  .search-and-tg { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
-
+  .search-and-tg { display: flex; align-items: center; gap: 8px; }
+  
   .live-clock-badge {
     background: rgba(255, 255, 255, 0.025);
     border: 1px solid rgba(245, 196, 81, 0.2);
     color: var(--accent-gold);
-    padding: 6px 9px;
+    padding: 6px 10px;
     border-radius: 8px;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 900;
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
     white-space: nowrap;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.4px;
   }
   .live-clock-badge i { font-size: 10px; color: var(--accent-secondary); }
 
-  .search-box { position: relative; width: 150px; }
+  .search-box { position: relative; width: 170px; }
   .search-box input {
     width: 100%;
-    background: rgba(255, 255, 255, 0.025);
+    background: rgba(255, 255, 255, 0.025); 
     border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 8px; padding: 6px 26px 6px 9px; color: #fff; font-size: 10.5px; font-weight: 700; outline: none;
+    border-radius: 8px; padding: 7px 28px 7px 10px; color: #fff; font-size: 11px; font-weight: 700; outline: none;
     direction: rtl;
   }
   .search-box input:focus { border-color: rgba(245, 196, 81, 0.5); background: rgba(245, 196, 81, 0.06); }
   .search-box i {
-    position: absolute; left: 9px; top: 50%; transform: translateY(-50%); color: var(--accent-gold); font-size: 10px;
+    position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--accent-gold); font-size: 10px;
   }
 
   .tg-btn {
-    background: rgba(245, 196, 81, 0.12);
-    border: 1px solid rgba(245, 196, 81, 0.3);
+    background: rgba(245, 196, 81, 0.12); 
+    border: 1px solid rgba(245, 196, 81, 0.3); 
     color: #fef3c7;
-    padding: 6px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; text-decoration: none; white-space: nowrap;
+    padding: 7px 12px; border-radius: 8px; font-size: 10px; font-weight: 800; text-decoration: none; white-space: nowrap;
     cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
   }
   .tg-btn:hover, .tg-btn:focus { background: rgba(245, 196, 81, 0.2); border-color: rgba(245, 196, 81, 0.55); color: #fff; outline: none; }
 
-  /* الشريط المتحرك مكبر وواضح في الأعلى */
+  /* الشريط المتحرك بخط أصغر ومرتب في الأعلى */
   .marquee-top-wrapper {
     background: linear-gradient(90deg, rgba(190, 18, 60, 0.14), rgba(245, 196, 81, 0.11), rgba(2, 132, 199, 0.14));
     border: 1px solid rgba(245, 196, 81, 0.3);
-    padding: 13px 0;
+    padding: 9px 0;
     overflow: hidden;
     white-space: nowrap;
     position: relative;
-    margin: 10px 12px 0 12px;
+    margin: 10px 14px 0 14px;
     border-radius: 13px;
     flex-shrink: 0;
     direction: ltr;
@@ -223,13 +587,13 @@
     align-items: center;
     width: max-content;
     animation: marqueeAnimation 24s linear infinite;
-    font-size: 13.5px;
-    font-weight: 900;
+    font-size: 10.5px;
+    font-weight: 800;
     color: #f8fafc;
     direction: rtl;
   }
   .marquee-content span {
-    margin-left: 70px;
+    margin-left: 55px;
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -241,154 +605,140 @@
     100% { transform: translate3d(-50%, 0, 0); }
   }
 
-  /* الشاشة الوسطى: تبقى بوضع الترحيب أو تتحول إلى مشغل القناة المحددة */
-  .center-screen-stage {
+  /* شعار التطبيق بوسط الصفحة */
+  .hero-app-logo-card {
     background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(245, 196, 81, 0.22);
+    border: 1px solid rgba(245, 196, 81, 0.2);
     border-radius: 18px;
-    margin: 10px 12px;
-    overflow: hidden;
-    position: relative;
-    min-height: 220px;
-    flex-shrink: 0;
-  }
-
-  .hero-welcome-box {
-    padding: 28px 18px;
+    padding: 34px 20px;
+    margin: 12px 14px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
+    flex-shrink: 0;
   }
   .hero-logo-icon {
-    width: 68px;
-    height: 68px;
+    width: 72px;
+    height: 72px;
     background: linear-gradient(135deg, #f5c451, #be123c, #0284c7);
     border-radius: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 30px;
+    font-size: 32px;
     color: #060811;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
   }
   .hero-brand-title {
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 900;
     color: #f8fafc;
     letter-spacing: 1px;
     margin-bottom: 4px;
   }
   .hero-brand-subtitle {
-    font-size: 10.5px;
+    font-size: 10px;
     color: var(--text-sub);
     font-weight: 700;
   }
 
-  /* المنطقة المتحركة للباقات والقنوات فقط تحت المشغل الثابت */
-  .scrollable-grid-wrap {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 6px 12px 18px 12px;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* الباقات قسمين باقة بصف باقة وتنزل لتحت */
-  .bundles-two-cols-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
+  /* نافذة إدخال رابط بث خارجي */
+  .custom-url-modal-card {
+    background: #090d1a;
+    border: 1px solid rgba(245, 196, 81, 0.45);
+    border-radius: 18px;
     width: 100%;
-  }
-
-  .bundle-tile-btn {
-    width: 100%;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 11px;
-    padding: 8px 9px;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    color: #e2e8f0;
-    cursor: pointer;
-    font-size: 10.5px;
-    font-weight: 800;
-    text-align: right;
-    transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+    max-width: 360px;
+    padding: 20px;
+    text-align: center;
     direction: rtl;
   }
-  .bundle-tile-btn:hover, .bundle-tile-btn:focus {
-    background: rgba(245, 196, 81, 0.11);
-    border-color: rgba(245, 196, 81, 0.4);
+  .custom-stream-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-line);
+    border-radius: 10px;
+    padding: 10px 12px;
     color: #fff;
+    font-size: 11px;
+    font-weight: 700;
     outline: none;
+    margin-bottom: 8px;
   }
-  .bundle-tile-btn.active {
-    background: linear-gradient(90deg, rgba(190, 18, 60, 0.28), rgba(245, 196, 81, 0.18));
-    color: #fff;
-    border-color: rgba(245, 196, 81, 0.65);
-    box-shadow: 0 2px 10px rgba(245, 196, 81, 0.12);
+  .custom-stream-input:focus {
+    border-color: var(--accent-gold);
   }
-  .bundle-menu-logo {
-    width: 24px; height: 24px; object-fit: contain; background: rgba(255,255,255,0.04);
-    border-radius: 7px; padding: 1.5px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.08);
+  .custom-saved-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 9px;
+    padding: 7px 10px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    text-align: right;
   }
-  .bundle-count-pill {
-    font-size: 8.5px;
-    font-weight: 900;
-    color: var(--accent-gold);
-    background: rgba(245, 196, 81, 0.12);
-    border: 1px solid rgba(245, 196, 81, 0.24);
-    padding: 1px 6px;
-    border-radius: 6px;
-    flex-shrink: 0;
+  .custom-saved-item:hover {
+    border-color: rgba(245, 196, 81, 0.4);
+    background: rgba(245, 196, 81, 0.08);
   }
 
+  .scrollable-grid-wrap { 
+    flex: 1; 
+    overflow-y: auto; 
+    padding: 0 14px 14px 14px; 
+    scrollbar-width: none; 
+    -webkit-overflow-scrolling: touch;
+  }
+  .scrollable-grid-wrap::-webkit-scrollbar { display: none; }
+
   .channels-grid-receiver {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
-    gap: 8px;
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+    gap: 9px;
     width: 100%;
-    margin-top: 2px;
+    margin-top: 12px;
   }
 
   .channel-card-rec {
-    background: rgba(255, 255, 255, 0.025);
+    background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 10px; padding: 8px 9px;
-    display: flex; align-items: center; justify-content: space-between; gap: 7px;
-    cursor: pointer;
+    border-radius: 11px; padding: 9px 10px;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    cursor: pointer; 
     transition: background 0.1s ease, border-color 0.1s ease;
     direction: rtl;
   }
   .channel-card-rec:hover, .channel-card-rec:focus {
-    background: rgba(245, 196, 81, 0.09);
-    border-color: rgba(245, 196, 81, 0.48);
+    background: rgba(245, 196, 81, 0.08);
+    border-color: rgba(245, 196, 81, 0.45);
     outline: none;
   }
   .ch-rec-info { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1; direction: rtl; text-align: right; }
   .ch-rec-logo {
-    width: 32px; height: 32px; object-fit: contain; background: rgba(255,255,255,0.03);
+    width: 34px; height: 34px; object-fit: contain; background: rgba(255,255,255,0.03);
     border-radius: 7px; padding: 2px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.07);
   }
   .ch-rec-texts { display: flex; flex-direction: column; min-width: 0; }
-  .ch-rec-title { font-size: 10.5px; font-weight: 800; color: #f8fafc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ch-rec-title { font-size: 10px; font-weight: 800; color: #f8fafc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .ch-rec-sub {
-    font-size: 7.5px; color: var(--text-sub); font-weight: 700; margin-top: 2px; display: flex; align-items: center; gap: 4px;
+    font-size: 7px; color: var(--text-sub); font-weight: 700; margin-top: 2px; display: flex; align-items: center; gap: 4px;
   }
   .live-dot {
     width: 5px; height: 5px; border-radius: 50%; background: var(--accent-green);
   }
 
   .quality-badge {
-    background: rgba(245, 196, 81, 0.12); color: var(--accent-gold); padding: 1px 5px; border-radius: 4px; font-size: 6.5px; font-weight: 900; border: 1px solid rgba(245, 196, 81, 0.25);
+    background: rgba(245, 196, 81, 0.12); color: var(--accent-gold); padding: 1px 5px; border-radius: 4px; font-size: 6px; font-weight: 900; border: 1px solid rgba(245, 196, 81, 0.25);
   }
   .ch-rec-play-btn {
-    width: 26px; height: 26px; background: linear-gradient(135deg, #f5c451, #be123c); color: #060811; border-radius: 7px;
-    display: flex; align-items: center; justify-content: center; font-size: 9.5px; flex-shrink: 0;
+    width: 27px; height: 27px; background: linear-gradient(135deg, #f5c451, #be123c); color: #060811; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0;
   }
 
   .toast-popup {
@@ -399,60 +749,58 @@
   }
   .toast-popup.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-  /* ===== مشغل التلفون (مدمج داخل الشاشة الوسطى أو بملء الشاشة) ===== */
+  /* ===== مشغل التلفون (يظهر على التلفون فقط) ===== */
   #player {
-    position: relative;
-    width: 100%;
-    height: 240px;
-    background: #000;
-    display: none;
-    flex-direction: column;
-    touch-action: manipulation;
-    overscroll-behavior: contain;
+    position: fixed; inset: 0; z-index: 500000;
+    background: #000; display: none; flex-direction: column;
+    height: 100vh; height: 100dvh; touch-action: manipulation; overscroll-behavior: contain;
   }
   #player.open { display: flex; }
-  #player:fullscreen, #player:-webkit-full-screen {
-    position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh; z-index: 500000;
-  }
   #player.fit-cover #vid { object-fit: cover; }
   #player.fit-fill #vid { object-fit: fill; }
   #player.idle { cursor: none; }
   #player.idle .player-top, #player.idle .player-bottom, #player.idle .player-center-controls { opacity: 0; pointer-events: none; }
   .player-top {
     position: absolute; top: 0; left: 0; right: 0; z-index: 5;
-    padding: 8px 10px;
-    display: flex; align-items: center; gap: 6px;
+    padding: calc(12px + env(safe-area-inset-top, 0px)) 14px 12px;
+    display: flex; align-items: center; gap: 8px;
     background: linear-gradient(180deg, rgba(0,0,0,0.85), transparent);
     direction: rtl; transition: opacity 0.25s;
   }
-  .player-title { flex: 1; font-size: 11.5px; font-weight: 900; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .player-title { flex: 1; font-size: 13px; font-weight: 900; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .pbtn {
-    min-width: 30px; height: 30px; padding: 0 8px; border-radius: 8px;
+    min-width: 36px; height: 36px; padding: 0 10px; border-radius: 10px;
     border: 1px solid rgba(255,255,255,0.18); background: rgba(15,10,14,0.78);
-    color: #fff; font-size: 11px; cursor: pointer;
-    display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-weight: 800;
+    color: #fff; font-size: 12px; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; gap: 5px; font-weight: 800;
   }
   .pbtn:hover, .pbtn:focus { border-color: var(--accent-gold); background: rgba(245,196,81,0.2); outline: none; }
   .pbtn.close { background: rgba(190,18,60,0.88); border-color: transparent; }
   .player-stage { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: #000; }
-  #vid { width: 100%; height: 100%; background: #000; display: block; object-fit: contain; }
+  #vid { width: 100%; height: 100%; background: #000; display: block; object-fit: contain; transition: filter 0.2s ease; }
+
+  /* أوضاع ألوان الفيديو لمشغل التلفون فقط */
+  #player.color-vivid #vid { filter: contrast(1.16) saturate(1.38) brightness(1.03); }
+  #player.color-cinema #vid { filter: contrast(1.22) saturate(1.15) brightness(0.96) sepia(0.08); }
+  #player.color-bright #vid { filter: brightness(1.22) contrast(1.08) saturate(1.12); }
+  #player.color-night #vid { filter: brightness(0.84) contrast(1.05) saturate(0.92) sepia(0.14); }
 
   /* أزرار التوقف والتشغيل والتقديم والتأخير 10 ثواني في وسط المشغل */
   .player-center-controls {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    z-index: 5; display: flex; align-items: center; justify-content: center; gap: 18px;
+    z-index: 5; display: flex; align-items: center; justify-content: center; gap: 22px;
     direction: ltr; transition: opacity 0.25s;
   }
   .center-skip-btn {
-    width: 40px; height: 40px; border-radius: 50%;
+    width: 48px; height: 48px; border-radius: 50%;
     border: 1px solid rgba(255,255,255,0.22); background: rgba(15,10,14,0.72);
-    color: #fff; font-size: 11px; cursor: pointer;
+    color: #fff; font-size: 13px; cursor: pointer;
     display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; font-weight: 900;
   }
   .center-play-btn {
-    width: 52px; height: 52px; border-radius: 50%;
+    width: 62px; height: 62px; border-radius: 50%;
     border: 1px solid rgba(255,255,255,0.28); background: rgba(15,10,14,0.78);
-    color: #fff; font-size: 18px; cursor: pointer;
+    color: #fff; font-size: 22px; cursor: pointer;
     display: inline-flex; align-items: center; justify-content: center;
     transition: background 0.2s, border-color 0.2s, opacity 0.2s;
   }
@@ -466,34 +814,34 @@
 
   .player-bottom {
     position: absolute; bottom: 0; left: 0; right: 0; z-index: 5;
-    padding: 16px 10px 8px;
+    padding: 24px 14px calc(14px + env(safe-area-inset-bottom, 0px));
     background: linear-gradient(0deg, rgba(0,0,0,0.9), transparent);
     direction: rtl; transition: opacity 0.25s;
-    display: flex; flex-direction: column; gap: 6px;
+    display: flex; flex-direction: column; gap: 8px;
   }
-  .ctrl-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .ctrl-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .ctrl-row.spread { justify-content: space-between; }
   .chip {
-    padding: 4px 9px; border-radius: 999px; font-size: 9.5px; font-weight: 900; color: #e2e8f0; cursor: pointer;
+    padding: 5px 11px; border-radius: 999px; font-size: 10px; font-weight: 900; color: #e2e8f0; cursor: pointer;
     background: rgba(15,10,14,0.78); border: 1px solid rgba(255,255,255,0.18);
   }
   .chip.active { background: linear-gradient(135deg, #f5c451, #be123c); color: #060811; border-color: transparent; }
-  .vol { accent-color: var(--accent-gold); width: 65px; }
-  .s10 { font-size: 8px; font-weight: 900; line-height: 1; }
-  .seek-row { display: flex; align-items: center; direction: ltr; width: 100%; gap: 6px; }
-  .seek-row .tm { font-size: 10px; font-weight: 800; color: #e2e8f0; min-width: 38px; text-align: center; }
-  #seek { flex: 1; min-width: 0; height: 18px; margin: 0; background: transparent; -webkit-appearance: none; appearance: none; }
+  .vol { accent-color: var(--accent-gold); width: 80px; }
+  .s10 { font-size: 9px; font-weight: 900; line-height: 1; }
+  .seek-row { display: flex; align-items: center; direction: ltr; width: 100%; gap: 8px; }
+  .seek-row .tm { font-size: 11px; font-weight: 800; color: #e2e8f0; min-width: 44px; text-align: center; }
+  #seek { flex: 1; min-width: 0; height: 22px; margin: 0; background: transparent; -webkit-appearance: none; appearance: none; }
   #seek::-webkit-slider-runnable-track { height: 4px; border-radius: 4px; background: linear-gradient(to right, var(--accent-gold) var(--p, 0%), rgba(255,255,255,0.28) var(--p, 0%)); }
-  #seek::-webkit-slider-thumb { -webkit-appearance: none; width: 13px; height: 13px; margin-top: -4.5px; border-radius: 50%; background: #fff; border: 2px solid var(--accent-gold); }
+  #seek::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; margin-top: -5px; border-radius: 50%; background: #fff; border: 2px solid var(--accent-gold); }
   #seek:disabled { opacity: 0.35; }
   .qwrap { position: relative; }
-  .qmenu { display: none; position: absolute; bottom: calc(100% + 8px); right: 0; min-width: 120px; max-height: 45vh; overflow-y: auto; flex-direction: column; padding: 6px; border-radius: 12px; z-index: 8; background: rgba(9,13,26,0.97); border: 1px solid rgba(245,196,81,0.3); }
+  .qmenu { display: none; position: absolute; bottom: calc(100% + 8px); right: 0; min-width: 130px; max-height: 45vh; overflow-y: auto; flex-direction: column; padding: 6px; border-radius: 12px; z-index: 8; background: rgba(9,13,26,0.97); border: 1px solid rgba(245,196,81,0.3); }
   .qmenu.on { display: flex; }
-  .qitem { background: transparent; border: 1px solid transparent; color: #e2e8f0; padding: 7px 10px; margin: 2px 0; border-radius: 8px; font-size: 10.5px; font-weight: 800; text-align: right; cursor: pointer; display: flex; justify-content: space-between; white-space: nowrap; }
+  .qitem { background: transparent; border: 1px solid transparent; color: #e2e8f0; padding: 8px 11px; margin: 2px 0; border-radius: 8px; font-size: 11px; font-weight: 800; text-align: right; cursor: pointer; display: flex; justify-content: space-between; white-space: nowrap; }
   .qitem:hover, .qitem.active { color: var(--accent-gold); background: rgba(245,196,81,0.12); }
   .qitem.active::after { content: '\2713'; margin-right: 10px; }
   .spinner {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 4; width: 58px; height: 58px; border-radius: 50%; display: none;
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 4; width: 78px; height: 78px; border-radius: 50%; display: none;
     border: 4px solid rgba(255,255,255,0.12); border-top-color: var(--accent-gold); animation: spin 0.9s linear infinite; pointer-events: none;
   }
   .spinner.on { display: block; }
@@ -512,27 +860,59 @@
   }
 
   @media (max-width: 700px) {
-    .marquee-top-wrapper { padding: 12px 0; }
-    .marquee-content { font-size: 13px; }
-    .search-box { width: 120px; }
+    html, body { flex-direction: column; overflow: auto; position: static; height: 100vh; height: 100dvh; min-height: 100vh; }
+    .receiver-sidebar { width: 100%; height: auto; border-left: none; border-bottom: 1px solid rgba(245, 196, 81, 0.16); background: var(--bg-sidebar); }
+    .sidebar-header { padding: 8px 12px; }
+    .bundles-menu-list { display: flex; flex-direction: row; overflow-x: auto; padding: 6px 8px; gap: 6px; }
+    .bundle-menu-item { width: auto; white-space: nowrap; margin-bottom: 0; padding: 6px 10px; }
+    .receiver-content-area { flex: 1; height: auto; overflow: visible; }
+    .scrollable-grid-wrap { overflow: visible; }
+    .marquee-top-wrapper { padding: 8px 0; }
+    .marquee-content { font-size: 9.5px; }
+    .search-box { width: 130px; }
     .search-box i { left: 8px; }
   }
 </style>
 </head>
 <body>
 
-  <!-- دخولية فخمة جداً (Splash Screen) تلقائية لمدة 3 ثواني -->
+  <!-- دخولية سينمائية سريعة وسلسة VORIXA PRO - 15 ثانية مع كرة بعلم العراق -->
   <div id="splashScreen">
-    <div class="splash-logo-box"><i class="fa-solid fa-tv"></i></div>
-    <div class="splash-title">VORIXA PRO</div>
-    <div class="splash-subtitle">عالمك الترفيهي والرياضي بمتناول يدك</div>
+    <div class="vrx-void-bg"></div>
+    <div class="vrx-purple-smoke"></div>
+    <div class="vrx-purple-smoke secondary"></div>
+    <div class="vrx-gold-particles"></div>
+    <div class="vrx-light-beams"></div>
+    <div class="vrx-light-beams beam-two"></div>
+
+    <div class="vrx-ball-stage">
+      <div class="vrx-ball-orbit-ring"></div>
+      <div class="vrx-3d-football">
+        <div class="iraq-stripe-red"></div>
+        <div class="iraq-stripe-white"><span class="iraq-takbir-text">الله أكبر</span></div>
+        <div class="iraq-stripe-black"></div>
+        <div class="vrx-ball-seams"></div>
+        <div class="vrx-ball-specular"></div>
+      </div>
+    </div>
+
+    <div class="vrx-brand-reveal">
+      <div class="vrx-emblem-crest">
+        <div class="vrx-crest-monogram">VP</div>
+      </div>
+      <div class="vrx-main-title">VORIXA PRO</div>
+      <div class="vrx-tagline">منصة الرياضة والترفيه بمستوى عالمي</div>
+      <div class="vrx-timeline-bar">
+        <div class="vrx-timeline-fill"></div>
+      </div>
+    </div>
   </div>
 
-  <!-- نافذة كود التفعيل (الكود 10) -->
+  <!-- نافذة كود التفعيل (الكود 24) -->
   <div id="authModal" class="modal-overlay">
     <div class="auth-modal-card">
       <div class="auth-icon-wrap"><i class="fa-solid fa-shield-halved"></i></div>
-      <h2 style="font-size: 16px; font-weight: 900; color: #fff; margin: 0 0 5px 0;">حماية وتفعيل VORIXA PRO</h2>
+      <h2 style="font-size: 16px; font-weight: 900; color: #fff; margin: 0 0 5px 0;">حماية وتفعيل VORIXA</h2>
       <p style="font-size: 10px; color: var(--text-sub); margin: 0 0 14px 0; font-weight: 700;">أدخل كود الدخول الخاص بالمشتركين للوصول للباقات</p>
       
       <input type="text" id="accessCodeInput" style="width: 100%; background: rgba(255,255,255,0.04); border: 1px solid var(--border-line); border-radius: 10px; padding: 10px; color: #fff; font-size: 15px; font-weight: 900; text-align: center; outline: none; margin-bottom: 8px;" placeholder="أدخل الكود">
@@ -548,7 +928,21 @@
     </div>
   </div>
 
-  <!-- نافذة تشغيل بمشغل خارجي -->
+  <!-- نافذة إدخال رابط بث خارجي -->
+  <div id="customUrlModal" class="modal-overlay" onclick="if(event.target===this) closeCustomUrlModal()">
+    <div class="custom-url-modal-card">
+      <div class="auth-icon-wrap"><i class="fa-solid fa-link"></i></div>
+      <h2 style="font-size: 15px; font-weight: 900; color: #fff; margin: 0 0 5px 0;">تشغيل رابط بث</h2>
+      <p style="font-size: 10px; color: var(--text-sub); margin: 0 0 12px 0; font-weight: 700;">أدخل أي رابط بث أو رابط مباشر وسيتم تشغيله فوراً</p>
+      <input type="text" id="customStreamNameInput" class="custom-stream-input" placeholder="اسم القناة (اختياري)">
+      <input type="url" id="customStreamUrlInput" class="custom-stream-input" dir="ltr" placeholder="https://... أو http://... (.m3u8 / .ts / .mp4)" onkeydown="if(event.key==='Enter'){ event.preventDefault(); playCustomStreamUrl(); }">
+      <button class="ext-btn" onclick="playCustomStreamUrl()"><i class="fa-solid fa-play"></i> تشغيل الآن</button>
+      <div id="customSavedListWrap" style="margin-top: 8px; max-height: 140px; overflow-y: auto;"></div>
+      <button class="ext-cancel" style="margin-top: 6px;" onclick="closeCustomUrlModal()">إغلاق</button>
+    </div>
+  </div>
+
+  <!-- نافذة تشغيل بمشغل خارجي (لنسخة التلفون) -->
   <div id="extModal" class="modal-overlay" onclick="if(event.target===this) closeExtModal()">
     <div class="ext-modal-card">
       <div class="auth-icon-wrap"><i class="fa-solid fa-up-right-from-square"></i></div>
@@ -568,110 +962,96 @@
 
   <!-- منطقة المحتوى الرئيسية -->
   <div class="receiver-content-area">
-    <!-- الجزء الثابت في الأعلى -->
-    <div class="sticky-top-header">
-      <div class="top-controls-bar">
-        <div class="bundle-header-left">
-          <div class="brand-mini-badge">
-            <div class="brand-mini-logo">V</div>
-            <span class="brand-mini-name">VORIXA PRO</span>
-          </div>
-          <div class="active-bundle-name" id="activeBundleTitle">
-            الرئيسية <span>لوحة الترحيب</span>
-          </div>
-          <button class="exit-bundle-btn" id="exitBundleBtn" onclick="exitCurrentBundle()">
-            <i class="fa-solid fa-right-from-bracket"></i> خروج من الباقة
-          </button>
-        </div>
-        <div class="search-and-tg">
-          <div class="live-clock-badge" id="liveClockDisplay">
-            <i class="fa-regular fa-clock"></i> <span id="clockTimeText">00:00:00</span>
-          </div>
-          <div class="search-box">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="globalSearchInput" oninput="handleGlobalSearch(this.value)" placeholder="ابحث عن قناة...">
-          </div>
-          <button onclick="openTelegramChannel(event)" class="tg-btn"><i class="fa-brands fa-telegram"></i> تليجرام</button>
-        </div>
+    <div class="top-controls-bar">
+      <div class="active-bundle-name" id="activeBundleTitle">
+        الرئيسية <span>لوحة الترحيب</span>
       </div>
-
-      <!-- الشريط المتحرك مكبر وواضح في الأعلى -->
-      <div class="marquee-top-wrapper">
-        <div class="marquee-content">
-          <span>بث مباشر بأعلى جودة وبدون تقطيع لقنوات بي ان سبورت وباقي القنوات الرياضية 💎</span>
-          <span>أشتركو بقناتنا على التليجرام لمعرفة جميع تحديثات التطبيق وتحديث الكود 🚨</span>
-          <span>بث مباشر بأعلى جودة وبدون تقطيع لقنوات بي ان سبورت وباقي القنوات الرياضية 💎</span>
-          <span>أشتركو بقناتنا على التليجرام لمعرفة جميع تحديثات التطبيق وتحديث الكود 🚨</span>
+      <div class="search-and-tg">
+        <div class="live-clock-badge" id="liveClockDisplay">
+          <i class="fa-regular fa-clock"></i> <span id="clockTimeText">00:00:00</span>
         </div>
-      </div>
-
-      <!-- الشاشة الوسطى: تبقى بوضع الترحيب أو تتحول إلى مشغل القناة المحددة -->
-      <div class="center-screen-stage" id="centerScreenStage">
-        <div class="hero-welcome-box" id="heroWelcomeBox">
-          <div class="hero-logo-icon">
-            <i class="fa-solid fa-tv"></i>
-          </div>
-          <div class="hero-brand-title">VORIXA PRO</div>
-          <div class="hero-brand-subtitle">بوابتك الأولى للبث المباشر والترفيه الرقمي</div>
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="globalSearchInput" oninput="handleGlobalSearch(this.value)" placeholder="ابحث عن قناة...">
         </div>
-
-        <!-- مشغل التلفون (يُفعّل تلقائياً لتشغيل كل الروابط داخل الشاشة الوسطى) -->
-        <div id="player" aria-label="المشغل">
-          <div class="player-stage" id="playerStage">
-            <video id="vid" playsinline webkit-playsinline autoplay preload="auto" controlsList="nodownload noremoteplayback"></video>
-          </div>
-          <div class="spinner" id="spinner"></div>
-          <div class="player-center-controls" id="playerCenterControls">
-            <button class="center-skip-btn" onclick="skip(-10)" aria-label="رجوع 10 ثواني"><i class="fa-solid fa-rotate-left"></i><span class="s10">10</span></button>
-            <button class="center-play-btn" id="btnPlay" onclick="togglePlay()" aria-label="تشغيل/إيقاف"><i class="fa-solid fa-pause"></i></button>
-            <button class="center-skip-btn" onclick="skip(10)" aria-label="تقديم 10 ثواني"><i class="fa-solid fa-rotate-right"></i><span class="s10">10</span></button>
-          </div>
-          <div class="player-top">
-            <button class="pbtn close" onclick="closeMobilePlayer()" aria-label="إغلاق"><i class="fa-solid fa-xmark"></i></button>
-            <div class="player-title" id="playerTitle"></div>
-            <button class="pbtn" id="btnPrevCh" onclick="chStep(-1)" aria-label="القناة السابقة" style="display:none"><i class="fa-solid fa-backward-step"></i></button>
-            <button class="pbtn" id="btnNextCh" onclick="chStep(1)" aria-label="القناة التالية" style="display:none"><i class="fa-solid fa-forward-step"></i></button>
-            <button class="pbtn" onclick="openExtModal()" aria-label="مشغل خارجي"><i class="fa-solid fa-up-right-from-square"></i></button>
-            <button class="pbtn" onclick="cycleFit()" aria-label="نسبة العرض"><i class="fa-solid fa-up-down-left-right"></i></button>
-            <button class="pbtn" id="btnFs" onclick="toggleFullscreen()" aria-label="ملء الشاشة"><i class="fa-solid fa-expand"></i></button>
-          </div>
-          <div class="player-bottom">
-            <div class="ctrl-row" id="streamChips"></div>
-            <div class="seek-row">
-              <span class="tm" id="tCur">0:00</span>
-              <input type="range" id="seek" min="0" max="1000" step="1" value="0" aria-label="شريط التشغيل" disabled>
-              <span class="tm" id="tDur">0:00</span>
-              <button class="pbtn" id="btnLive" onclick="goLive()" style="display:none; font-size:9.5px;"><span class="live-dot"></span>مباشر</button>
-            </div>
-            <div class="ctrl-row spread">
-              <div class="ctrl-row">
-                <button class="pbtn" id="btnMute" onclick="toggleMute()" aria-label="كتم"><i class="fa-solid fa-volume-high"></i></button>
-                <input type="range" class="vol" id="volRange" min="0" max="1" step="0.05" value="1" aria-label="مستوى الصوت">
-              </div>
-              <div class="ctrl-row">
-                <div class="qwrap" id="qWrap" style="display:none">
-                  <button class="pbtn" id="btnQual" onclick="toggleQMenu()" aria-label="الجودة"><i class="fa-solid fa-gear"></i><span id="qLabel">تلقائي</span></button>
-                  <div class="qmenu" id="qMenu" role="menu"></div>
-                </div>
-                <button class="pbtn" onclick="restartStream()" aria-label="إعادة الاتصال"><i class="fa-solid fa-arrows-rotate"></i></button>
-                <button class="pbtn" onclick="togglePip()" aria-label="نافذة عائمة"><i class="fa-solid fa-tv"></i></button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <button onclick="openCustomUrlModal()" class="tg-btn"><i class="fa-solid fa-link"></i> رابط</button>
+        <button onclick="openTelegramChannel(event)" class="tg-btn"><i class="fa-brands fa-telegram"></i> تليجرام</button>
       </div>
     </div>
 
-    <!-- المنطقة المتحركة للباقات أو قنوات الباقة المختارة فقط -->
+    <div class="recent-bar" id="recentBar"></div>
+
     <div class="scrollable-grid-wrap" id="scrollableContainer"></div>
   </div>
 
-  <!-- مكتبات المشغل -->
+  <!-- القائمة الجانبية للباقات -->
+  <div class="receiver-sidebar">
+    <div class="sidebar-header">
+      <div class="brand-wrap">
+        <div class="sidebar-title">VORIXA PRO</div>
+        <span class="iraq-flag-top-badge" title="العراق">
+          <span class="iraq-flag-top-red"></span>
+          <span class="iraq-flag-top-white"><span class="iraq-flag-top-takbir">الله أكبر</span></span>
+          <span class="iraq-flag-top-black"></span>
+        </span>
+        <div class="sidebar-logo">V</div>
+      </div>
+    </div>
+    <div class="bundles-menu-list" id="bundlesMenuList"></div>
+  </div>
+
+  <!-- مشغل التلفون (يُفعّل تلقائياً لأجهزة التلفون فقط) -->
+  <div id="player" aria-label="المشغل">
+    <div class="player-stage" id="playerStage">
+      <video id="vid" playsinline webkit-playsinline autoplay preload="auto" controlsList="nodownload noremoteplayback"></video>
+    </div>
+    <div class="spinner" id="spinner"></div>
+    <div class="player-center-controls" id="playerCenterControls">
+      <button class="center-skip-btn" onclick="skip(-10)" aria-label="رجوع 10 ثواني"><i class="fa-solid fa-rotate-left"></i><span class="s10">10</span></button>
+      <button class="center-play-btn" id="btnPlay" onclick="togglePlay()" aria-label="تشغيل/إيقاف"><i class="fa-solid fa-pause"></i></button>
+      <button class="center-skip-btn" onclick="skip(10)" aria-label="تقديم 10 ثواني"><i class="fa-solid fa-rotate-right"></i><span class="s10">10</span></button>
+    </div>
+    <div class="player-top">
+      <button class="pbtn close" onclick="closeMobilePlayer()" aria-label="إغلاق"><i class="fa-solid fa-xmark"></i></button>
+      <div class="player-title" id="playerTitle"></div>
+      <button class="pbtn" id="btnPrevCh" onclick="chStep(-1)" aria-label="القناة السابقة" style="display:none"><i class="fa-solid fa-backward-step"></i></button>
+      <button class="pbtn" id="btnNextCh" onclick="chStep(1)" aria-label="القناة التالية" style="display:none"><i class="fa-solid fa-forward-step"></i></button>
+      <button class="pbtn" onclick="openExtModal()" aria-label="مشغل خارجي"><i class="fa-solid fa-up-right-from-square"></i></button>
+      <button class="pbtn" onclick="cycleFit()" aria-label="نسبة العرض"><i class="fa-solid fa-up-down-left-right"></i></button>
+      <button class="pbtn" id="btnFs" onclick="toggleFullscreen()" aria-label="ملء الشاشة"><i class="fa-solid fa-expand"></i></button>
+    </div>
+    <div class="player-bottom">
+      <div class="ctrl-row" id="streamChips"></div>
+      <div class="seek-row">
+        <span class="tm" id="tCur">0:00</span>
+        <input type="range" id="seek" min="0" max="1000" step="1" value="0" aria-label="شريط التشغيل" disabled>
+        <span class="tm" id="tDur">0:00</span>
+        <button class="pbtn" id="btnLive" onclick="goLive()" style="display:none; font-size:10px;"><span class="live-dot"></span>مباشر</button>
+      </div>
+      <div class="ctrl-row spread">
+        <div class="ctrl-row">
+          <button class="pbtn" id="btnMute" onclick="toggleMute()" aria-label="كتم"><i class="fa-solid fa-volume-high"></i></button>
+          <input type="range" class="vol" id="volRange" min="0" max="1" step="0.05" value="1" aria-label="مستوى الصوت">
+        </div>
+        <div class="ctrl-row">
+          <button class="pbtn" id="btnColorMode" onclick="cycleVideoColor()" aria-label="ألوان الفيديو"><i class="fa-solid fa-wand-magic-sparkles"></i><span id="colorModeLabel">طبيعي</span></button>
+          <div class="qwrap" id="qWrap" style="display:none">
+            <button class="pbtn" id="btnQual" onclick="toggleQMenu()" aria-label="الجودة"><i class="fa-solid fa-gear"></i><span id="qLabel">تلقائي</span></button>
+            <div class="qmenu" id="qMenu" role="menu"></div>
+          </div>
+          <button class="pbtn" onclick="restartStream()" aria-label="إعادة الاتصال"><i class="fa-solid fa-arrows-rotate"></i></button>
+          <button class="pbtn" onclick="togglePip()" aria-label="نافذة عائمة"><i class="fa-solid fa-tv"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- مكتبات المشغل لنسخة التلفون -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mpegts.js@1.7.3/dist/mpegts.js"></script>
 
   <script>
-    const correctAppCode = "10";
+    const correctAppCode = "12";
     const fallbackImg = "https://via.placeholder.com/80/090d1a/f5c451?text=VORIXA";
     const telegramUsername = "se_22m";
 
@@ -683,7 +1063,76 @@
     })();
     const IS_PHONE_DEVICE = !IS_TV_DEVICE;
 
-    // تفعيل وتحديث ساعة الوقت الحقيقي كل ثانية
+    function dismissSplashNow() {
+      const splash = document.getElementById('splashScreen');
+      if (splash && splash.style.display !== 'none') {
+        splash.style.opacity = '0';
+        splash.style.pointerEvents = 'none';
+        splash.style.display = 'none';
+      }
+    }
+
+    /* مؤثر صوتي سينمائي عميق وقوي (Web Audio API) يتزامن مع تسلسل الدخولية - 15 ثانية */
+    let vrxAudioPlayed = false;
+    function playEpicCinematicIntroAudio() {
+      if (vrxAudioPlayed) return;
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        if (ctx.state === 'suspended') {
+          ctx.resume().catch(() => {});
+        }
+        vrxAudioPlayed = true;
+        const now = ctx.currentTime;
+
+        const subOsc = ctx.createOscillator();
+        const subGain = ctx.createGain();
+        subOsc.type = 'sine';
+        subOsc.frequency.setValueAtTime(52, now);
+        subOsc.frequency.exponentialRampToValueAtTime(36, now + 14.2);
+        subGain.gain.setValueAtTime(0.001, now);
+        subGain.gain.linearRampToValueAtTime(0.28, now + 1.8);
+        subGain.gain.setValueAtTime(0.24, now + 11.5);
+        subGain.gain.exponentialRampToValueAtTime(0.001, now + 15.0);
+        subOsc.connect(subGain);
+        subGain.connect(ctx.destination);
+        subOsc.start(now);
+        subOsc.stop(now + 15.1);
+
+        const riseOsc = ctx.createOscillator();
+        const riseFilter = ctx.createBiquadFilter();
+        const riseGain = ctx.createGain();
+        riseOsc.type = 'sawtooth';
+        riseOsc.frequency.setValueAtTime(80, now + 2.2);
+        riseOsc.frequency.exponentialRampToValueAtTime(220, now + 7.8);
+        riseFilter.type = 'lowpass';
+        riseFilter.frequency.setValueAtTime(260, now + 2.2);
+        riseFilter.frequency.exponentialRampToValueAtTime(1400, now + 7.8);
+        riseGain.gain.setValueAtTime(0.001, now + 2.2);
+        riseGain.gain.linearRampToValueAtTime(0.12, now + 7.3);
+        riseGain.gain.exponentialRampToValueAtTime(0.001, now + 8.4);
+        riseOsc.connect(riseFilter);
+        riseFilter.connect(riseGain);
+        riseGain.connect(ctx.destination);
+        riseOsc.start(now + 2.2);
+        riseOsc.stop(now + 8.5);
+
+        const hitOsc = ctx.createOscillator();
+        const hitGain = ctx.createGain();
+        hitOsc.type = 'triangle';
+        hitOsc.frequency.setValueAtTime(135, now + 8.2);
+        hitOsc.frequency.exponentialRampToValueAtTime(44, now + 13.5);
+        hitGain.gain.setValueAtTime(0.001, now + 8.2);
+        hitGain.gain.linearRampToValueAtTime(0.32, now + 8.4);
+        hitGain.gain.exponentialRampToValueAtTime(0.001, now + 13.8);
+        hitOsc.connect(hitGain);
+        hitGain.connect(ctx.destination);
+        hitOsc.start(now + 8.2);
+        hitOsc.stop(now + 13.9);
+      } catch (e) {}
+    }
+
     function updateRealtimeClock() {
       const now = new Date();
       let hours = now.getHours();
@@ -707,11 +1156,18 @@
     setInterval(updateRealtimeClock, 1000);
     updateRealtimeClock();
 
-    // تشغيل تلقائي للشاشة الافتتاحية لمدة 3 ثواني
     window.addEventListener('DOMContentLoaded', () => {
+      buildSidebarBundles();
+      playEpicCinematicIntroAudio();
+      const splashEl = document.getElementById('splashScreen');
+      if (splashEl) {
+        splashEl.addEventListener('pointerdown', playEpicCinematicIntroAudio, { once: true });
+      }
+      
       setTimeout(() => {
         const splash = document.getElementById('splashScreen');
         splash.style.opacity = '0';
+        splash.style.transform = 'translate3d(0, 0, 0) scale(1.04)';
         setTimeout(() => { 
           splash.style.display = 'none'; 
           if (localStorage.getItem('vorixa_sat_auth') !== correctAppCode) {
@@ -719,8 +1175,8 @@
           } else {
             showHomeDashboard();
           }
-        }, 250);
-      }, 3000);
+        }, 320);
+      }, 15000);
     });
 
     function checkAccessCode() {
@@ -778,436 +1234,45 @@
         id: 'bein',
         name: 'قنوات بي إن سبورت',
         channels: [
-          { name: 'belN SPORTS 1 4k', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: '4K', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/410706.m3u8' }] },
-          { name: 'belN SPORTS 2 4k', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: '4K', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/582152.m3u8' }] },
-          { name: 'belN SPORTS 3 4k', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: '4K', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/150729.m3u8' }] },
-          { name: 'belN SPORTS 4 4k', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: '4K', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/193768.m3u8' }] },
-          { name: 'belN SPORTS 5 4k', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: '4K', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/782634.m3u8' }] },
-          { name: 'belN SPORTS 6 4k', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: '4K', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/372231.m3u8' }] },
-          { name: 'belN SPORTS 7 4k', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: '4K', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/167754.m3u8' }] },
-          { name: 'belN SPORTS 8 4k', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: '4K', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/979525.m3u8' }] },
-          { name: 'belN SPORTS 9 4k', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: '4K', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/909074.m3u8' }] },
-          { name: 'belN SPORTS 1 HD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'HD', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/493682.m3u8' }] },
-          { name: 'belN SPORTS 2 HD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'HD', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/422331.m3u8' }] },
-          { name: 'belN SPORTS 3 HD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'HD', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/546507.m3u8' }] },
-          { name: 'belN SPORTS 4 HD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'HD', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/716559.m3u8' }] },
-          { name: 'belN SPORTS 5 HD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'HD', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/681664.m3u8' }] },
-          { name: 'belN SPORTS 6 HD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'HD', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/372231.m3u8' }] },
-          { name: 'belN SPORTS 7 HD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'HD', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/167754.m3u8' }] },
-          { name: 'belN SPORTS 8 HD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'HD', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/979525.m3u8' }] },
-          { name: 'belN SPORTS 9 HD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'HD', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/909074.m3u8' }] },
-          { name: 'belN SPORTS 1 SD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'SD', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/194432.m3u8' }] },
-          { name: 'belN SPORTS 2 SD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'SD', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/618157.m3u8' }] },
-          { name: 'belN SPORTS 3 SD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'SD', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/117974.m3u8' }] },
-          { name: 'belN SPORTS 4 SD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'SD', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/698573.m3u8' }] },
-          { name: 'belN SPORTS 5 SD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'SD', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/332578.m3u8' }] },
-          { name: 'belN SPORTS 6 SD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'SD', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/407331.m3u8' }] },
-          { name: 'belN SPORTS 7 SD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'SD', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/206649.m3u8' }] },
-          { name: 'belN SPORTS 8 SD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'SD', url: 'http://tv.nv2.info/live/Ez48880/25125mu94/240213.m3u8' }] }
+          { name: 'belN SPORTS 1 4k', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: '4K', url: 'http://pro.prince4k.com:7355/live/YY5BOOMKSPOH779%40KK/LICS7Y98CSILSCIJCC/269795.ts' }] },
+          { name: 'belN SPORTS 2 4k', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: '4K', url: 'http://pro.prince4k.com:7355/live/YY5BOOMKSPOH779%40KK/LICS7Y98CSILSCIJCC/269796.ts' }] },
+          { name: 'belN SPORTS 3 4k', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: '4K', url: 'http://pro.prince4k.com:7355/live/YY5BOOMKSPOH779%40KK/LICS7Y98CSILSCIJCC/269797.ts' }] },
+          { name: 'belN SPORTS 4 4k', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: '4K', url: 'http://pro.prince4k.com:7355/live/YY5BOOMKSPOH779%40KK/LICS7Y98CSILSCIJCC/269798.ts' }] },
+          { name: 'belN SPORTS 5 4k', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: '4K', url: 'http://pro.prince4k.com:7355/live/YY5BOOMKSPOH779%40KK/LICS7Y98CSILSCIJCC/269799.ts' }] },
+          { name: 'belN SPORTS 6 4k', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: '4K', url: 'http://pro.prince4k.com:7355/live/YY5BOOMKSPOH779%40KK/LICS7Y98CSILSCIJCC/269800.ts' }] },
+          { name: 'belN SPORTS 7 4k', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: '4K', url: 'http://pro.prince4k.com:7355/live/YY5BOOMKSPOH779%40KK/LICS7Y98CSILSCIJCC/269801.ts' }] },
+          { name: 'belN SPORTS 8 4k', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: '4K', url: 'http://87.229.95.188/live/hcZkp94fwE/z4YPVtEyCY/20.ts' }] },
+          { name: 'belN SPORTS 9 4k', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: '4K', url: 'http://87.229.95.188/live/hcZkp94fwE/z4YPVtEyCY/23.ts' }] },
+          { name: 'belN SPORTS 1 HD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'HD', url: 'http://iioollmazuy78.site:2052/live/22400103024712/84529037687385/677030.ts' }] },
+          { name: 'belN SPORTS 2 HD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'HD', url: 'http://iioollmazuy78.site:2052/live/22400103024712/84529037687385/677031.ts' }] },
+          { name: 'belN SPORTS 3 HD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'HD', url: 'http://iioollmazuy78.site:2052/live/22400103024712/84529037687385/677032.ts' }] },
+          { name: 'belN SPORTS 4 HD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'HD', url: 'http://iioollmazuy78.site:2052/live/22400103024712/84529037687385/677033.ts' }] },
+          { name: 'belN SPORTS 5 HD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'HD', url: 'http://iioollmazuy78.site:2052/live/22400103024712/84529037687385/677034.ts' }] },
+          { name: 'belN SPORTS 6 HD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'HD', url: 'http://iioollmazuy78.site:2052/live/22400103024712/84529037687385/677035.ts' }] },
+          { name: 'belN SPORTS 1 SD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'SD', url: 'http://iioollmazuy78.site:2052/live/22400103024712/84529037687385/677084.ts' }] },
+          { name: 'belN SPORTS 2 SD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'SD', url: 'http://iioollmazuy78.site:2052/live/22400103024712/84529037687385/677085.ts' }] },
+          { name: 'belN SPORTS 3 SD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'SD', url: 'http://iioollmazuy78.site:2052/live/22400103024712/84529037687385/677086.ts' }] },
+          { name: 'belN SPORTS 4 SD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'SD', url: 'http://iioollmazuy78.site:2052/live/22400103024712/84529037687385/677087.ts' }] },
+          { name: 'belN SPORTS 5 SD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'SD', url: 'http://iioollmazuy78.site:2052/live/22400103024712/84529037687385/677088.ts' }] },
+          { name: 'belN SPORTS 6 SD', logo: 'https://iili.io/nha0uSV.md.jpg', streams: [{ q: 'SD', url: 'http://iioollmazuy78.site:2052/live/22400103024712/84529037687385/677089.ts' }] }
         ]
       },
       {
         id: 'alwan',
         name: 'قنوات ألوان الرياضية',
         channels: [
-          { name: 'ALWAN SPORTS 1', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'LIVE', url: 'https://blcco.linkip.org/live/3461_.m3u8' }] },
-          { name: 'ALWAN SPORTS 2', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'LIVE', url: 'https://blcco.linkip.org/live/3460_.m3u8' }] },
-          { name: 'ALWAN SPORTS 3', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'LIVE', url: 'https://blcco.linkip.org/live/3459_.m3u8' }] },
-          { name: 'ALWAN SPORTS 4', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'LIVE', url: 'https://blcco.linkip.org/live/3458_.m3u8' }] },
-          { name: 'ALWAN SPORTS 5', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'LIVE', url: 'https://blcco.linkip.org/live/3457_.m3u8' }] },
-          { name: 'ALWAN SPORTS 6', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'LIVE', url: 'https://blcco.linkip.org/live/3456_.m3u8' }] },
-          { name: 'ALWAN SPORTS 7', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'LIVE', url: 'https://blcco.linkip.org/live/3455_.m3u8' }] },
-          { name: 'ALWAN SPORTS 8', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'LIVE', url: 'https://blcco.linkip.org/live/3454_.m3u8' }] },
-          { name: 'ALWAN SPORTS 9', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'LIVE', url: 'https://blcco.linkip.org/live/3453_.m3u8' }] },
-          { name: 'ALWAN SPORTS 10', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'LIVE', url: 'https://blcco.linkip.org/live/3452_.m3u8' }] }
-        ]
-      },
-      {
-        id: 'tod_sports',
-        name: 'TOD | SPORTS',
-        logo: 'https://i.ibb.co/VYp2CPVg/tod-og-logo.jpg',
-        channels: [
-          { name: 'TOD 1', logo: 'https://i.ibb.co/VYp2CPVg/tod-og-logo.jpg', streams: [{ q: 'LIVE', url: 'http://pro.netmos.ovh:7355/live/31534790410213067/U09ZEDdu@6X!PeD/273441.m3u8' }] },
-          { name: 'TOD 2', logo: 'https://i.ibb.co/VYp2CPVg/tod-og-logo.jpg', streams: [{ q: 'LIVE', url: 'http://pro.netmos.ovh:7355/live/31534790410213067/U09ZEDdu@6X!PeD/273440.m3u8' }] },
-          { name: 'TOD 3', logo: 'https://i.ibb.co/VYp2CPVg/tod-og-logo.jpg', streams: [{ q: 'LIVE', url: 'http://pro.netmos.ovh:7355/live/31534790410213067/U09ZEDdu@6X!PeD/273439.m3u8' }] },
-          { name: 'TOD 4', logo: 'https://i.ibb.co/VYp2CPVg/tod-og-logo.jpg', streams: [{ q: 'LIVE', url: 'http://pro.netmos.ovh:7355/live/31534790410213067/U09ZEDdu@6X!PeD/273438.m3u8' }] },
-          { name: 'TOD 5', logo: 'https://i.ibb.co/VYp2CPVg/tod-og-logo.jpg', streams: [{ q: 'LIVE', url: 'http://pro.netmos.ovh:7355/live/31534790410213067/U09ZEDdu@6X!PeD/273437.m3u8' }] },
-          { name: 'TOD 6', logo: 'https://i.ibb.co/VYp2CPVg/tod-og-logo.jpg', streams: [{ q: 'LIVE', url: 'http://pro.netmos.ovh:7355/live/31534790410213067/U09ZEDdu@6X!PeD/273436.m3u8' }] },
-          { name: 'TOD 7', logo: 'https://i.ibb.co/VYp2CPVg/tod-og-logo.jpg', streams: [{ q: 'LIVE', url: 'http://pro.netmos.ovh:7355/live/31534790410213067/U09ZEDdu@6X!PeD/273435.m3u8' }] },
-          { name: 'TOD 8', logo: 'https://i.ibb.co/VYp2CPVg/tod-og-logo.jpg', streams: [{ q: 'LIVE', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/831796.ts' }] },
-          { name: 'TOD 9', logo: 'https://i.ibb.co/VYp2CPVg/tod-og-logo.jpg', streams: [{ q: 'LIVE', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/831797.ts' }] },
-          { name: 'TOD 10', logo: 'https://i.ibb.co/VYp2CPVg/tod-og-logo.jpg', streams: [{ q: 'LIVE', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/831792.ts' }] },
-          { name: 'TOD 11', logo: 'https://i.ibb.co/VYp2CPVg/tod-og-logo.jpg', streams: [{ q: 'LIVE', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/831755.m3u8' }] },
-          { name: 'TOD 12', logo: 'https://i.ibb.co/VYp2CPVg/tod-og-logo.jpg', streams: [{ q: 'LIVE', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/831752.m3u8' }] },
-          { name: 'TOD 13', logo: 'https://i.ibb.co/VYp2CPVg/tod-og-logo.jpg', streams: [{ q: 'LIVE', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/831791.ts' }] },
-          { name: 'TOD 14', logo: 'https://i.ibb.co/VYp2CPVg/tod-og-logo.jpg', streams: [{ q: 'LIVE', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/831790.ts' }] },
-          { name: 'TOD 15', logo: 'https://i.ibb.co/VYp2CPVg/tod-og-logo.jpg', streams: [{ q: 'LIVE', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/831789.ts' }] },
-          { name: 'TOD 16', logo: 'https://i.ibb.co/VYp2CPVg/tod-og-logo.jpg', streams: [{ q: 'LIVE', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/831788.ts' }] }
-        ]
-      },
-      {
-        id: 'iq_iraq_sports',
-        name: 'IQ | Iraq SPORTS',
-        logo: 'https://i.ibb.co/bRXxYLKc/9df21b7d1677226328b3035293fc417d.jpg',
-        channels: [
-          { name: 'Iraqi Sports HD', logo: 'https://i.ibb.co/rfmy95CF/c80e395054794c12d6ee9f773179cbaa.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/97079.ts' }] },
-          { name: 'Iraqi Sports FHD', logo: 'https://i.ibb.co/rfmy95CF/c80e395054794c12d6ee9f773179cbaa.jpg', streams: [{ q: 'FHD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/143491.ts' }] },
-          { name: 'AL Rabiaa sports', logo: 'https://i.ibb.co/8wZKh95/images-af4df409-9f53-4f.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/143490.ts' }] },
-          { name: 'AL Rabiaa Sports 1', logo: 'https://i.ibb.co/8wZKh95/images-af4df409-9f53-4f.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/234644.ts' }] },
-          { name: 'AL Rabiaa Sports 2', logo: 'https://i.ibb.co/8wZKh95/images-af4df409-9f53-4f.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/234645.ts' }] },
-          { name: 'AL Rabiaa Sports +1', logo: 'https://i.ibb.co/8wZKh95/images-af4df409-9f53-4f.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/234646.ts' }] },
-          { name: 'AL Rabiaa Sports +2', logo: 'https://i.ibb.co/8wZKh95/images-af4df409-9f53-4f.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/234647.ts' }] },
-          { name: 'AL Rabiaa Sports 1 4k', logo: 'https://i.ibb.co/8wZKh95/images-af4df409-9f53-4f.jpg', streams: [{ q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/194472.ts' }] }
-        ]
-      },
-      {
-        id: 'bundesliga',
-        name: 'الدوري الألماني | SHAHID',
-        logo: 'https://i.ibb.co/JWGQ9p7g/images-2a93381e-25ef-4c.png',
-        channels: [
-          { name: 'SHAHID SPORTS 1', logo: 'https://i.ibb.co/JWGQ9p7g/images-2a93381e-25ef-4c.png', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/674792.ts' }] },
-          { name: 'SHAHID SPORTS 2', logo: 'https://i.ibb.co/JWGQ9p7g/images-2a93381e-25ef-4c.png', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/674793.ts' }] },
-          { name: 'SHAHID SPORTS 3', logo: 'https://i.ibb.co/JWGQ9p7g/images-2a93381e-25ef-4c.png', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/674794.ts' }] },
-          { name: 'SHAHID SPORTS 4', logo: 'https://i.ibb.co/JWGQ9p7g/images-2a93381e-25ef-4c.png', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/674795.ts' }] },
-          { name: 'SHAHID SPORTS 5', logo: 'https://i.ibb.co/JWGQ9p7g/images-2a93381e-25ef-4c.png', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/674796.ts' }] },
-          { name: 'SHAHID SPORTS 6', logo: 'https://i.ibb.co/JWGQ9p7g/images-2a93381e-25ef-4c.png', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/674797.ts' }] },
-          { name: 'SHAHID SPORTS 7', logo: 'https://i.ibb.co/JWGQ9p7g/images-2a93381e-25ef-4c.png', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/674798.ts' }] },
-          { name: 'SHAHID SPORTS 8', logo: 'https://i.ibb.co/JWGQ9p7g/images-2a93381e-25ef-4c.png', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/674799.ts' }] },
-          { name: 'SHAHID SPORTS 9', logo: 'https://i.ibb.co/JWGQ9p7g/images-2a93381e-25ef-4c.png', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/674800.ts' }] }
-        ]
-      },
-      {
-        id: 'kurdistan_sports',
-        name: 'KurdisTan SPORTS',
-        logo: 'https://i.ibb.co/Ld9dqMWj/images-20785efa-b74d-4b.jpg',
-        channels: [
-          { name: 'Duhok SPORTS 4K', logo: 'https://i.ibb.co/Ld9dqMWj/images-20785efa-b74d-4b.jpg', streams: [{ q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/602828.ts' }] },
-          { name: 'AVA SPORTS HD', logo: 'https://i.ibb.co/Ld9dqMWj/images-20785efa-b74d-4b.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/601394.ts' }] },
-          { name: '4SPORTS HD', logo: 'https://i.ibb.co/Ld9dqMWj/images-20785efa-b74d-4b.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/601395.ts' }] },
-          { name: 'NRT SPORTS HD', logo: 'https://i.ibb.co/Ld9dqMWj/images-20785efa-b74d-4b.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/601396.ts' }] },
-          { name: 'Reng SPORTS HD', logo: 'https://i.ibb.co/Ld9dqMWj/images-20785efa-b74d-4b.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/601397.ts' }] },
-          { name: 'Kurdistan SPORTS HD', logo: 'https://i.ibb.co/Ld9dqMWj/images-20785efa-b74d-4b.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/601398.ts' }] },
-          { name: 'ASO SPORTS HD', logo: 'https://i.ibb.co/Ld9dqMWj/images-20785efa-b74d-4b.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/601399.ts' }] },
-          { name: 'Nobar SPORTS HD', logo: 'https://i.ibb.co/Ld9dqMWj/images-20785efa-b74d-4b.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/601400.ts' }] }
-        ]
-      },
-      {
-        id: 'shasha',
-        name: 'AT | Shasah sport',
-        logo: 'https://i.ibb.co/SDm4mt8h/FB-IMG-1794649007678.jpg',
-        channels: [
-          { 
-            name: 'Shasha SPORTS 1', 
-            logo: 'https://i.ibb.co/SDm4mt8h/FB-IMG-1794649007678.jpg', 
-            streams: [
-              { q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/654129.ts' },
-              { q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/651422.ts' }
-            ] 
-          },
-          { 
-            name: 'Shasha SPORTS 2', 
-            logo: 'https://i.ibb.co/SDm4mt8h/FB-IMG-1794649007678.jpg', 
-            streams: [
-              { q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/67381.ts' },
-              { q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/67380.ts' }
-            ] 
-          },
-          { 
-            name: 'Shasha SPORTS 3', 
-            logo: 'https://i.ibb.co/SDm4mt8h/FB-IMG-1794649007678.jpg', 
-            streams: [
-              { q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/67383.ts' },
-              { q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/67382.ts' }
-            ] 
-          }
-        ]
-      },
-      {
-        id: 'starzplay',
-        name: 'AT | STARZPLAY',
-        logo: 'https://i.ibb.co/xqv71pRP/689cd5dde06bf-1755108829.webp',
-        channels: [
-          { 
-            name: 'STARZPLAY SPORTS 1', 
-            logo: 'https://i.ibb.co/xqv71pRP/689cd5dde06bf-1755108829.webp', 
-            streams: [
-              { q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/67377.ts' },
-              { q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/67376.ts' }
-            ] 
-          },
-          { 
-            name: 'STARZPLAY SPORTS 2', 
-            logo: 'https://i.ibb.co/xqv71pRP/689cd5dde06bf-1755108829.webp', 
-            streams: [
-              { q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/67379.ts' },
-              { q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/67378.ts' }
-            ] 
-          },
-          { 
-            name: 'STARZPLAY SPORTS 3', 
-            logo: 'https://i.ibb.co/xqv71pRP/689cd5dde06bf-1755108829.webp', 
-            streams: [
-              { q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/648603.ts' },
-              { q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/648602.ts' }
-            ] 
-          }
-        ]
-      },
-      {
-        id: 'adsports_at',
-        name: 'AT | AD SPORTS',
-        logo: 'https://i.ibb.co/k2S5QC6t/IMG-1c8a8173-82ab-43ca-a286-9724b129894b.jpg',
-        channels: [
-          { 
-            name: 'AD SPORTS 1', 
-            logo: 'https://i.ibb.co/k2S5QC6t/IMG-1c8a8173-82ab-43ca-a286-9724b129894b.jpg', 
-            streams: [
-              { q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/67373.ts' },
-              { q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/67373.ts' }
-            ] 
-          },
-          { 
-            name: 'AD SPORTS 2', 
-            logo: 'https://i.ibb.co/k2S5QC6t/IMG-1c8a8173-82ab-43ca-a286-9724b129894b.jpg', 
-            streams: [
-              { q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/67375.ts' },
-              { q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/67374.ts' }
-            ] 
-          }
-        ]
-      },
-      {
-        id: 'rabiaa',
-        name: 'قنوات الرابعة',
-        channels: [
-          { name: 'ALRABIAA SPORTS 1', logo: 'https://i.ibb.co/3ykbWk73/IMG-20261113-WA0001.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/651423.ts' }] },
-          { name: 'ALRABIAA SPORTS 2', logo: 'https://i.ibb.co/3ykbWk73/IMG-20261113-WA0001.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/651424.ts' }] },
-          { name: 'ALRABIAA SPORTS 3', logo: 'https://i.ibb.co/3ykbWk73/IMG-20261113-WA0001.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/651425.ts' }] },
-          { name: 'ALRABIAA SPORTS 4', logo: 'https://i.ibb.co/3ykbWk73/IMG-20261113-WA0001.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/651426.ts' }] }
-        ]
-      },
-      {
-        id: 'solosport',
-        name: 'Solo Sport',
-        logo: 'https://i.ibb.co/CpwWwryK/image-b27bb3f5.jpg',
-        channels: [
-          { 
-            name: 'Solo Sport 1', 
-            logo: 'https://i.ibb.co/CpwWwryK/image-b27bb3f5.jpg', 
-            streams: [
-              { q: 'FHD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723477.ts' },
-              { q: 'HEVC', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723478.ts' },
-              { q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723479.ts' },
-              { q: 'SD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723480.ts' }
-            ] 
-          },
-          { 
-            name: 'Solo Sport 2', 
-            logo: 'https://i.ibb.co/CpwWwryK/image-b27bb3f5.jpg', 
-            streams: [
-              { q: 'FHD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723481.ts' },
-              { q: 'HEVC', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723482.ts' },
-              { q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723483.ts' },
-              { q: 'SD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723484.ts' }
-            ] 
-          },
-          { 
-            name: 'Solo Sport 3', 
-            logo: 'https://i.ibb.co/CpwWwryK/image-b27bb3f5.jpg', 
-            streams: [
-              { q: 'FHD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723485.ts' },
-              { q: 'HEVC', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723486.ts' },
-              { q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723487.ts' },
-              { q: 'SD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723488.ts' }
-            ] 
-          },
-          { 
-            name: 'Solo Sport 4', 
-            logo: 'https://i.ibb.co/CpwWwryK/image-b27bb3f5.jpg', 
-            streams: [
-              { q: 'FHD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723489.ts' },
-              { q: 'HEVC', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723490.ts' },
-              { q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723491.ts' },
-              { q: 'SD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723492.ts' }
-            ] 
-          },
-          { 
-            name: 'Solo Sport 5', 
-            logo: 'https://i.ibb.co/CpwWwryK/image-b27bb3f5.jpg', 
-            streams: [
-              { q: 'FHD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723493.ts' },
-              { q: 'HEVC', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723494.ts' },
-              { q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723495.ts' },
-              { q: 'SD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/723496.ts' }
-            ] 
-          }
-        ]
-      },
-      {
-        id: 'alkass',
-        name: 'قنوات الكأس',
-        channels: [
-          { name: 'Al Kass 1', logo: 'https://i.ibb.co/DgpMKgN1/large-20260828213617-1787942177-551.jpg', streams: [{ q: 'HD', url: 'http://4576.live-44359.xyz/live/2487903738/ez94z02zgm/18747.m3u8' }] },
-          { name: 'Al Kass 2', logo: 'https://i.ibb.co/DgpMKgN1/large-20260828213617-1787942177-551.jpg', streams: [{ q: 'HD', url: 'http://4576.live-44359.xyz/live/2487903738/ez94z02zgm/18746.m3u8' }] },
-          { name: 'Al Kass 3', logo: 'https://i.ibb.co/DgpMKgN1/large-20260828213617-1787942177-551.jpg', streams: [{ q: 'HD', url: 'http://4576.live-44359.xyz/live/2487903738/ez94z02zgm/18745.m3u8' }] },
-          { name: 'Al Kass 4', logo: 'https://i.ibb.co/DgpMKgN1/large-20260828213617-1787942177-551.jpg', streams: [{ q: 'HD', url: 'http://4576.live-44359.xyz/live/2487903738/ez94z02zgm/18744.m3u8' }] },
-          { name: 'Al Kass 5', logo: 'https://i.ibb.co/DgpMKgN1/large-20260828213617-1787942177-551.jpg', streams: [{ q: 'HD', url: 'http://4576.live-44359.xyz/live/2487903738/ez94z02zgm/458811.m3u8' }] }
-        ]
-      },
-      {
-        id: 'ad',
-        name: 'أبو ظبي وستارزبلاي',
-        channels: [
-          { name: 'AD SPORTS 1HD', logo: 'https://i.ibb.co/bgY113R7/IMG-e5ed8426-7531-4161-bed6-a0c761caa054.png', streams: [{ q: 'HD', url: 'http://live-albashatv.site/gg?url=http://rfedswertas9900.site:2052/live/32400256889746/29789212069919/67372.ts' }] },
-          { name: 'AD SPORTS 2HD', logo: 'https://i.ibb.co/bgY113R7/IMG-e5ed8426-7531-4161-bed6-a0c761caa054.png', streams: [{ q: 'HD', url: 'http://live-albashatv.site/gg?url=http://rfedswertas9900.site:2052/live/32400256889746/29789212069919/67374.ts' }] },
-          { name: 'Starzplay 1HD', logo: 'https://i.ibb.co/YFhB3fHd/IMG-60ec271e-550d-4156-9987-c370f3f6ab59.jpg', streams: [{ q: 'HD', url: 'http://n7s.top/live/hm8685685/8768469/328658.ts' }] },
-          { name: 'Starzplay 2HD', logo: 'https://i.ibb.co/YFhB3fHd/IMG-60ec271e-550d-4156-9987-c370f3f6ab59.jpg', streams: [{ q: 'HD', url: 'http://n7s.top/live/hm8685685/8768469/328663.ts' }] }
-        ]
-      },
-      {
-        id: 'thmanyah',
-        name: 'قنوات ثمانية',
-        logo: 'https://i.ibb.co/fdnXrW7B/IMG-4055be1a-9779-47d1-a0e6-7e0ae8f6df1c.jpg',
-        channels: [
-          { name: 'THMANAYH SPORTS 1', logo: 'https://i.ibb.co/fdnXrW7B/IMG-4055be1a-9779-47d1-a0e6-7e0ae8f6df1c.jpg', streams: [{ q: 'LIVE', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/869601.ts' }] },
-          { name: 'THMANAYH SPORTS 2', logo: 'https://i.ibb.co/fdnXrW7B/IMG-4055be1a-9779-47d1-a0e6-7e0ae8f6df1c.jpg', streams: [{ q: 'LIVE', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/869602.ts' }] },
-          { name: 'THMANAYH SPORTS 3', logo: 'https://i.ibb.co/fdnXrW7B/IMG-4055be1a-9779-47d1-a0e6-7e0ae8f6df1c.jpg', streams: [{ q: 'LIVE', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/869603.ts' }] },
-          { name: 'THMANAYH SPORTS 1 4k', logo: 'https://i.ibb.co/fdnXrW7B/IMG-4055be1a-9779-47d1-a0e6-7e0ae8f6df1c.jpg', streams: [{ q: '4K', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/877925.ts' }] },
-          { name: 'THMANAYH SPORTS 2 4k', logo: 'https://i.ibb.co/fdnXrW7B/IMG-4055be1a-9779-47d1-a0e6-7e0ae8f6df1c.jpg', streams: [{ q: '4K', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/877926.ts' }] },
-          { name: 'THMANAYH SPORTS 3 4k', logo: 'https://i.ibb.co/fdnXrW7B/IMG-4055be1a-9779-47d1-a0e6-7e0ae8f6df1c.jpg', streams: [{ q: '4K', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/877927.ts' }] },
-          { name: 'THMANAYH SPORTS 1 HD', logo: 'https://i.ibb.co/fdnXrW7B/IMG-4055be1a-9779-47d1-a0e6-7e0ae8f6df1c.jpg', streams: [{ q: 'HD', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/877928.ts' }] },
-          { name: 'THMANAYH SPORTS 2 HD', logo: 'https://i.ibb.co/fdnXrW7B/IMG-4055be1a-9779-47d1-a0e6-7e0ae8f6df1c.jpg', streams: [{ q: 'HD', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/877929.ts' }] },
-          { name: 'THMANAYH SPORTS 3 HD', logo: 'https://i.ibb.co/fdnXrW7B/IMG-4055be1a-9779-47d1-a0e6-7e0ae8f6df1c.jpg', streams: [{ q: 'HD', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/877930.ts' }] },
-          { name: 'THMANAYH SPORTS 1 SD', logo: 'https://i.ibb.co/fdnXrW7B/IMG-4055be1a-9779-47d1-a0e6-7e0ae8f6df1c.jpg', streams: [{ q: 'SD', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/877931.ts' }] },
-          { name: 'THMANAYH SPORTS 2 SD', logo: 'https://i.ibb.co/fdnXrW7B/IMG-4055be1a-9779-47d1-a0e6-7e0ae8f6df1c.jpg', streams: [{ q: 'SD', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/877932.ts' }] },
-          { name: 'THMANAYH SPORTS 3 SD', logo: 'https://i.ibb.co/fdnXrW7B/IMG-4055be1a-9779-47d1-a0e6-7e0ae8f6df1c.jpg', streams: [{ q: 'SD', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/877933.ts' }] }
-        ]
-      },
-      {
-        id: 'foreign',
-        name: 'القنوات الأجنبية',
-        channels: [
-          { name: 'Channel 1', logo: 'https://i.ibb.co/nNM83WP7/file-000000005cac81f5888f04c62cbb0437.png', streams: [{ q: 'HD', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/819093.ts' }] },
-          { name: 'TNT SPORTS 1', logo: 'https://i.ibb.co/nNM83WP7/file-000000005cac81f5888f04c62cbb0437.png', streams: [{ q: 'HD', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/819102.ts' }] },
-          { name: 'TNT SPORTS 2', logo: 'https://i.ibb.co/nNM83WP7/file-000000005cac81f5888f04c62cbb0437.png', streams: [{ q: 'HD', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/819104.ts' }] },
-          { name: 'TNT SPORTS 3', logo: 'https://i.ibb.co/nNM83WP7/file-000000005cac81f5888f04c62cbb0437.png', streams: [{ q: 'HD', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/819106.ts' }] },
-          { name: 'Lega de HD', logo: 'https://i.ibb.co/nNM83WP7/file-000000005cac81f5888f04c62cbb0437.png', streams: [{ q: 'HD', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/773232.ts' }] },
-          { name: 'DAZN 1 HD', logo: 'https://i.ibb.co/nNM83WP7/file-000000005cac81f5888f04c62cbb0437.png', streams: [{ q: 'HD', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/280269.ts' }] },
-          { name: 'DAZN 2 HD', logo: 'https://i.ibb.co/nNM83WP7/file-000000005cac81f5888f04c62cbb0437.png', streams: [{ q: 'HD', url: 'http://my99599.site:2095/live/Monzer685729139/196856302922/280273.ts' }] },
-          { name: 'AVA sport HD', logo: 'https://i.ibb.co/nNM83WP7/file-000000005cac81f5888f04c62cbb0437.png', streams: [{ q: 'HD', url: 'http://silka.m3um9xplus.org:2052/live/30635000266893/85606299443755/601394.ts' }] },
-          { name: 'Duhok HD', logo: 'https://i.ibb.co/nNM83WP7/file-000000005cac81f5888f04c62cbb0437.png', streams: [{ q: 'HD', url: 'http://silka.m3um9xplus.org:2052/live/30635000266893/85606299443755/602828.ts' }] },
-          { name: 'CAZE TV', logo: 'https://i.ibb.co/nNM83WP7/file-000000005cac81f5888f04c62cbb0437.png', streams: [{ q: 'HD', url: 'http://138.204.86.4:8080/CAZE_TV/playlist.m3u8' }] }
-        ]
-      },
-      {
-        id: 'bein_movies',
-        name: 'belN movies | افلام',
-        logo: 'https://i.ibb.co/cc2cj2xV/BEIN-MOVIES-ACTION.png',
-        channels: [
-          { name: 'belN Movies 1 4k', logo: 'https://i.ibb.co/cc2cj2xV/BEIN-MOVIES-ACTION.png', streams: [{ q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/427.ts' }] },
-          { name: 'belN Movies 2 4k', logo: 'https://i.ibb.co/cc2cj2xV/BEIN-MOVIES-ACTION.png', streams: [{ q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/428.ts' }] },
-          { name: 'belN Movies 3 4k', logo: 'https://i.ibb.co/cc2cj2xV/BEIN-MOVIES-ACTION.png', streams: [{ q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/429.ts' }] },
-          { name: 'belN Movies 4 4k', logo: 'https://i.ibb.co/cc2cj2xV/BEIN-MOVIES-ACTION.png', streams: [{ q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/430.ts' }] },
-          { name: 'belN Series 1 4k', logo: 'https://i.ibb.co/cc2cj2xV/BEIN-MOVIES-ACTION.png', streams: [{ q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/431.ts' }] },
-          { name: 'belN Series 2 4k', logo: 'https://i.ibb.co/cc2cj2xV/BEIN-MOVIES-ACTION.png', streams: [{ q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/432.ts' }] },
-          { name: 'belN DRAMA 1 4k', logo: 'https://i.ibb.co/cc2cj2xV/BEIN-MOVIES-ACTION.png', streams: [{ q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/433.ts' }] },
-          { name: 'belN TCM 4k', logo: 'https://i.ibb.co/cc2cj2xV/BEIN-MOVIES-ACTION.png', streams: [{ q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/436.ts' }] },
-          { name: 'belN Gourmet 4k', logo: 'https://i.ibb.co/cc2cj2xV/BEIN-MOVIES-ACTION.png', streams: [{ q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/438.ts' }] },
-          { name: 'belN Fatafeat 4k', logo: 'https://i.ibb.co/cc2cj2xV/BEIN-MOVIES-ACTION.png', streams: [{ q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/440.ts' }] },
-          { name: 'belN Be Junior', logo: 'https://i.ibb.co/cc2cj2xV/BEIN-MOVIES-ACTION.png', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/442.ts' }] },
-          { name: 'belN Baraem 4k', logo: 'https://i.ibb.co/cc2cj2xV/BEIN-MOVIES-ACTION.png', streams: [{ q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/443.ts' }] },
-          { name: 'belN Jeem 4k', logo: 'https://i.ibb.co/cc2cj2xV/BEIN-MOVIES-ACTION.png', streams: [{ q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/444.ts' }] },
-          { name: 'belN TRAVEL 4k', logo: 'https://i.ibb.co/cc2cj2xV/BEIN-MOVIES-ACTION.png', streams: [{ q: '4K', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/87191.ts' }] }
-        ]
-      },
-      {
-        id: 'tod_films',
-        name: 'TOD FILMS | افلام',
-        logo: 'https://i.ibb.co/hNBGhqx/4552b0d31942c123547b917acc212cf9.jpg',
-        channels: [
-          { name: 'TOD UNA', logo: 'https://i.ibb.co/hNBGhqx/4552b0d31942c123547b917acc212cf9.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192512.ts' }] },
-          { name: 'TOD DOS', logo: 'https://i.ibb.co/hNBGhqx/4552b0d31942c123547b917acc212cf9.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192513.ts' }] },
-          { name: 'TOD TRES', logo: 'https://i.ibb.co/hNBGhqx/4552b0d31942c123547b917acc212cf9.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192514.ts' }] },
-          { name: 'TOD CUATRO', logo: 'https://i.ibb.co/hNBGhqx/4552b0d31942c123547b917acc212cf9.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192515.ts' }] },
-          { name: 'TOD CINCO', logo: 'https://i.ibb.co/hNBGhqx/4552b0d31942c123547b917acc212cf9.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192516.ts' }] },
-          { name: 'TOD SEIS', logo: 'https://i.ibb.co/hNBGhqx/4552b0d31942c123547b917acc212cf9.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192517.ts' }] },
-          { name: 'TOD SIETE', logo: 'https://i.ibb.co/hNBGhqx/4552b0d31942c123547b917acc212cf9.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192518.ts' }] },
-          { name: 'TOD OCHO', logo: 'https://i.ibb.co/hNBGhqx/4552b0d31942c123547b917acc212cf9.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192519.ts' }] },
-          { name: 'TOD NUEVE', logo: 'https://i.ibb.co/hNBGhqx/4552b0d31942c123547b917acc212cf9.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192520.ts' }] },
-          { name: 'TOD DIEZ', logo: 'https://i.ibb.co/hNBGhqx/4552b0d31942c123547b917acc212cf9.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192521.ts' }] },
-          { name: 'TOD ONCE', logo: 'https://i.ibb.co/hNBGhqx/4552b0d31942c123547b917acc212cf9.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192522.ts' }] },
-          { name: 'TOD TRECE', logo: 'https://i.ibb.co/hNBGhqx/4552b0d31942c123547b917acc212cf9.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192524.ts' }] },
-          { name: 'TOD CATORCE', logo: 'https://i.ibb.co/hNBGhqx/4552b0d31942c123547b917acc212cf9.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192525.ts' }] },
-          { name: 'TOD QUINCE', logo: 'https://i.ibb.co/hNBGhqx/4552b0d31942c123547b917acc212cf9.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192526.ts' }] },
-          { name: 'TOD DIECISÉIS', logo: 'https://i.ibb.co/hNBGhqx/4552b0d31942c123547b917acc212cf9.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192527.ts' }] },
-          { name: 'TOD DIECISIETE', logo: 'https://i.ibb.co/hNBGhqx/4552b0d31942c123547b917acc212cf9.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192528.ts' }] },
-          { name: 'TOD DIECIOCHO', logo: 'https://i.ibb.co/hNBGhqx/4552b0d31942c123547b917acc212cf9.jpg', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192529.ts' }] }
-        ]
-      },
-      {
-        id: 'netflix',
-        name: 'قنوات | Netflix',
-        logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png',
-        channels: [
-          { name: '┃EG┃ NETFLIX ARABIC 1', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653125.ts' }] },
-          { name: '┃EG┃ NETFLIX ARABIC 2', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653126.ts' }] },
-          { name: '┃EG┃ NETFLIX ARABIC 3', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653127.ts' }] },
-          { name: '┃EG┃ NETFLIX ACTION HD', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'HD', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653148.ts' }] },
-          { name: '┃EG┃ NETFLIX ACTION 1', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653129.ts' }] },
-          { name: '┃EG┃ NETFLIX ACTION 2', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653130.ts' }] },
-          { name: '┃EG┃ NETFLIX ACTION WAR', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653131.ts' }] },
-          { name: '┃EG┃ NETFLIX AFLAM HD', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'HD', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653155.ts' }] },
-          { name: '┃EG┃ NETFLIX ALWAN HD', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'HD', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653156.ts' }] },
-          { name: '┃EG┃ NETFLIX ANIMATION', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653144.ts' }] },
-          { name: '┃EG┃ NETFLIX ARABIC CLASSIC', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653128.ts' }] },
-          { name: '┃EG┃  NETFLIX CIMA HD', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'HD', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653159.ts' }] },
-          { name: '┃EG┃ NETFLIX CINEMA HD', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'HD', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653146.ts' }] },
-          { name: '┃EG┃ NETFLIX CLASSIC HD', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'HD', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653153.ts' }] },
-          { name: '┃EG┃ NETFLIX COMEDY 1', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653134.ts' }] },
-          { name: '┃EG┃ NETFLIX COMEDY 2', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653135.ts' }] },
-          { name: '┃EG┃ NETFLIX COMEDY HD', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'HD', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653149.ts' }] },
-          { name: '┃EG┃ NETFLIX CRIME 1', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653136.ts' }] },
-          { name: '┃EG┃ NETFLIX CRIME 2', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653137.ts' }] },
-          { name: '┃EG┃ NETFLIX DRAMA 1', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653132.ts' }] },
-          { name: '┃EG┃ NETFLIX DRAMA 2', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653133.ts' }] },
-          { name: '┃EG┃ NETFLIX DRAMA HD', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'HD', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653151.ts' }] },
-          { name: '┃EG┃ NETFLIX FAMILY 1', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653140.ts' }] },
-          { name: '┃EG┃ NETFLIX FAMILY 2', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653141.ts' }] },
-          { name: '┃EG┃ NETFLIX FAMILY HD', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'HD', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653150.ts' }] },
-          { name: '┃EG┃ NETFLIX FILM HD', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'HD', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653147.ts' }] },
-          { name: '┃EG┃ NETFLIX HOME CINEMA HD', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'HD', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653145.ts' }] },
-          { name: '┃EG┃ NETFLIX HORROR 1', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653138.ts' }] },
-          { name: '┃EG┃ NETFLIX HORROR 2', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653139.ts' }] },
-          { name: '┃EG┃ NETFLIX MASRAHIAAT HD', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'HD', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653152.ts' }] },
-          { name: '┃EG┃ NETFLIX MASRAHIYAT 1', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653142.ts' }] },
-          { name: '┃EG┃ NETFLIX MASRAHIYAT 2', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'LIVE', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653143.ts' }] },
-          { name: '┃EG┃ NETFLIX MIX HD', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'HD', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653160.ts' }] },
-          { name: '┃EG┃ NETFLIX SHOW HD', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'HD', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653154.ts' }] },
-          { name: '┃EG┃ NETFLIX TIME HD', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'HD', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653158.ts' }] },
-          { name: '┃EG┃ NETFLIX ZAMAN HD', logo: 'http://picon.tivi-ott.net:25461/picon/Argentina/┃AR┃ OD NETFLIX EGYPT/NET.png', streams: [{ q: 'HD', url: 'http://mag.tiger-ott.net/live/KEBD2U/7F8W2T/1653157.ts' }] }
-        ]
-      },
-      {
-        id: 'stc',
-        name: 'AR | STC',
-        logo: 'https://i.ibb.co/LydYrkV/IMG-e0fd8694-bce1-418e-b9aa-03993f271809.png',
-        channels: [
-          { name: 'STC SPORTS 1', logo: 'https://i.ibb.co/LydYrkV/IMG-e0fd8694-bce1-418e-b9aa-03993f271809.png', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/642474.ts' }] },
-          { name: 'STC SPORTS 2', logo: 'https://i.ibb.co/LydYrkV/IMG-e0fd8694-bce1-418e-b9aa-03993f271809.png', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/642475.ts' }] },
-          { name: 'STC SPORTS 3', logo: 'https://i.ibb.co/LydYrkV/IMG-e0fd8694-bce1-418e-b9aa-03993f271809.png', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/649917.ts' }] },
-          { name: 'STC cinema 1 HD', logo: 'https://i.ibb.co/LydYrkV/IMG-e0fd8694-bce1-418e-b9aa-03993f271809.png', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/642471.ts' }] },
-          { name: 'STC FAMILY HD', logo: 'https://i.ibb.co/LydYrkV/IMG-e0fd8694-bce1-418e-b9aa-03993f271809.png', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/642472.ts' }] },
-          { name: 'STC DRAMA HD', logo: 'https://i.ibb.co/LydYrkV/IMG-e0fd8694-bce1-418e-b9aa-03993f271809.png', streams: [{ q: 'HD', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/642473.ts' }] }
-        ]
-      },
-      {
-        id: 'fajr',
-        name: 'قنوات الفجر',
-        channels: [
-          { name: 'قناة الفجر 1', logo: 'https://i.ibb.co/CpwWwryK/image-b27bb3f5.jpg', streams: [{ q: 'HD', url: 'https://e.siar.us/live/ozfest.m3u8' }] },
-          { name: 'قناة الفجر 2', logo: 'https://i.ibb.co/CpwWwryK/image-b27bb3f5.jpg', streams: [{ q: 'HD', url: 'http://a.norzro.cfd/live/8667593288/2505245402/660921.m3u8' }] },
-          { name: 'قناة الفجر 3', logo: 'https://i.ibb.co/CpwWwryK/image-b27bb3f5.jpg', streams: [{ q: 'HD', url: 'http://a.norzro.cfd/live/8667593288/2505245402/660920.m3u8' }] },
-          { name: 'قناة الفجر 4', logo: 'https://i.ibb.co/CpwWwryK/image-b27bb3f5.jpg', streams: [{ q: 'HD', url: 'http://a.norzro.cfd/live/8667593288/2505245402/660919.m3u8' }] }
+          { name: 'ALWAN SPORTS 1 HD', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'HD', url: 'http://pro.prince4k.com:7355/live/YY5BOOMKSPOH779%40KK/LICS7Y98CSILSCIJCC/181661.ts' }] },
+          { name: 'ALWAN SPORTS 2 HD', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'HD', url: 'http://pro.prince4k.com:7355/live/YY5BOOMKSPOH779%40KK/LICS7Y98CSILSCIJCC/181664.ts' }] },
+          { name: 'ALWAN SPORTS 3 HD', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'HD', url: 'http://pro.prince4k.com:7355/live/YY5BOOMKSPOH779%40KK/LICS7Y98CSILSCIJCC/181667.ts' }] },
+          { name: 'ALWAN SPORTS 4 HD', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'HD', url: 'http://pro.prince4k.com:7355/live/YY5BOOMKSPOH779%40KK/LICS7Y98CSILSCIJCC/181670.ts' }] },
+          { name: 'ALWAN SPORTS 5 HD', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'HD', url: 'http://pro.prince4k.com:7355/live/YY5BOOMKSPOH779%40KK/LICS7Y98CSILSCIJCC/181673.ts' }] },
+          { name: 'ALWAN SPORTS 6 HD', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'HD', url: 'http://pro.prince4k.com:7355/live/YY5BOOMKSPOH779%40KK/LICS7Y98CSILSCIJCC/181676.ts' }] },
+          { name: 'ALWAN SPORTS 1 SD', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'SD', url: 'http://pro.prince4k.com:7355/live/YY5BOOMKSPOH779%40KK/LICS7Y98CSILSCIJCC/181662.ts' }] },
+          { name: 'ALWAN SPORTS 2 SD', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'SD', url: 'http://pro.prince4k.com:7355/live/YY5BOOMKSPOH779%40KK/LICS7Y98CSILSCIJCC/181665.ts' }] },
+          { name: 'ALWAN SPORTS 3 SD', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'SD', url: 'http://pro.prince4k.com:7355/live/YY5BOOMKSPOH779%40KK/LICS7Y98CSILSCIJCC/181668.ts' }] },
+          { name: 'ALWAN SPORTS 4 SD', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'SD', url: 'http://pro.prince4k.com:7355/live/YY5BOOMKSPOH779%40KK/LICS7Y98CSILSCIJCC/181671.ts' }] },
+          { name: 'ALWAN SPORTS 5 SD', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'SD', url: 'http://pro.prince4k.com:7355/live/YY5BOOMKSPOH779%40KK/LICS7Y98CSILSCIJCC/181674.ts' }] },
+          { name: 'ALWAN SPORTS 6 SD', logo: 'https://iili.io/nhcuPQR.md.jpg', streams: [{ q: 'SD', url: 'http://pro.prince4k.com:7355/live/YY5BOOMKSPOH779%40KK/LICS7Y98CSILSCIJCC/181677.ts' }] }
         ]
       },
       {
@@ -1241,24 +1306,6 @@
         ]
       },
       {
-        id: 'vip',
-        name: 'منصات VIP',
-        channels: [
-          { name: 'SHAHID ACTION AR', logo: 'https://iili.io/nh0lnJR.md.jpg', streams: [{ q: 'VIP', url: 'http://eurofinal.life/live/mahmoud748596/47458962474/489058.ts' }] },
-          { name: 'SHAHID ACTION EN', logo: 'https://iili.io/nh0lnJR.md.jpg', streams: [{ q: 'VIP', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192738.ts' }] },
-          { name: 'SHAHID COMEDy', logo: 'https://iili.io/nh0lnJR.md.jpg', streams: [{ q: 'VIP', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192739.ts' }] },
-          { name: 'SHAHID MARVEL', logo: 'https://iili.io/nh0lnJR.md.jpg', streams: [{ q: 'VIP', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192740.ts' }] },
-          { name: 'SHAHID TURKEY', logo: 'https://iili.io/nh0lnJR.md.jpg', streams: [{ q: 'VIP', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192741.ts' }] },
-          { name: 'SHAHID ASIAN', logo: 'https://i.ibb.co/cc2cj2xV/BEIN-MOVIES-ACTION.png', streams: [{ q: 'VIP', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192742.ts' }] },
-          { name: 'SHAHID BOLLYWOOD', logo: 'https://i.ibb.co/cc2cj2xV/BEIN-MOVIES-ACTION.png', streams: [{ q: 'VIP', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192743.ts' }] },
-          { name: 'SHAHID WRESTLING', logo: 'https://iili.io/nh0lnJR.md.jpg', streams: [{ q: 'VIP', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192744.ts' }] },
-          { name: 'SHAHID ANIMATION', logo: 'https://iili.io/nh0lnJR.md.jpg', streams: [{ q: 'VIP', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192745.ts' }] },
-          { name: 'SHAHID animation EN', logo: 'https://iili.io/nh0lnJR.md.jpg', streams: [{ q: 'VIP', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192746.ts' }] },
-          { name: 'SHAHID CLIP', logo: 'https://i.ibb.co/cc2cj2xV/BEIN-MOVIES-ACTION.png', streams: [{ q: 'VIP', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192747.ts' }] },
-          { name: 'SHAHID 3D', logo: 'https://iili.io/nh0lnJR.md.jpg', streams: [{ q: 'VIP', url: 'http://link.faltulog.org:2052/live/36750623403240/14750722182138/192748.ts' }] }
-        ]
-      },
-      {
         id: 'disney',
         name: 'ديزني+',
         channels: [
@@ -1275,70 +1322,226 @@
           { name: 'ليل البنفسج - الحلقة 3', logo: 'https://i.ibb.co/Cs4wTWF3/FB-IMG-1793977465500-edit-1265285187398424.jpg', streams: [{ q: 'MP4', url: 'http://130.193.165.22/Flussonic248/ArabicTVSeries2/LaylAlbanafsaj-S02E03.mp4' }] },
           { name: 'ليل البنفسج - الحلقة 4', logo: 'https://i.ibb.co/Cs4wTWF3/FB-IMG-1793977465500-edit-1265285187398424.jpg', streams: [{ q: 'MP4', url: 'http://130.193.165.22/Flussonic248/ArabicTVSeries2/LaylAlbanafsaj-S02E04.mp4' }] },
           { name: 'ليل البنفسج - الحلقة 5', logo: 'https://i.ibb.co/Cs4wTWF3/FB-IMG-1793977465500-edit-1265285187398424.jpg', streams: [{ q: 'MP4', url: 'http://130.193.165.22/Flussonic248/ArabicTVSeries2/LaylAlbanafsaj-S02E05.mp4' }] },
-          { name: 'ليل البنفسج - الحلقة 6', logo: 'https://i.ibb.co/Cs4wTWF3/FB-IMG-1793977465500-edit-1265285187398424.jpg', streams: [{ q: 'MP4', url: 'http://130.193.165.22/Flussonic248/ArabicTVSeries2/LaylAlbanafsaj-S02E06.mp4' }] }
+          { name: 'ليل البنفسج - الحلقة 6', logo: 'https://i.ibb.co/Cs4wTWF3/FB-IMG-1793977465500-edit-1265285187398424.jpg', streams: [{ q: 'MP4', url: 'http://130.193.165.22/Flussonic248/ArabicTVSeries2/LaylAlbanafsaj-S02E06.mp4' }] },
+          { name: 'ليل البنفسج - الحلقة 7', logo: 'https://i.ibb.co/Cs4wTWF3/FB-IMG-1793977465500-edit-1265285187398424.jpg', streams: [{ q: 'MP4', url: 'http://130.193.165.22/Flussonic248/ArabicTVSeries2/LaylAlbanafsaj-S02E07.mp4' }] }
         ]
       }
     ];
 
     let currentActiveBundleChannels = null;
 
-    function toggleExitBundleBtn(show) {
-      const btn = document.getElementById('exitBundleBtn');
-      if (btn) btn.classList.toggle('visible', !!show);
+    function getSavedCustomLinks() {
+      try {
+        const raw = localStorage.getItem('vorixa_custom_links_v1');
+        const arr = JSON.parse(raw || '[]');
+        return Array.isArray(arr) ? arr : [];
+      } catch (e) {
+        return [];
+      }
     }
 
-    function exitCurrentBundle() {
-      document.getElementById('globalSearchInput').value = '';
-      showHomeDashboard();
-      showToast("تم الخروج من الباقة", "🏠");
+    function saveCustomLinkItem(name, url) {
+      const list = getSavedCustomLinks().filter(item => item.url !== url);
+      list.unshift({ name: name, url: url });
+      try {
+        localStorage.setItem('vorixa_custom_links_v1', JSON.stringify(list.slice(0, 15)));
+      } catch (e) {}
     }
 
-    function showHomeDashboard() {
-      currentActiveBundleChannels = null;
-      toggleExitBundleBtn(false);
-      document.getElementById('activeBundleTitle').innerHTML = `الرئيسية <span>لوحة الترحيب</span>`;
-      const container = document.getElementById('scrollableContainer');
-      container.innerHTML = '';
-      container.scrollTop = 0;
+    function normalizePhoneLink(rawInput) {
+      let u = String(rawInput || '').trim();
+      if (!u) return '';
+      if (/^intent:\/\//i.test(u)) return u;
+      if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(u)) {
+        if (/^\/\//.test(u)) {
+          u = (location.protocol === 'https:' ? 'https:' : 'http:') + u;
+        } else {
+          u = 'http://' + u;
+        }
+      }
+      return u;
+    }
 
-      const grid = document.createElement('div');
-      grid.className = 'bundles-two-cols-grid';
+    function isDirectPhoneMedia(url) {
+      const u = extractTargetStreamUrl(url);
+      if (!u) return false;
+      if (/(\.m3u8|\.ts|\.flv|\.mp4|\.webm|\.ogg|\.mov|\.m4v|\.mp3|\.aac|\.m4a)([?#&/]|$)/i.test(u)) {
+        return true;
+      }
+      if (/(\/live\/[^?#]+\/[^?#]+\/\d+|mpegts|playlist\.m3u8|master\.m3u8|chunklist|index\.m3u8)/i.test(u)) {
+        return true;
+      }
+      return false;
+    }
+
+    function openPhoneLinkFast(rawName, rawUrl) {
+      dismissSplashNow();
+      const normalizedUrl = normalizePhoneLink(rawUrl);
+      if (!normalizedUrl) {
+        showToast("أدخل رابطاً صحيحاً أولاً", "⚠️");
+        return false;
+      }
+
+      const title = (rawName && rawName.trim()) ? rawName.trim() : "رابط سريع";
+      saveCustomLinkItem(title, normalizedUrl);
+      closeCustomUrlModal();
+
+      if (/^intent:\/\//i.test(normalizedUrl)) {
+        showToast("جاري الفتح: " + title, "⚡");
+        window.location.href = normalizedUrl;
+        return true;
+      }
+
+      if (!isDirectPhoneMedia(normalizedUrl)) {
+        showToast("جاري الفتح: " + title, "⚡");
+        window.location.href = normalizedUrl;
+        return true;
+      }
+
+      const detected = detectStreamType(normalizedUrl);
+      const qTag = detected === 'hls' ? 'M3U8' : detected === 'mpegts' ? 'TS' : detected === 'flv' ? 'FLV' : 'LIVE';
+      const customChannel = {
+        name: title,
+        logo: fallbackImg,
+        streams: [{ q: qTag, url: normalizedUrl }]
+      };
+
+      openMobilePlayer(customChannel, [customChannel], 0);
+      return true;
+    }
+
+    function openCustomUrlModal() {
+      dismissSplashNow();
+      document.getElementById('customUrlModal').style.display = 'flex';
+      renderSavedCustomLinks();
+      const inputEl = document.getElementById('customStreamUrlInput');
+      if (inputEl) {
+        setTimeout(() => { try { inputEl.focus(); } catch (e) {} }, 60);
+      }
+    }
+
+    function closeCustomUrlModal() {
+      document.getElementById('customUrlModal').style.display = 'none';
+    }
+
+    function playCustomStreamUrl() {
+      const urlInput = document.getElementById('customStreamUrlInput');
+      const nameInput = document.getElementById('customStreamNameInput');
+      if (!urlInput) return;
+
+      const rawUrl = urlInput.value.trim();
+      const customName = (nameInput && nameInput.value.trim()) ? nameInput.value.trim() : "بث خارجي مباشر";
+      openPhoneLinkFast(customName, rawUrl);
+    }
+
+    function renderSavedCustomLinks() {
+      const wrap = document.getElementById('customSavedListWrap');
+      if (!wrap) return;
+      const saved = getSavedCustomLinks();
+      wrap.innerHTML = '';
+      saved.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'custom-saved-item';
+        row.onclick = () => {
+          openPhoneLinkFast(item.name, item.url);
+        };
+        row.innerHTML = `
+          <div style="min-width:0; flex:1;">
+            <div style="font-size:10px; font-weight:800; color:#f8fafc; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${item.name}</div>
+            <div style="font-size:8px; color:var(--text-sub); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" dir="ltr">${item.url}</div>
+          </div>
+          <i class="fa-solid fa-play" style="color:var(--accent-gold); font-size:10px;"></i>
+        `;
+        wrap.appendChild(row);
+      });
+    }
+
+    function buildSidebarBundles() {
+      const menu = document.getElementById('bundlesMenuList');
+      menu.innerHTML = '';
       const frag = document.createDocumentFragment();
+      
+      const homeItem = document.createElement('button');
+      homeItem.className = 'bundle-menu-item active';
+      homeItem.id = 'menu_btn_home';
+      homeItem.onclick = () => {
+        dismissSplashNow();
+        document.getElementById('globalSearchInput').value = '';
+        showHomeDashboard();
+      };
+      homeItem.innerHTML = `
+        <div style="width:25px; height:25px; background:rgba(245,196,81,0.14); border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--accent-gold); font-size:11px;"><i class="fa-solid fa-house"></i></div>
+        <span style="flex:1; text-align:right;">الرئيسية</span>
+        <span style="font-size:7px; opacity:0.65;">✨</span>
+      `;
+      frag.appendChild(homeItem);
 
       satelliteBundles.forEach(bundle => {
         const bundleLogo = bundle.logo ? bundle.logo : (bundle.channels[0] ? bundle.channels[0].logo : fallbackImg);
         const item = document.createElement('button');
-        item.className = 'bundle-tile-btn';
-        item.id = 'bundle_tile_' + bundle.id;
+        item.className = 'bundle-menu-item';
+        item.id = 'menu_btn_' + bundle.id;
         item.onclick = () => {
+          dismissSplashNow();
           document.getElementById('globalSearchInput').value = '';
           selectBundle(bundle.id);
         };
         item.innerHTML = `
           <img src="${bundleLogo}" decoding="async" onerror="this.onerror=null;this.src='${fallbackImg}';" class="bundle-menu-logo">
-          <span style="flex:1; text-align:right; overflow:hidden; text-overflow:ellipsis;">${bundle.name}</span>
-          <span class="bundle-count-pill">${bundle.channels.length}</span>
+          <span style="flex:1; text-align:right;">${bundle.name}</span>
+          <span style="font-size:7px; opacity:0.65;">${bundle.channels.length}</span>
         `;
         frag.appendChild(item);
       });
+      menu.appendChild(frag);
+    }
 
-      grid.appendChild(frag);
-      container.appendChild(grid);
+    function showHomeDashboard() {
+      currentActiveBundleChannels = null;
+      document.querySelectorAll('.bundle-menu-item').forEach(el => el.classList.remove('active'));
+      const homeBtn = document.getElementById('menu_btn_home');
+      if (homeBtn) homeBtn.classList.add('active');
+
+      document.getElementById('activeBundleTitle').innerHTML = `الرئيسية <span>لوحة الترحيب</span>`;
+      
+      const container = document.getElementById('scrollableContainer');
+      container.innerHTML = `
+        <!-- الشريط المتحرك بخط أصغر ومرتب في الأعلى -->
+        <div class="marquee-top-wrapper">
+          <div class="marquee-content">
+            <span>بث مباشر بأعلى جودة وبدون تقطيع لقنوات بي ان سبورت وباقي القنوات الرياضية 💎</span>
+            <span>أشتركو بقناتنا على التليجرام لمعرفة جميع تحديثات التطبيق وتحديث الكود 🚨</span>
+            <span>بث مباشر بأعلى جودة وبدون تقطيع لقنوات بي ان سبورت وباقي القنوات الرياضية 💎</span>
+            <span>أشتركو بقناتنا على التليجرام لمعرفة جميع تحديثات التطبيق وتحديث الكود 🚨</span>
+          </div>
+        </div>
+
+        <!-- شعار التطبيق بوسط الصفحة -->
+        <div class="hero-app-logo-card">
+          <div class="hero-logo-icon">
+            <i class="fa-solid fa-tv"></i>
+          </div>
+          <div class="hero-brand-title">VORIXA PRO</div>
+          <div class="hero-brand-subtitle">بوابتك الأولى للبث المباشر والترفيه الرقمي</div>
+        </div>
+      `;
     }
 
     function selectBundle(bundleId) {
+      document.querySelectorAll('.bundle-menu-item').forEach(el => el.classList.remove('active'));
+      const activeBtn = document.getElementById('menu_btn_' + bundleId);
+      if (activeBtn) activeBtn.classList.add('active');
+
       const bundle = satelliteBundles.find(b => b.id === bundleId);
       if (!bundle) return;
 
       currentActiveBundleChannels = bundle.channels;
-      toggleExitBundleBtn(true);
       document.getElementById('activeBundleTitle').innerHTML = `
         ${bundle.name} <span>${bundle.channels.length} قناة</span>
       `;
 
       const container = document.getElementById('scrollableContainer');
       container.innerHTML = '';
-      container.scrollTop = 0;
       renderChannelsGrid(bundle.channels, container);
     }
 
@@ -1352,7 +1555,11 @@
         const card = document.createElement('div');
         card.className = 'channel-card-rec';
         card.tabIndex = 0;
-        card.onclick = () => handleChannelClick(ch, channelsList);
+        card.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          handleChannelClick(ch, channelsList);
+        };
         card.innerHTML = `
           <div class="ch-rec-info">
             <img src="${ch.logo}" decoding="async" onerror="this.onerror=null;this.src='${fallbackImg}';" class="ch-rec-logo">
@@ -1375,12 +1582,14 @@
     }
 
     function handleGlobalSearch(query) {
+      dismissSplashNow();
       const q = query.trim().toLowerCase();
       if (!q) {
         showHomeDashboard();
         return;
       }
 
+      document.querySelectorAll('.bundle-menu-item').forEach(el => el.classList.remove('active'));
       const allMatches = [];
       satelliteBundles.forEach(b => {
         b.channels.forEach(ch => {
@@ -1391,25 +1600,24 @@
       });
 
       currentActiveBundleChannels = allMatches;
-      toggleExitBundleBtn(true);
       document.getElementById('activeBundleTitle').innerHTML = `
         نتائج البحث <span>${allMatches.length} قناة</span>
       `;
       const container = document.getElementById('scrollableContainer');
       container.innerHTML = '';
-      container.scrollTop = 0;
 
       if (allMatches.length === 0) {
-        container.innerHTML = `<div style="text-align:center; color:var(--text-sub); padding:24px 10px; font-size:11px;">لا توجد قناة مطابقة لـ "${query}"</div>`;
+        container.innerHTML = `<div style="text-align:center; color:var(--text-sub); padding:30px 10px; font-size:11px;">لا توجد قناة مطابقة لـ "${query}"</div>`;
         return;
       }
       renderChannelsGrid(allMatches, container);
     }
 
     /* =====================================================================
-       التوجيه بين نسخة التلفون (المشغل المضاف بالشاشة الوسطى) ونسخة الشاشات (AppCreator24)
+       التوجيه بين نسخة التلفون (المشغل المضاف) ونسخة الشاشات (AppCreator24)
        ===================================================================== */
     function handleChannelClick(ch, listContext) {
+      dismissSplashNow();
       if (!ch || !ch.streams || ch.streams.length === 0) return;
 
       // نسخة الشاشات: تبقى على مشغل AppCreator24 الأصلي بدون تغيير
@@ -1418,23 +1626,60 @@
         return;
       }
 
-      // نسخة التلفون: تشغل القناة مباشرة داخل الشاشة الوسطى
+      // نسخة التلفون: تشغل بالمشغل المضاف
       openMobilePlayer(ch, listContext || currentActiveBundleChannels || [ch], 0);
     }
 
     // مشغل الشاشات الأصلي مال AppCreator24
     function launchStream(url, displayName) {
       showToast("جاري التشغيل: " + displayName, "✨");
-      window.location.href = url;
+      try {
+        window.location.assign(url);
+      } catch (e) {
+        window.location.href = url;
+      }
     }
 
     /* =====================================================================
        مشغل نسخة التلفون فقط (HLS / MPEG-TS / Native) - داعم لكل أشكال ts و m3u8
        ===================================================================== */
-    const MP = { ch: null, list: null, idx: 0, hls: null, ts: null, token: 0, retries: 0, stallT: null, retryT: null, idleT: null, engT: null, fit: 0, curUrl: '' };
+    const MP = { ch: null, list: null, idx: 0, hls: null, ts: null, token: 0, retries: 0, spinT: null, stallT: null, retryT: null, idleT: null, engT: null, fit: 0, colorMode: 0, curUrl: '' };
     const vid = document.getElementById('vid');
     const playerEl = document.getElementById('player');
-    const heroWelcomeEl = document.getElementById('heroWelcomeBox');
+
+    const VIDEO_COLOR_MODES = [
+      { cls: '', label: 'طبيعي' },
+      { cls: 'color-vivid', label: 'زاهي' },
+      { cls: 'color-cinema', label: 'سينمائي' },
+      { cls: 'color-bright', label: 'ساطع' },
+      { cls: 'color-night', label: 'ليلي' }
+    ];
+
+    function cycleVideoColor() {
+      MP.colorMode = (MP.colorMode + 1) % VIDEO_COLOR_MODES.length;
+      VIDEO_COLOR_MODES.forEach(m => { if (m.cls) playerEl.classList.remove(m.cls); });
+      const activeMode = VIDEO_COLOR_MODES[MP.colorMode];
+      if (activeMode.cls) playerEl.classList.add(activeMode.cls);
+      const lbl = document.getElementById('colorModeLabel');
+      if (lbl) lbl.textContent = activeMode.label;
+      showToast('ألوان الفيديو: ' + activeMode.label, '🎨');
+      wakeMobileControls();
+    }
+
+    function showSpinnerDelayed(delayMs = 1200) {
+      if (playerEl.classList.contains('stream-dead')) return;
+      clearTimeout(MP.spinT);
+      MP.spinT = setTimeout(() => {
+        if (playerEl.classList.contains('open') && !playerEl.classList.contains('stream-dead') && (vid.readyState < 3 || vid.paused)) {
+          document.getElementById('spinner').classList.add('on');
+        }
+      }, delayMs);
+    }
+
+    function hideSpinnerNow() {
+      clearTimeout(MP.spinT);
+      document.getElementById('spinner').classList.remove('on');
+    }
 
     function extractTargetStreamUrl(rawUrl) {
       let u = String(rawUrl || '').trim();
@@ -1477,24 +1722,28 @@
     }
 
     function openMobilePlayer(ch, list, streamIdx = 0) {
+      dismissSplashNow();
       MP.ch = ch;
       MP.list = Array.isArray(list) && list.length ? list : [ch];
       MP.retries = 0;
       const hasMulti = MP.list.length > 1;
       document.getElementById('btnPrevCh').style.display = hasMulti ? '' : 'none';
       document.getElementById('btnNextCh').style.display = hasMulti ? '' : 'none';
-      if (heroWelcomeEl) heroWelcomeEl.style.display = 'none';
       playerEl.classList.add('open');
       renderMobileChips();
       playMobileStream(streamIdx);
       wakeMobileControls();
+      setTimeout(() => {
+        if (playerEl.classList.contains('open')) {
+          enterMobileFs();
+        }
+      }, 150);
     }
 
     function closeMobilePlayer() {
       ++MP.token;
       resetMobileStage();
       playerEl.classList.remove('open', 'idle', 'stream-dead');
-      if (heroWelcomeEl) heroWelcomeEl.style.display = 'flex';
       exitMobileFs();
     }
 
@@ -1520,7 +1769,6 @@
       MP.idx = i;
       markMobileChip();
       const st = MP.ch.streams[i];
-      MP.curUrl = extractTargetStreamUrl(st.url);
       document.getElementById('playerTitle').textContent = MP.ch.name + (st.q && MP.ch.streams.length > 1 ? ' - ' + st.q : '');
       startMobilePlayback(st);
     }
@@ -1531,6 +1779,7 @@
     }
 
     function resetMobileStage() {
+      clearTimeout(MP.spinT);
       clearTimeout(MP.stallT);
       clearTimeout(MP.retryT);
       clearTimeout(MP.engT);
@@ -1599,7 +1848,7 @@
 
       const attempts = buildAttemptQueue(baseUrl, st.type);
       let stepIdx = 0;
-      document.getElementById('spinner').classList.add('on');
+      showSpinnerDelayed(450);
 
       const destroyCurrentEngines = () => {
         if (MP.hls) { try { MP.hls.destroy(); } catch (e) {} MP.hls = null; }
@@ -1626,26 +1875,27 @@
             return;
           }
           runNextAttempt();
-        }, 11000);
+        }, 9000);
 
         if (item.mode === 'hls') {
           if (window.Hls && Hls.isSupported()) {
             const h = new Hls({
               lowLatencyMode: false,
               enableWorker: item.useWorker,
-              maxBufferLength: 60,
-              maxMaxBufferLength: 120,
-              backBufferLength: 30,
-              liveSyncDurationCount: 4,
-              fragLoadingTimeOut: 15000,
-              fragLoadingMaxRetry: 3,
-              fragLoadingRetryDelay: 1000,
-              manifestLoadingTimeOut: 12000,
-              manifestLoadingMaxRetry: 3,
-              manifestLoadingRetryDelay: 1000,
-              levelLoadingTimeOut: 12000,
-              levelLoadingMaxRetry: 3,
-              levelLoadingRetryDelay: 1000
+              maxBufferLength: 90,
+              maxMaxBufferLength: 180,
+              backBufferLength: 45,
+              liveSyncDurationCount: 5,
+              liveMaxLatencyDurationCount: 15,
+              fragLoadingTimeOut: 20000,
+              fragLoadingMaxRetry: 5,
+              fragLoadingRetryDelay: 1200,
+              manifestLoadingTimeOut: 15000,
+              manifestLoadingMaxRetry: 4,
+              manifestLoadingRetryDelay: 1200,
+              levelLoadingTimeOut: 15000,
+              levelLoadingMaxRetry: 4,
+              levelLoadingRetryDelay: 1200
             });
             MP.hls = h;
             h.loadSource(item.url);
@@ -1661,7 +1911,7 @@
             });
             h.on(Hls.Events.ERROR, (ev, data) => {
               if (my !== MP.token || !data.fatal) return;
-              if (data.type === Hls.ErrorTypes.MEDIA_ERROR && mediaRec++ < 2) {
+              if (data.type === Hls.ErrorTypes.MEDIA_ERROR && mediaRec++ < 3) {
                 h.recoverMediaError();
                 safeMobilePlay();
                 return;
@@ -1688,16 +1938,16 @@
             }, {
               enableWorker: item.useWorker,
               enableStashBuffer: true,
-              stashInitialSize: 512 * 1024,
+              stashInitialSize: 1024 * 1024,
               lazyLoad: false,
               deferLoadAfterSourceOpen: false,
               fixAudioTimestampGap: true,
               liveBufferLatencyChasing: false,
-              liveBufferLatencyMaxLatency: 10.0,
-              liveBufferLatencyMinRemain: 2.0,
+              liveBufferLatencyMaxLatency: 25.0,
+              liveBufferLatencyMinRemain: 3.0,
               autoCleanupSourceBuffer: true,
-              autoCleanupMaxBackwardDuration: 60,
-              autoCleanupMinBackwardDuration: 30,
+              autoCleanupMaxBackwardDuration: 90,
+              autoCleanupMinBackwardDuration: 45,
               reuseRedirectedURL: true
             });
             MP.ts = t;
@@ -1706,6 +1956,14 @@
             safeMobilePlay();
             t.on(mpegts.Events.ERROR, () => {
               if (my !== MP.token) return;
+              if (MP.retries++ < 2) {
+                clearTimeout(MP.retryT);
+                MP.retryT = setTimeout(() => {
+                  if (my !== MP.token) return;
+                  try { t.unload(); t.load(); safeMobilePlay(); } catch (e) { runNextAttempt(); }
+                }, 1200);
+                return;
+              }
               runNextAttempt();
             });
           } else {
@@ -1769,7 +2027,7 @@
     }
 
     function onMobileFail() {
-      document.getElementById('spinner').classList.remove('on');
+      hideSpinnerNow();
       clearTimeout(MP.stallT);
       clearTimeout(MP.engT);
       playerEl.classList.add('stream-dead');
@@ -1778,7 +2036,7 @@
 
     vid.addEventListener('waiting', () => {
       if (playerEl.classList.contains('stream-dead')) return;
-      document.getElementById('spinner').classList.add('on');
+      showSpinnerDelayed(1300);
       clearTimeout(MP.stallT);
       MP.stallT = setTimeout(() => {
         if (playerEl.classList.contains('open') && vid.readyState < 3) {
@@ -1786,6 +2044,8 @@
             try { MP.hls.startLoad(); safeMobilePlay(); } catch (e) {}
           } else if (MP.ts) {
             try { safeMobilePlay(); } catch (e) {}
+          } else {
+            safeMobilePlay();
           }
         }
       }, 15000);
@@ -1793,22 +2053,25 @@
     vid.addEventListener('progress', () => {
       if (vid.readyState >= 3) {
         clearTimeout(MP.stallT);
-        document.getElementById('spinner').classList.remove('on');
+        hideSpinnerNow();
       }
     });
     vid.addEventListener('playing', () => {
       clearTimeout(MP.stallT);
       clearTimeout(MP.engT);
       playerEl.classList.remove('stream-dead');
-      document.getElementById('spinner').classList.remove('on');
+      hideSpinnerNow();
       MP.retries = 0;
       document.getElementById('btnPlay').innerHTML = '<i class="fa-solid fa-pause"></i>';
     });
-    vid.addEventListener('pause', () => { document.getElementById('btnPlay').innerHTML = '<i class="fa-solid fa-play"></i>'; });
+    vid.addEventListener('pause', () => {
+      clearTimeout(MP.spinT);
+      document.getElementById('btnPlay').innerHTML = '<i class="fa-solid fa-play"></i>';
+    });
     vid.addEventListener('canplay', () => {
       clearTimeout(MP.stallT);
       playerEl.classList.remove('stream-dead');
-      document.getElementById('spinner').classList.remove('on');
+      hideSpinnerNow();
       if (vid.paused) safeMobilePlay();
     });
     document.getElementById('volRange').addEventListener('input', e => {
@@ -1888,11 +2151,11 @@
 
     async function enterMobileFs() {
       try {
-        const req = playerEl.requestFullscreen || playerEl.webkitRequestFullscreen || document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen;
-        if (req) await req.call(playerEl.requestFullscreen ? playerEl : document.documentElement);
+        const req = document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen;
+        if (req) await req.call(document.documentElement);
       } catch (e) {}
       try {
-        if (screen.orientation && screen.orientation.lock) await screen.orientation.lock('landscape');
+        if (screen.orientation && screen.orientation.lock) await screen.orientation.lock('landscape').catch(() => {});
       } catch (e) {}
     }
 
@@ -1925,18 +2188,12 @@
     function openExtModal() { document.getElementById('extModal').style.display = 'flex'; }
     function closeExtModal() { document.getElementById('extModal').style.display = 'none'; }
     function openExternal(kind) {
-      const targetUrl = extractTargetStreamUrl(MP.curUrl || (MP.ch && MP.ch.streams && MP.ch.streams[MP.idx] && MP.ch.streams[MP.idx].url) || '');
-      const m = String(targetUrl).match(/^(https?):\/\/([^#]*)/i);
+      const m = String(MP.curUrl || '').match(/^(https?):\/\/([^#]*)/i);
       if (!m) { showToast('الرابط لا يدعم التشغيل الخارجي', '⚠️'); closeExtModal(); return; }
       const pkg = kind === 'vlc' ? 'org.videolan.vlc' : kind === 'mx' ? 'com.mxtech.videoplayer.ad' : '';
       const fb = pkg ? 'S.browser_fallback_url=' + encodeURIComponent('https://play.google.com/store/apps/details?id=' + pkg) + ';' : '';
       closeExtModal();
-      try { vid.pause(); } catch (e) {}
-      showToast('جاري الفتح في المشغل الخارجي...', '🚀');
       location.href = 'intent://' + m[2] + '#Intent;scheme=' + m[1].toLowerCase() + ';action=android.intent.action.VIEW;type=video/*;' + (pkg ? 'package=' + pkg + ';' : '') + fb + 'end';
-      setTimeout(() => {
-        try { window.open(targetUrl, '_blank', 'noopener,noreferrer'); } catch (e) {}
-      }, 900);
     }
 
     function wakeMobileControls() {
