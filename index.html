@@ -42,7 +42,7 @@
     flex-direction: column;
   }
 
-  /* دخولية سينمائية فاخرة وسريعة وسلسة VORIXA PRO - 15 ثانية بدون تقطيع */
+  /* دخولية سينمائية فاخرة وسريعة وسلسة VORIXA PRO - 7 ثوانٍ بدون تقطيع */
   #splashScreen {
     position: fixed; inset: 0;
     background: #020205;
@@ -63,7 +63,7 @@
     opacity: 0;
     will-change: opacity;
     transform: translateZ(0);
-    animation: vrxVoidRise 15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: vrxVoidRise 7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     pointer-events: none;
   }
   @keyframes vrxVoidRise {
@@ -82,13 +82,13 @@
     opacity: 0;
     will-change: transform, opacity;
     transform: translate3d(0, 0, 0) scale(0.8);
-    animation: vrxSmokeSwirl 15s linear forwards;
+    animation: vrxSmokeSwirl 7s linear forwards;
     pointer-events: none;
   }
   .vrx-purple-smoke.secondary {
     width: 340px; height: 340px;
     background: radial-gradient(circle, rgba(245, 196, 81, 0.12) 0%, rgba(147, 51, 234, 0.16) 45%, transparent 72%);
-    animation: vrxSmokeCounter 15s linear forwards;
+    animation: vrxSmokeCounter 7s linear forwards;
   }
   @keyframes vrxSmokeSwirl {
     0% { opacity: 0; transform: translate3d(0, 0, 0) scale(0.8) rotate(0deg); }
@@ -117,7 +117,7 @@
     opacity: 0;
     will-change: transform, opacity;
     transform: translate3d(0, 0, 0);
-    animation: vrxParticlesGlow 15s ease-out forwards;
+    animation: vrxParticlesGlow 7s ease-out forwards;
     pointer-events: none;
   }
   @keyframes vrxParticlesGlow {
@@ -141,7 +141,7 @@
     opacity: 0;
     will-change: transform, opacity;
     transform: rotate(-16deg) translate3d(-35%, 0, 0);
-    animation: vrxBeamRush 15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: vrxBeamRush 7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     pointer-events: none;
   }
   .vrx-light-beams.beam-two {
@@ -154,7 +154,7 @@
       rgba(245, 196, 81, 0.0) 76%,
       transparent 100%);
     transform: rotate(15deg) translate3d(35%, 0, 0);
-    animation: vrxBeamRushReverse 15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: vrxBeamRushReverse 7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
   @keyframes vrxBeamRush {
     0%, 7% { opacity: 0; transform: rotate(-16deg) translate3d(-35%, 0, 0) scaleY(0.5); }
@@ -178,7 +178,7 @@
     opacity: 0;
     will-change: transform, opacity;
     transform: translate3d(0, 12px, 0) scale(0.45);
-    animation: vrxBallStageFlow 15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: vrxBallStageFlow 7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     z-index: 4;
   }
   @keyframes vrxBallStageFlow {
@@ -327,7 +327,7 @@
     opacity: 0;
     will-change: transform, opacity;
     transform: translate3d(0, 0, 0) scale(1.12);
-    animation: vrxBrandArrive 15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: vrxBrandArrive 7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     z-index: 5;
     padding: 0 18px;
   }
@@ -358,7 +358,7 @@
     position: absolute; inset: -60%;
     background: linear-gradient(115deg, transparent 35%, rgba(254, 240, 138, 0.38) 50%, rgba(192, 132, 252, 0.22) 56%, transparent 68%);
     will-change: transform;
-    animation: vrxCrestShine 15s ease-out forwards;
+    animation: vrxCrestShine 7s ease-out forwards;
   }
   @keyframes vrxCrestShine {
     0%, 58% { transform: translate3d(-65%, -65%, 0); }
@@ -410,7 +410,7 @@
     background: linear-gradient(90deg, #7e22ce, #c084fc, #f5c451, #fef08a);
     transform-origin: right center;
     will-change: transform;
-    animation: vrxTimelineRun 14.9s linear forwards;
+    animation: vrxTimelineRun 6.9s linear forwards;
   }
   @keyframes vrxTimelineRun {
     0% { transform: scaleX(0); }
@@ -878,7 +878,7 @@
 </head>
 <body>
 
-  <!-- دخولية سينمائية سريعة وسلسة VORIXA PRO - 15 ثانية مع كرة بعلم العراق -->
+  <!-- دخولية سينمائية سريعة وسلسة VORIXA PRO - 7 ثوانٍ مع كرة بعلم العراق -->
   <div id="splashScreen">
     <div class="vrx-void-bg"></div>
     <div class="vrx-purple-smoke"></div>
@@ -1071,67 +1071,6 @@
     })();
     const IS_PHONE_DEVICE = !IS_TV_DEVICE;
 
-    /* مؤثر صوتي سينمائي عميق وقوي (Web Audio API) يتزامن مع تسلسل الدخولية - 15 ثانية */
-    let vrxAudioPlayed = false;
-    function playEpicCinematicIntroAudio() {
-      if (vrxAudioPlayed) return;
-      try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (!AudioCtx) return;
-        const ctx = new AudioCtx();
-        if (ctx.state === 'suspended') {
-          ctx.resume().catch(() => {});
-        }
-        vrxAudioPlayed = true;
-        const now = ctx.currentTime;
-
-        const subOsc = ctx.createOscillator();
-        const subGain = ctx.createGain();
-        subOsc.type = 'sine';
-        subOsc.frequency.setValueAtTime(52, now);
-        subOsc.frequency.exponentialRampToValueAtTime(36, now + 14.2);
-        subGain.gain.setValueAtTime(0.001, now);
-        subGain.gain.linearRampToValueAtTime(0.28, now + 1.8);
-        subGain.gain.setValueAtTime(0.24, now + 11.5);
-        subGain.gain.exponentialRampToValueAtTime(0.001, now + 15.0);
-        subOsc.connect(subGain);
-        subGain.connect(ctx.destination);
-        subOsc.start(now);
-        subOsc.stop(now + 15.1);
-
-        const riseOsc = ctx.createOscillator();
-        const riseFilter = ctx.createBiquadFilter();
-        const riseGain = ctx.createGain();
-        riseOsc.type = 'sawtooth';
-        riseOsc.frequency.setValueAtTime(80, now + 2.2);
-        riseOsc.frequency.exponentialRampToValueAtTime(220, now + 7.8);
-        riseFilter.type = 'lowpass';
-        riseFilter.frequency.setValueAtTime(260, now + 2.2);
-        riseFilter.frequency.exponentialRampToValueAtTime(1400, now + 7.8);
-        riseGain.gain.setValueAtTime(0.001, now + 2.2);
-        riseGain.gain.linearRampToValueAtTime(0.12, now + 7.3);
-        riseGain.gain.exponentialRampToValueAtTime(0.001, now + 8.4);
-        riseOsc.connect(riseFilter);
-        riseFilter.connect(riseGain);
-        riseGain.connect(ctx.destination);
-        riseOsc.start(now + 2.2);
-        riseOsc.stop(now + 8.5);
-
-        const hitOsc = ctx.createOscillator();
-        const hitGain = ctx.createGain();
-        hitOsc.type = 'triangle';
-        hitOsc.frequency.setValueAtTime(135, now + 8.2);
-        hitOsc.frequency.exponentialRampToValueAtTime(44, now + 13.5);
-        hitGain.gain.setValueAtTime(0.001, now + 8.2);
-        hitGain.gain.linearRampToValueAtTime(0.32, now + 8.4);
-        hitGain.gain.exponentialRampToValueAtTime(0.001, now + 13.8);
-        hitOsc.connect(hitGain);
-        hitGain.connect(ctx.destination);
-        hitOsc.start(now + 8.2);
-        hitOsc.stop(now + 13.9);
-      } catch (e) {}
-    }
-
     // تفعيل وتحديث ساعة الوقت الحقيقي كل ثانية
     function updateRealtimeClock() {
       const now = new Date();
@@ -1156,14 +1095,8 @@
     setInterval(updateRealtimeClock, 1000);
     updateRealtimeClock();
 
-    // تشغيل الدخولية الجديدة لمدة 15 ثانية ثم التحقق أو عرض الرئيسية بنفس شكل الموقع
+    // تشغيل الدخولية الجديدة لمدة 7 ثوانٍ ثم التحقق أو عرض الرئيسية بنفس شكل الموقع
     window.addEventListener('DOMContentLoaded', () => {
-      playEpicCinematicIntroAudio();
-      const splashEl = document.getElementById('splashScreen');
-      if (splashEl) {
-        splashEl.addEventListener('pointerdown', playEpicCinematicIntroAudio, { once: true });
-      }
-
       setTimeout(() => {
         const splash = document.getElementById('splashScreen');
         splash.style.opacity = '0';
@@ -1176,7 +1109,7 @@
             showHomeDashboard();
           }
         }, 320);
-      }, 15000);
+      }, 7000);
     });
 
     function checkAccessCode() {
